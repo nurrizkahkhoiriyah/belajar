@@ -16,8 +16,9 @@ class Login extends CI_Controller {
         if($email == 'admin' && $password == '12345'){
             $ret=array(
                 'status' => '1',
-                'message' => 'login berhasil',
-                'email' => $email
+                'message' => 'Login Berhasil',
+                'email' => $email,
+                'password' => $password
             );
         } else if(empty($email)){
             $ret=array(
@@ -29,7 +30,12 @@ class Login extends CI_Controller {
                 'status' => '3',
                 'message' => 'Password harus diisi'
             );
-        } else {
+        } else if(empty($password) && empty($email)){
+            $ret=array(
+                'status' => '4',
+                'message' => 'Login Gagal'
+            );
+        }else {
             $ret=array(
                 'status' => false,
                 'message' => 'login gagal'

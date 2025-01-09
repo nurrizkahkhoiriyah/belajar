@@ -50,13 +50,17 @@
                     dataType: 'json',
                     success: function(response){
                         if(response.status == '1'){
-                          $('.messageblock').html('<div>Login Berhasil<br> Email : '+ response.email +
-                          '<br> Password : '+ response.password + '</div>')
-                          alert(response.message);
+                          $('#loginBtn').text('Logout');
+                          $('.messageBlock').html('<div>' + 
+                        response.message + '<br>Email: ' + response.email + '<br>Password : ' + response.password +
+                        '</div>')
+                          // alert(response.message);
                         } else if (response.status == '2'){
                           $('#emailError').text(response.message);
                         } else if (response.status == '3'){
                           $('#passwordError').text(response.message);
+                        } else if (response.status == '4'){
+                          $('.text-danger').text(response.message);
                         } else {
                           $('.error-block').html(response.message);
                         } 
