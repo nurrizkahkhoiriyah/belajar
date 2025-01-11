@@ -1,78 +1,69 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Dashboard extends CI_Controller {
-    public function __construct(){
-        parent::__construct();
-        $this->load->model('User_model');
-    }
+class Dashboard extends CI_Controller
+{
 
-    public function index(){
-        $q = $this->User_model->getUserAll();
-        // if($q->num_rows() > 0){
-        //     foreach($q->result() as $row) {
-        //         echo 'name = ' . $row->username . "<br>";
-        //         echo 'password = '. $row->password . "<br>";
-        //     }
+	public function __construct(){
+		parent::__construct();
+		$this->load->model('User_model');
 
-        // } else {
-        //     echo "kosong";
-        // }
-        $data['users'] = $q->result();
-        $this->load->view('view_dashboard', $data);
-    }
-
-    public function add(){
-        $this->load->view('view_add_user');
-    }
-
-    public function save(){
-        $data['username'] = $this->input->post('username');
-        $data['password'] = $this->input->post('password');
-
-        $insert = $this->User_model->insertUser($data);
-
-        if($insert){
-            redirect('dashboard','refresh');
-        } else{
-            $this->session->set_flashdata('insert_error', 'Data gagal disimpan');
-            $this->load->view('view_add_user', $data);
-        }
-
-    }
-
-    public function edit($id = null){
-        $q = $this->User_model->getUserByID($id);
-        $data['user'] = $q->row();
-
-        $this->load->view('view_edit_user', $data);
-    }
-
-    public function update_user(){
-        $id = $this->input->post('id');
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
-
-        $data = array(
-            'username' => $username,
-            'password' => $password,
-        );
-
-        $update = $this->User_model->updateUser($id, $data);
-
-        if($update){
-            redirect('dashboard','refresh');
-        } else{
-            $this->session->set_flashdata('update_error', 'Data gagal diupdate');
-            redirect('dashboard/edit/' . $id,'refresh');
-        }
-
-    }
+		if (!$this->session->userdata('user_id')) {
+			redirect('login');
+		}
+		
+	}
 
 
+	public function index(){
+		$loggedInUserId = $this->session->userdata('user_id');
+		$data['loggedInUserId'] = $loggedInUserId;
 
-    public function delete($id = null){
-        $this->User_model->deleteUser($id);
-        redirect('dashboard', 'refresh');
-    }
+		$q = $this->User_model->getUserAll();
+		$data['users'] = $q;
+
+		$this->load->view('view_dashboard', $data);
+	}
+
+	public function get_all(){
+		$q = $this->User_model->getUserAll(); 
+		echo json_encode($q); 
+	}
+
+	public function save(){
+		$data = array(
+			'username' => $this->input->post('username'),
+			'password' => $this->input->post('password')
+		);
+	
+		$this->User_model->insertUser($data);
+		$users = $this->User_model->getUserAll();
+		echo json_encode($users);
+	}
+
+
+	public function update_user(){
+		$id = $this->input->post('id');
+
+		$data = array(
+			'username' => $this->input->post('username'),
+			'password' => $this->input->post('password')
+		);
+
+		$update = $this->User_model->updateUser($id, $data);
+		echo json_encode($update);
+	}
+
+	public function edit($id = null){
+		$edit = $this->User_model->getUserByID($id);
+		echo json_encode($edit);
+	}
+
+	public function delete($id = null){
+		$id = $this->input->post('id');
+
+		$delete = $this->User_model->deleteUser($id);
+		echo json_encode($delete);
+
+	}
 }

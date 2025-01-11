@@ -7,6 +7,7 @@
     <link href="<?php echo base_url('public/template/css/bootstrap.min.css');?>" rel="stylesheet">
   </head>
   <body>
+    <div class="container mt-4">
     <div class="row justify-content-center pt-5">
       <div class="card col-md-4">
         <div class="card-header">
@@ -15,14 +16,16 @@
         <div class="card-body">
           <form id="loginForm" action="#" method="post" enctype="multipart/form-data">
             <div class="mb-1">
-              <label for="email" class="form-label">Email</label>
-              <input type="text" class="form-control" id="email" name="email">
-              <div class="error-block text-danger" id="emailError"></div>
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" name="username">
+              <div class="error-block text-danger" id="usernameError">
+              </div>
             </div>
             <div class="mb-1">
               <label for="password" class="form-label">Password</label>
               <input type="password" class="form-control" id="password" name="password">
-              <div class="error-block text-danger" id="passwordError"></div>
+              <div class="error-block text-danger" id="passwordError">
+              </div>
             </div>
 
             <button type="button" id="loginBtn" class="btn btn-primary mt-3">Login</button>
@@ -39,7 +42,7 @@
         $(document).ready(function() {
             $('#loginBtn').click(function() {
                 // Reset error messages
-                $('#emailError').text('');
+                $('#usernameError').text('');
                 $('#passwordError').text('');
                 $('.messageBlock').html('');
 
@@ -48,29 +51,25 @@
                     url: '<?php echo base_url('login/proses_login'); ?>',
                     type: 'POST',
                     data: {
-                        email: $('#email').val(),
+                        username: $('#username').val(),
                         password: $('#password').val()
                     },
                     dataType: 'json',
                     success: function(response) {
-                        if (response.status === '1') {
-                            $('#loginBtn').text('Logout');
-                            $('.messageBlock').html(
-                                `<div class="text-success">${response.message}<br>Email: ${response.email}<br>Password: ${response.password}</div>`
-                            );
-                            $('#email').val(''); // Reset form
-                            $('#password').val('');
-                        } else if (response.status === '2') {
-                            $('#emailError').text(response.emailMessage);
-                        } else if (response.status === '3') {
-                            $('#passwordError').text(response.passwordMessage);
-                        } else if (response.status === '4') {
-                            $('.messageBlock').html(`<div class="text-danger">${response.message}</div>`);
-                        } else if (response.status === '5') {
-                            $('#emailError').text(response.emailMessage);
-                            $('#passwordError').text(response.passwordMessage);
-                        }
-                    }
+                      if (response.status === '1') {
+                          window.location.href = response.redirect; // Redirect ke dashboard
+                      } else if (response.status === '2') {
+                          $('#usernameError').text(response.usernameMessage);
+                      } else if (response.status === '3') {
+                          $('#passwordError').text(response.passwordMessage);
+                      } else if (response.status === '4') {
+                          $('.messageBlock').html(`<div class="text-danger">${response.message}</div>`);
+                      } else if (response.status === '5') {
+                          $('#usernameError').text(response.usernameMessage);
+                          $('#passwordError').text(response.passwordMessage);
+                      }
+                  }
+
                 });
             });
         });
