@@ -66,6 +66,9 @@
 					</table>
 				</div>
 			</div>
+            <div class="">
+					<button class="btn btn-primary mb-3" id="logoutBtn" >Logout</button>
+			</div>
 		</div>
 	</div>
 	<!-- Modal Add Data -->
@@ -207,6 +210,28 @@
                         },
                         error: function() {
                             alert('Gagal menghapus user.');
+                        }
+                    });
+                }
+            });
+
+            $('#logoutBtn').click(function () {
+                // Konfirmasi logout
+                if (confirm('Apakah Anda yakin ingin logout?')) {
+                    $.ajax({
+                        url: '<?= base_url('dashboard/logout'); ?>', // URL ke fungsi logout
+                        type: 'POST',
+                        success: function (response) {
+                            let res = JSON.parse(response);
+                            if (res.status) {
+                                // Redirect ke halaman login
+                                window.location.href = '<?= base_url('login'); ?>';
+                            } else {
+                                alert('Logout gagal. Silakan coba lagi.');
+                            }
+                        },
+                        error: function () {
+                            alert('Terjadi kesalahan. Tidak dapat logout.');
                         }
                     });
                 }

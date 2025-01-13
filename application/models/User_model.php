@@ -22,16 +22,11 @@ class User_model extends CI_Model
 		return $q->row_array();
 	}
 
-	// public function getUserByUsername($username){
-	// 	$this->db->where('username', $username);
-    // 	$query = $this->db->get('users'); 
-
-	// 	if ($query->num_rows() > 0) {
-	// 		return $query->row_array(); 
-	// 	}
-
-	// 	return null; 
-	// }
+	public function getUserByUsername($username) {
+		$this->db->where('username', $username);
+		return $this->db->get('users')->row();
+	}
+	
 
 	public function updateUser($id, $data){
 		$this->db->where('id', $id);
@@ -56,5 +51,14 @@ class User_model extends CI_Model
         $q = $this->db->get('user');
         return $q->row();
     }
+
+	public function getUserByUsernameExceptId($username, $id) {
+		$this->db->where('username', $username);
+		$this->db->where('id !=', $id);
+		return $this->db->get('users')->row();
+	}
+	
+	
+	
 
 }

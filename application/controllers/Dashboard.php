@@ -66,4 +66,9 @@ class Dashboard extends CI_Controller
 		echo json_encode($delete);
 
 	}
+
+	public function logout() {
+        $this->session->sess_destroy();
+        echo json_encode(['status' => true, 'message' => 'Logout berhasil.']);
+    }
 }
