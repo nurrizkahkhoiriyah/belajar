@@ -62,7 +62,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary saveBtn">Simpan</button>
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
 	</div>
@@ -109,16 +109,33 @@
 	$('.btnTambahJurusan').click(function() {
 		$('#modalJurusan').modal('show');
 	});
-	$('.saveBtn').click(function() {
-		// lakukan proses simpan data, lalu tutup modal , lalu reload tabel
-	})
-	$('.editBtn').click(function() {
-		// tampilkan data dalam modal 
-	})
-	$('.deleteBtn').click(function() {
-		// lakukan proses delete data, lalu reload tabel
-	})
 
+	$('.saveBtn').click(function() {
+		let id = $('#id').val();
+			let nama_tahun_pelajaran = $('#nama_tahun_pelajaran').val();
+			let nama_jurusan = $('#nama_jurusan').val();
+			let url = '<?php echo base_url('jurusan/save'); ?>';
+				$.ajax({
+					url: url,
+					type: 'POST',
+					data: {
+						id: id,
+						nama_tahun_pelajaran: nama_tahun_pelajaran,
+						nama_jurusan: nama_jurusan,
+					},
+					dataType: 'json',
+					success: function(response) {
+						if (response.status) {
+							alert(response.message);
+							$('#modalJurusan').modal('hide');
+							tableJurusan();
+						} else {
+							alert(response.message);
+						}
+					}
+				});
+	})
+	
 	function editJurusan(id){
 			$.ajax({
 				url: '<?php echo base_url('jurusan/edit'); ?>',
@@ -130,9 +147,10 @@
 				success: function(response) {
 					if (response.status) {
 						$('#id').val(response.data.id);
-						$('#nama_jurusan').val(response.data.nama_jurusan);
 						$('#nama_tahun_pelajaran').val(response.data.nama_tahun_pelajaran);
-						$('#modalTahunPelajaran').modal('show');
+						$('#nama_jurusan').val(response.data.nama_jurusan);
+						$('#modalJurusan').modal('show');
+						tableJurusan();
 					} else {
 						alert(response.message);
 					}

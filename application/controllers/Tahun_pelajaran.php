@@ -93,19 +93,13 @@ class Tahun_pelajaran extends CI_Controller
         $data['status_tahun_pelajaran'] = $this->input->post('status_tahun_pelajaran');
 		$id = $this->input->post('id');
 
-		if ($data['nama_tahun_pelajaran'] == '' || $data['tanggal_mulai'] == '' || $data['tanggal_akhir'] == '') {
+		if ($data['nama_tahun_pelajaran'] == '' || $data['tanggal_mulai'] == '' || $data['tanggal_akhir'] == '' || $data['status_tahun_pelajaran'] == '') {
 			$ret = array(
 				'status' => false,
-				'message' => 'Harap isi semua',
+				'message' => 'Harap diisi semua'
 			);
 		} else {
-			$q = $this->md->getNamaTahunPelajaran($data['username']);
-			if ($q->num_rows() > 0) {
-				$ret = array(
-					'status' => false,
-					'message' => 'Username sudah digunakan'
-				);
-			} else {
+
 				if ($id != '') {
 					$update = $this->md->updateTahunPelajaran($id, $data);
 					if ($update) {
@@ -134,7 +128,7 @@ class Tahun_pelajaran extends CI_Controller
 						);
 					}
 				}
-			}
+			
 		}
 		echo json_encode($ret);
 	}

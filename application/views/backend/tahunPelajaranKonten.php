@@ -31,7 +31,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Tambah Tahun Pelajaran</h5>
+				<h5 class="modal-title"> Tahun Pelajaran</h5>
 
 				<button type="button" class="close " data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -57,11 +57,11 @@
 							<div class="error-block"></div>
 						</div>
 						<div class="mb-1">
-							<label for="status_tahun_pelajaran" class="form-label">Status</label>
-							<input class="form-control" id="status_tahun_pelajaran" name="status_tahun_pelajaran">
-								<!-- <option value="1">Aktif</option>
-								<option value="0">Tidak Aktif</option> -->
-							<!-- </input> -->
+						<label for="status_tahun_pelajaran" class="form-label">Status</label>
+							<select class="form-control" id="status_tahun_pelajaran" name="status_tahun_pelajaran">
+								<option value="1">Aktif</option>
+								<option value="0">Tidak Aktif</option>
+							</select>
 							<div class="error-block"></div>
 						</div>
 					</form>
@@ -74,11 +74,6 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
 
 
 
@@ -127,11 +122,11 @@
 
 
 	$('.saveBtn').click(function() {
-		var id = $('#id').val();
-			var nama_tahun_pelajaran = $('#nama_tahun_pelajaran').val();
-			var tanggal_mulai = $('#tanggal_mulai').val();
-			var tanggal_akhir = $('#tanggal_akhir').val();
-			var status_tahun_pelajaran = $('#status_tahun_pelajaran').val();
+		let id = $('#id').val();
+			let nama_tahun_pelajaran = $('#nama_tahun_pelajaran').val();
+			let tanggal_mulai = $('#tanggal_mulai').val();
+			let tanggal_akhir = $('#tanggal_akhir').val();
+			let status_tahun_pelajaran = $('#status_tahun_pelajaran').val();
 			let url = '<?php echo base_url('tahun_pelajaran/save'); ?>';
 				$.ajax({
 					url: url,
@@ -155,13 +150,7 @@
 					}
 				});
 	})
-	// $('.editTahunPelajaran').click(function() {
-			
-	// })
 	
-	$('.deleteBtn').click(function() {
-		// lakukan proses delete data, lalu reload tabel
-	})
 	function editTahunPelajaran(id){
 			$.ajax({
 				url: '<?php echo base_url('tahun_pelajaran/edit'); ?>',
@@ -178,6 +167,7 @@
 						$('#tanggal_akhir').val(response.data.tanggal_akhir);
 						$('#status_tahun_pelajaran').val(response.data.status_tahun_pelajaran);
 						$('#modalTahunPelajaran').modal('show');
+						tableTahunPelajaran();
 					} else {
 						alert(response.message);
 					}
