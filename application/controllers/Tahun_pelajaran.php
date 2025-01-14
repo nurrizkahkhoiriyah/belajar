@@ -43,27 +43,30 @@ class Tahun_pelajaran extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function edit($id = null)
+	public function edit()
 	{
+
 		$id = $this->input->post('id');
-		// $edit = $this->md->getTahunPelajaranByID($id);
-		// echo json_encode($edit);
-		
+		$q = $this->md->getTahunPelajaranByID($id);
 
-		 // ID dikirimkan melalui request POST
-		$data = $this->md->getTahunPelajaranByID($id);
-
-		if (!$id) {
-			echo json_encode(['status' => false, 'message' => 'ID tidak valid.']);
-			return;
-    	}
-
-		if ($data) {
-			echo json_encode(['status' => true, 'data' => $data]);
+		if ($q->num_rows() > 0) {
+			$ret = array(
+				'status' => true,
+				'data' => $q->row(),
+				'message' => '',
+			);
 		} else {
-			echo json_encode(['status' => false, 'message' => 'Data tidak ditemukan atau sudah dihapus.']);
+			$ret = array(
+				'status' => false,
+				'data' => [],
+				'message' => 'Data tidak ditemukan',
+				'query' => $this->db->last_query()
+			);
 		}
+
+		echo json_encode($ret);
 	}
+
 	
 	public function delete()
 	{
@@ -82,44 +85,92 @@ class Tahun_pelajaran extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function save() {
-        $id = $this->input->post('id');
-        $nama_tahun_pelajaran = $this->input->post('nama_tahun_pelajaran');
-        $tanggal_mulai = $this->input->post('tanggal_mulai');
-        $tanggal_akhir = $this->input->post('tanggal_akhir');
-        $status_tahun_pelajaran = $this->input->post('status_tahun_pelajaran');
+	public function save()
+	{	
+		$data['nama_tahun_pelajaran'] = $this->input->post('nama_tahun_pelajaran');
+        $data['tanggal_mulai'] = $this->input->post('tanggal_mulai');
+        $data['tanggal_akhir'] = $this->input->post('tanggal_akhir');
+        $data['status_tahun_pelajaran'] = $this->input->post('status_tahun_pelajaran');
+		$id = $this->input->post('id');
 
-        if (empty($nama_tahun_pelajaran) || empty($tanggal_mulai) || empty($tanggal_akhir)) {
-            echo json_encode([
-                'status' => false,
-                'message' => 'Harap isi semua field wajib.'
-            ]);
-            return;
-        }
+		if ($data['nama_tahun_pelajaran'] == '' || $data['tanggal_mulai'] == '' || $data['tanggal_akhir'] == '') {
+			$ret = array(
+				'status' => false,
+				'message' => 'Harap isi semua',
+			);
+		} else {
+			$q = $this->md->getNamaTahunPelajaran($data['username']);
+			if ($q->num_rows() > 0) {
+				$ret = array(
+					'status' => false,
+					'message' => 'Username sudah digunakan'
+				);
+			} else {
+				if ($id != '') {
+					$update = $this->md->updateTahunPelajaran($id, $data);
+					if ($update) {
+						$ret = array(
+							'status' => true,
+							'message' => 'Data berhasil diupdate'
+						);
+					} else {
+						$ret = array(
+							'status' => false,
+							'message' => 'Data gagal diupdate'
+						);
+					}
+				} else {
+					$insert = $this->md->insertTahunPelajaran($data);
 
-        $data = [
-            'nama_tahun_pelajaran' => $nama_tahun_pelajaran,
-            'tanggal_mulai' => $tanggal_mulai,
-            'tanggal_akhir' => $tanggal_akhir,
-            'status_tahun_pelajaran' => $status_tahun_pelajaran
-        ];
+					if ($insert) {
+						$ret = array(
+							'status' => true,
+							'message' => 'Data berhasil disimpan'
+						);
+					} else {
+						$ret = array(
+							'status' => false,
+							'message' => 'Data gagal disimpan'
+						);
+					}
+				}
+			}
+		}
+		echo json_encode($ret);
+	}
 
-        if (empty($id)) {
-            $result = $this->md->insert($data);
-        } else {
-            $result = $this->md->update($id, $data);
-        }
+	public function update()
+	{
+		$id = $this->input->post('id');
+		$nama_tahun_pelajaran = $this->input->post('nama_tahun_pelajaran');
+		$tanggal_mulai = $this->input->post('tanggal_mulai');
+		$tanggal_akhir = $this->input->post('tanggal_akhir');
+		$status_tahun_pelajaran = $this->input('status_tahun_pelajaran');
 
-        if ($result) {
-            echo json_encode([
-                'status' => true,
-                'message' => empty($id) ? 'Data berhasil ditambahkan.' : 'Data berhasil diperbarui.'
-            ]);
-        } else {
-            echo json_encode([
-                'status' => false,
-                'message' => 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.'
-            ]);
-        }
-    }
+		$data = array(
+			'nama_tahun_pelajaran' => $nama_tahun_pelajaran,
+			'tanggal_mulai' => $tanggal_mulai,
+			'tanggal_akhir' => $tanggal_akhir,
+			'status_tahun_pelajaran' => $status_tahun_pelajaran,
+		);
+
+		$update = $this->md->updateUser($id, $data);
+
+		if ($update) {
+			$ret = array(
+				'status' => true,
+				'message' => 'Data berhasil diupdate'
+			);
+		} else {
+			$ret = array(
+				'status' => false,
+				'message' => 'Data gagal diupdate'
+			);
+		}
+
+		echo json_encode($ret);
+	}
+
+	
+
 }

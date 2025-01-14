@@ -107,7 +107,7 @@
 					tabelTahunPelajaran.find('tbody').html('');
 					let no = 1;
 					$.each(response.data, function(i, item) {
-
+						let tr = $('<tr>');
 						tr.append('<td>' + no++ + '</td>');
 						tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
 						tr.append('<td>' + item.tanggal_mulai + '</td>');
@@ -125,47 +125,36 @@
 		});
 	}
 
+
 	$('.saveBtn').click(function() {
-		const id = $('#id').val();
-		const nama_tahun_pelajaran = $('#nama_tahun_pelajaran').val();
-		const tanggal_mulai = $('#tanggal_mulai').val();
-		const tanggal_akhir = $('#tanggal_akhir').val();
-		const status_tahun_pelajaran = $('#status_tahun_pelajaran').val();
-
-		if (!nama_tahun_pelajaran || !tanggal_mulai || !tanggal_akhir) {
-			alert('Harap isi semua field dengan benar.');
-			return;
-		}
-
-		$.ajax({
-			url: '<?php echo base_url('tahun_pelajaran/save'); ?>',
-			type: 'POST',
-			data: {
-				id: id,
-				nama_tahun_pelajaran: nama_tahun_pelajaran,
-				tanggal_mulai: tanggal_mulai,
-				tanggal_akhir: tanggal_akhir,
-				status_tahun_pelajaran: status_tahun_pelajaran
-			},
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					alert(response.message); 
-					$('#modalTahunPelajaran').modal('hide'); 
-					tabelTahunPelajaran(); // Reload tabel
-				} else {
-					alert(response.message); 
-				}
-			},
-			error: function(xhr, status, error) {
-				alert('Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
-			}
-		});
-	});
-
-	// $('.saveBtn').click(function() {
-	// 	// lakukan proses simpan data, lalu tutup modal , lalu reload tabel
-	// })
+		var id = $('#id').val();
+			var nama_tahun_pelajaran = $('#nama_tahun_pelajaran').val();
+			var tanggal_mulai = $('#tanggal_mulai').val();
+			var tanggal_akhir = $('#tanggal_akhir').val();
+			var status_tahun_pelajaran = $('#status_tahun_pelajaran').val();
+			let url = '<?php echo base_url('tahun_pelajaran/save'); ?>';
+				$.ajax({
+					url: url,
+					type: 'POST',
+					data: {
+						id: id,
+						nama_tahun_pelajaran: nama_tahun_pelajaran,
+						tanggal_mulai: tanggal_mulai,
+						tanggal_akhir: tanggal_akhir,
+						status_tahun_pelajaran: status_tahun_pelajaran,
+					},
+					dataType: 'json',
+					success: function(response) {
+						if (response.status) {
+							alert(response.message);
+							$('#modalTahunPelajaran').modal('hide');
+							tableTahunPelajaran();
+						} else {
+							alert(response.message);
+						}
+					}
+				});
+	})
 	// $('.editTahunPelajaran').click(function() {
 			
 	// })
