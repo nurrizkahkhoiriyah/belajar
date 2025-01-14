@@ -49,7 +49,7 @@ class Login extends CI_Controller {
                 $ret = array(
                     'status' => '1',
                     'message' => 'Login berhasil',
-                    'redirect' => base_url('dashboard') 
+                    'redirect' => base_url('admin') 
                 );
             } else {
                 $ret = array(
@@ -57,51 +57,15 @@ class Login extends CI_Controller {
                     'message' => 'Login gagal. Username atau password salah.'
                 );
             }
-            // $this->form_validation->set_rules('username', 'Username', 'required|trim');
-            // $this->form_validation->set_rules('password', 'Password', 'required|trim');
-
-            // if ($this->form_validation->run() == FALSE) {
-            //     $this->load->view('login'); // Kembali ke form login jika validasi gagal
-            // } else {
-            //     $username = $this->input->post('username');
-            //     $password = $this->input->post('password');
-
-            //     // Panggil model untuk cek pengguna
-            //     $this->load->model('User_model');
-            //     $user = $this->User_model->check_user($username, $password);
-
-            //     if ($user) {
-            //         // Login sukses, set session
-            //         $this->session->set_userdata('user_id', $user->id);
-            //         $this->session->set_userdata('username', $user->username);
-
-            //         redirect('dashboard'); // Alihkan ke halaman dashboard
-            //     } else {
-            //         // Login gagal, tampilkan pesan error
-            //         $this->session->set_flashdata('error', 'Username atau password salah!');
-            //         redirect('login');
-            //     }
-            // }
     
         echo json_encode($ret);
         }
     }
 
     public function logout() {
-        // Hapus semua session dan logout
         $this->session->sess_destroy();
-        redirect('login');
+        echo json_encode(['status' => true, 'message' => 'Logout berhasil.']);
     }
-    
-
-        // $user = $this->User_model->get_user($username, $password);
-        // if ($user) {
-        //     $this->session->set_userdata('user', $user);
-        //     redirect('dashboard');
-        // } else {
-        //     $this->session->set_flashdata('error', 'Username atau password salah');
-        //     redirect('login');
-        // }
-        
+ 
 
 }

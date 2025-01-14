@@ -19,7 +19,7 @@ class User_model extends CI_Model
 
 	public function getUserByID($id = null){
 		$q = $this->db->where('id', $id)->get($this->table);
-		return $q->row_array();
+		return $q;
 	}
 
 	public function getUserByUsername($username) {
