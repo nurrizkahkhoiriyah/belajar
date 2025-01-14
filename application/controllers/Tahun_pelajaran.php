@@ -81,4 +81,45 @@ class Tahun_pelajaran extends CI_Controller
 
 		echo json_encode($ret);
 	}
+
+	public function save() {
+        $id = $this->input->post('id');
+        $nama_tahun_pelajaran = $this->input->post('nama_tahun_pelajaran');
+        $tanggal_mulai = $this->input->post('tanggal_mulai');
+        $tanggal_akhir = $this->input->post('tanggal_akhir');
+        $status_tahun_pelajaran = $this->input->post('status_tahun_pelajaran');
+
+        if (empty($nama_tahun_pelajaran) || empty($tanggal_mulai) || empty($tanggal_akhir)) {
+            echo json_encode([
+                'status' => false,
+                'message' => 'Harap isi semua field wajib.'
+            ]);
+            return;
+        }
+
+        $data = [
+            'nama_tahun_pelajaran' => $nama_tahun_pelajaran,
+            'tanggal_mulai' => $tanggal_mulai,
+            'tanggal_akhir' => $tanggal_akhir,
+            'status_tahun_pelajaran' => $status_tahun_pelajaran
+        ];
+
+        if (empty($id)) {
+            $result = $this->md->insert($data);
+        } else {
+            $result = $this->md->update($id, $data);
+        }
+
+        if ($result) {
+            echo json_encode([
+                'status' => true,
+                'message' => empty($id) ? 'Data berhasil ditambahkan.' : 'Data berhasil diperbarui.'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => false,
+                'message' => 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.'
+            ]);
+        }
+    }
 }

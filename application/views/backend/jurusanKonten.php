@@ -118,4 +118,48 @@
 	$('.deleteBtn').click(function() {
 		// lakukan proses delete data, lalu reload tabel
 	})
+
+	function editJurusan(id){
+			$.ajax({
+				url: '<?php echo base_url('jurusan/edit'); ?>',
+				type: 'POST',
+				data: {
+					id: id
+				},
+				dataType: 'json',
+				success: function(response) {
+					if (response.status) {
+						$('#id').val(response.data.id);
+						$('#nama_jurusan').val(response.data.nama_jurusan);
+						$('#nama_tahun_pelajaran').val(response.data.nama_tahun_pelajaran);
+						$('#modalTahunPelajaran').modal('show');
+					} else {
+						alert(response.message);
+					}
+				}
+			});
+	}
+
+	function deleteJurusan(id) {
+		if (confirm('Apakah Anda yakin ingin menghapus user ini?')) {
+			let url = '<?php echo base_url('jurusan/delete'); ?>';
+			$.ajax({
+				url: url,
+				type: 'POST',
+				data: {
+					id: id
+				},
+				dataType: 'json',
+				success: function(response) {
+					if (response.status) {
+						alert(response.message);
+						tabelJurusan();
+					} else {
+						alert(response.message);
+					}
+				}
+			});
+		}
+
+	}
 </script>

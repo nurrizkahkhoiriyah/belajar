@@ -58,10 +58,10 @@
 						</div>
 						<div class="mb-1">
 							<label for="status_tahun_pelajaran" class="form-label">Status</label>
-							<select class="form-control" id="status_tahun_pelajaran" name="status_tahun_pelajaran">
-								<option value="1">Aktif</option>
-								<option value="0">Tidak Aktif</option>
-							</select>
+							<input class="form-control" id="status_tahun_pelajaran" name="status_tahun_pelajaran">
+								<!-- <option value="1">Aktif</option>
+								<option value="0">Tidak Aktif</option> -->
+							<!-- </input> -->
 							<div class="error-block"></div>
 						</div>
 					</form>
@@ -125,10 +125,47 @@
 		});
 	}
 
-	
 	$('.saveBtn').click(function() {
-		// lakukan proses simpan data, lalu tutup modal , lalu reload tabel
-	})
+		const id = $('#id').val();
+		const nama_tahun_pelajaran = $('#nama_tahun_pelajaran').val();
+		const tanggal_mulai = $('#tanggal_mulai').val();
+		const tanggal_akhir = $('#tanggal_akhir').val();
+		const status_tahun_pelajaran = $('#status_tahun_pelajaran').val();
+
+		if (!nama_tahun_pelajaran || !tanggal_mulai || !tanggal_akhir) {
+			alert('Harap isi semua field dengan benar.');
+			return;
+		}
+
+		$.ajax({
+			url: '<?php echo base_url('tahun_pelajaran/save'); ?>',
+			type: 'POST',
+			data: {
+				id: id,
+				nama_tahun_pelajaran: nama_tahun_pelajaran,
+				tanggal_mulai: tanggal_mulai,
+				tanggal_akhir: tanggal_akhir,
+				status_tahun_pelajaran: status_tahun_pelajaran
+			},
+			dataType: 'json',
+			success: function(response) {
+				if (response.status) {
+					alert(response.message); 
+					$('#modalTahunPelajaran').modal('hide'); 
+					tabelTahunPelajaran(); // Reload tabel
+				} else {
+					alert(response.message); 
+				}
+			},
+			error: function(xhr, status, error) {
+				alert('Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
+			}
+		});
+	});
+
+	// $('.saveBtn').click(function() {
+	// 	// lakukan proses simpan data, lalu tutup modal , lalu reload tabel
+	// })
 	// $('.editTahunPelajaran').click(function() {
 			
 	// })

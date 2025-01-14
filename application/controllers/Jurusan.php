@@ -42,4 +42,43 @@ class Jurusan extends CI_Controller
 
 		echo json_encode($ret);
 	}
+
+	public function edit($id = null)
+	{
+		$id = $this->input->post('id');
+		// $edit = $this->md->getTahunPelajaranByID($id);
+		// echo json_encode($edit);
+		
+
+		 // ID dikirimkan melalui request POST
+		$data = $this->md->getJurusanByID($id);
+
+		if (!$id) {
+			echo json_encode(['status' => false, 'message' => 'ID tidak valid.']);
+			return;
+    	}
+
+		if ($data) {
+			echo json_encode(['status' => true, 'data' => $data]);
+		} else {
+			echo json_encode(['status' => false, 'message' => 'Data tidak ditemukan atau sudah dihapus.']);
+		}
+	}
+	
+	public function delete()
+	{
+
+		$id = $this->input->post('id');
+		$q = $this->md->deleteTahunPelajaran($id);
+
+		if ($q) {
+			$ret['status'] = true;
+			$ret['message'] = 'Data berhasil dihapus';
+		} else {
+			$ret['status'] = false;
+			$ret['message'] = 'Data gagal dihapus';
+		}
+
+		echo json_encode($ret);
+	}
 }
