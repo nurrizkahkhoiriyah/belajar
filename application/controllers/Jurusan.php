@@ -69,7 +69,7 @@ class Jurusan extends CI_Controller
 	{
 
 		$id = $this->input->post('id');
-		$q = $this->md->deleteTahunPelajaran($id);
+		$q = $this->md->deleteJurusan($id);
 
 		if ($q) {
 			$ret['status'] = true;

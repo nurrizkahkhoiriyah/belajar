@@ -51,7 +51,7 @@ class Kelas extends CI_Controller
 		
 
 		 // ID dikirimkan melalui request POST
-		$data = $this->md->getJurusanByID($id);
+		$data = $this->md->getKelasByID($id);
 
 		if (!$id) {
 			echo json_encode(['status' => false, 'message' => 'ID tidak valid.']);
@@ -69,7 +69,7 @@ class Kelas extends CI_Controller
 	{
 
 		$id = $this->input->post('id');
-		$q = $this->md->deleteTahunPelajaran($id);
+		$q = $this->md->deleteKelas($id);
 
 		if ($q) {
 			$ret['status'] = true;

@@ -78,16 +78,40 @@ class Masterdata_model extends CI_Model
 		return $this->db->affected_rows();
 	}
 
-	public function update($id, $data)
+	public function updateTahunJurusan($id, $data)
 	{
 		$this->db->where('id', $id);
-		$this->db->update($this->table, $data);
+		$this->db->update($this->tableTahunJurusan, $data);
 		return $this->db->affected_rows();
 	}
 
-	public function insert($data)
+	public function updateJurusan($id, $data)
 	{
-		$this->db->insert($this->table, $data);
+		$this->db->where('id', $id);
+		$this->db->update($this->tableJurusan, $data);
+		return $this->db->affected_rows();
+	}
+
+	public function updateKelas($id, $data)
+	{
+		$this->db->where('id', $id);
+		$this->db->update($this->tableKelas, $data);
+		return $this->db->affected_rows();
+	}
+
+	public function insertTahunPelajaran($data)
+	{
+		$this->db->insert($this->tableTahunPelajaran, $data);
+		return $this->db->insert_id();
+	}
+	public function insertJurusan($data)
+	{
+		$this->db->insert($this->tableJurusan, $data);
+		return $this->db->insert_id();
+	}
+	public function insertKelas($data)
+	{
+		$this->db->insert($this->tableKelas, $data);
 		return $this->db->insert_id();
 	}
 
