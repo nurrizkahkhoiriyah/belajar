@@ -12,7 +12,6 @@ class Kelas extends CI_Controller
 
 	public function index()
 	{
-
 		$data = array(
 			'menu' => 'backend/menu',
 			'content' => 'backend/kelasKonten',
@@ -21,10 +20,34 @@ class Kelas extends CI_Controller
 		$this->load->view('template', $data);
 	}
 
-	public function table_kelas()
+	public function option_tahun_pelajaran()
+	{
+		$q = $this->md->getAllTahunPelajaranNotDeleted();
+		$ret = '<option value="">Pilih Tahun Pelajaran</option>';
+		if ($q->num_rows() > 0) {
+			foreach ($q->result() as $row) {
+				$ret .= '<option value="' . $row->id . '">' . $row->nama_tahun_pelajaran . '</option>';
+			}
+		}
+		echo $ret;
+	}
+
+	public function option_jurusan($id)
 	{
 
-		$q = $this->md->getAllKelas();
+		$q = $this->md->getJurusanByTahunPelajaranID($id);
+		$ret = '<option value="">Pilih Jurusan</option>';
+		if ($q->num_rows() > 0) {
+			foreach ($q->result() as $row) {
+				$ret .= '<option value="' . $row->id . '">' . $row->nama_jurusan . '</option>';
+			}
+		}
+		echo $ret;
+	}
+
+	public function table_kelas()
+	{
+		$q = $this->md->getAllKelasNotDeleted();
 		$dt = [];
 		if ($q->num_rows() > 0) {
 			foreach ($q->result() as $row) {
@@ -40,37 +63,70 @@ class Kelas extends CI_Controller
 			$ret['message'] = 'Data tidak tersedia';
 		}
 
+
 		echo json_encode($ret);
 	}
 
-	public function edit($id = null)
+	public function save()
+	{
+
+		$id = $this->input->post('id');
+		$id_tahun_pelajaran = $this->input->post('id_tahun_pelajaran');
+		$data['nama_kelas'] = $this->input->post('nama_kelas');
+		$data['id_jurusan'] = $this->input->post('id_jurusan');
+		$data['created_at'] = date('Y-m-d H:i:s');
+		$data['updated_at'] = date('Y-m-d H:i:s');
+		$data['deleted_at'] = 0;
+
+		if ($data['nama_kelas']) {
+			$cek = $this->md->cekKelasDuplicate($data['nama_kelas'], $data['id_jurusan'], $id);
+			if ($cek->num_rows() > 0) {
+				$ret['status'] = false;
+				$ret['message'] = 'Kelas sudah ada';
+				$ret['query'] = $this->db->last_query();
+			} else {
+				if ($id) {
+					$this->md->updateKelas($id, $data);
+					$ret['status'] = true;
+					$ret['message'] = 'Data berhasil diupdate';
+				} else {
+					$this->md->saveKelas($data);
+					$ret['status'] = true;
+					$ret['message'] = 'Data berhasil disimpan';
+					$ret['query'] = $this->db->last_query();
+				}
+			}
+		} else {
+			$ret['status'] = false;
+			$ret['message'] = 'Data tidak boleh kosong';
+			$ret['query'] = $this->db->last_query();
+		}
+
+		echo json_encode($ret);
+	}
+
+	public function edit()
 	{
 		$id = $this->input->post('id');
-		// $edit = $this->md->getTahunPelajaranByID($id);
-		// echo json_encode($edit);
-		
-
-		 // ID dikirimkan melalui request POST
-		$data = $this->md->getKelasByID($id);
-
-		if (!$id) {
-			echo json_encode(['status' => false, 'message' => 'ID tidak valid.']);
-			return;
-    	}
-
-		if ($data) {
-			echo json_encode(['status' => true, 'data' => $data]);
+		$q = $this->md->getKelasByID($id);
+		if ($q->num_rows() > 0) {
+			$ret['status'] = true;
+			$ret['data'] = $q->row();
+			$ret['message'] = '';
+			$ret['query'] = $this->db->last_query();
 		} else {
-			echo json_encode(['status' => false, 'message' => 'Data tidak ditemukan atau sudah dihapus.']);
+			$ret['status'] = false;
+			$ret['data'] = [];
+			$ret['message'] = 'Data tidak tersedia';
 		}
+		echo json_encode($ret);
 	}
-	
+
 	public function delete()
 	{
-
 		$id = $this->input->post('id');
-		$q = $this->md->deleteKelas($id);
-
+		$data['deleted_at'] = time();
+		$q = $this->md->updateKelas($id, $data);
 		if ($q) {
 			$ret['status'] = true;
 			$ret['message'] = 'Data berhasil dihapus';
@@ -78,7 +134,6 @@ class Kelas extends CI_Controller
 			$ret['status'] = false;
 			$ret['message'] = 'Data gagal dihapus';
 		}
-
 		echo json_encode($ret);
 	}
 }

@@ -39,7 +39,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-user">
-					<form action="#" method="post" enctype="multipart/form-data">
+					<form id="formTahunPelajaran" action="#" method="post" enctype="multipart/form-data">
 						<input type="hidden" class="form-control" id="id" name="id" value="">
 						<div class="mb-1">
 							<label for="nama_tahun_pelajaran" class="form-label">Nama Tahun Pelajaran</label>
@@ -81,11 +81,6 @@
 <script>
 	$(document).ready(function() {
 		tabelTahunPelajaran();
-
-		$('.btnTambahTahunPelajaran').click(function() {
-			$('#modalTahunPelajaran').modal('show');
-		});
-
 		
 	})
 
@@ -120,35 +115,35 @@
 		});
 	}
 
+	$('.btnTambahTahunPelajaran').click(function() {
+		$('#id').val('');
+		$('#formTahunPelajaran').trigger('reset');
+		$('#modalTahunPelajaran').modal('show');
+	});
 
 	$('.saveBtn').click(function() {
-		let id = $('#id').val();
-			let nama_tahun_pelajaran = $('#nama_tahun_pelajaran').val();
-			let tanggal_mulai = $('#tanggal_mulai').val();
-			let tanggal_akhir = $('#tanggal_akhir').val();
-			let status_tahun_pelajaran = $('#status_tahun_pelajaran').val();
-			let url = '<?php echo base_url('tahun_pelajaran/save'); ?>';
-				$.ajax({
-					url: url,
-					type: 'POST',
-					data: {
-						id: id,
-						nama_tahun_pelajaran: nama_tahun_pelajaran,
-						tanggal_mulai: tanggal_mulai,
-						tanggal_akhir: tanggal_akhir,
-						status_tahun_pelajaran: status_tahun_pelajaran,
-					},
-					dataType: 'json',
-					success: function(response) {
-						if (response.status) {
-							alert(response.message);
-							$('#modalTahunPelajaran').modal('hide');
-							tableTahunPelajaran();
-						} else {
-							alert(response.message);
-						}
-					}
-				});
+		$.ajax({
+			url: '<?php echo base_url('tahun_pelajaran/save'); ?>',
+			type: 'POST',
+			data: {
+				id: $('#id').val(),
+				nama_tahun_pelajaran: $('#nama_tahun_pelajaran').val(),
+				tanggal_mulai: $('#tanggal_mulai').val(),
+				tanggal_akhir: $('#tanggal_akhir').val(),
+				status_tahun_pelajaran: $('#status_tahun_pelajaran').val(),
+			},
+			dataType: 'json',
+			success: function(response) {
+				if (response.status) {
+					alert(response.message);
+					$('#modalTahunPelajaran').modal('hide');
+					tabelTahunPelajaran();
+				} else {
+					alert(response.message);
+				}
+			}
+
+		})
 	})
 	
 	function editTahunPelajaran(id){

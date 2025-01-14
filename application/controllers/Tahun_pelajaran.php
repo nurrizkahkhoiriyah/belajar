@@ -24,7 +24,7 @@ class Tahun_pelajaran extends CI_Controller
 	public function table_tahun_pelajaran()
 	{
 
-		$q = $this->md->getAllTahunPelajaran();
+		$q = $this->md->getAllTahunPelajaranNotDeleted();
 		$dt = [];
 		if ($q->num_rows() > 0) {
 			foreach ($q->result() as $row) {
@@ -87,20 +87,24 @@ class Tahun_pelajaran extends CI_Controller
 
 	public function save()
 	{	
-		$data['nama_tahun_pelajaran'] = $this->input->post('nama_tahun_pelajaran');
-        $data['tanggal_mulai'] = $this->input->post('tanggal_mulai');
-        $data['tanggal_akhir'] = $this->input->post('tanggal_akhir');
-        $data['status_tahun_pelajaran'] = $this->input->post('status_tahun_pelajaran');
 		$id = $this->input->post('id');
+		$data['nama_tahun_pelajaran'] = $this->input->post('nama_tahun_pelajaran');
+		$data['tanggal_mulai'] = $this->input->post('tanggal_mulai');
+		$data['tanggal_akhir'] = $this->input->post('tanggal_akhir');
+		$data['status_tahun_pelajaran'] = $this->input->post('status_tahun_pelajaran');
+		$data['created_at'] = date('Y-m-d H:i:s');
+		$data['updated_at'] = date('Y-m-d H:i:s');
+		$data['deleted_at'] = 0;
 
-		if ($data['nama_tahun_pelajaran'] == '' || $data['tanggal_mulai'] == '' || $data['tanggal_akhir'] == '' || $data['status_tahun_pelajaran'] == '') {
-			$ret = array(
-				'status' => false,
-				'message' => 'Harap diisi semua'
-			);
-		} else {
+		if ($data['nama_tahun_pelajaran']) {
+			$cek = $this->md->cekTahunPelajaranDuplicate($data['nama_tahun_pelajaran'], $id);
+			if ($cek->num_rows() > 0) {
+				$ret['status'] = false;
+				$ret['message'] = 'Tahun Pelajaran sudah ada';
+				$ret['query'] = $this->db->last_query();
+			} else {
 
-				if ($id != '') {
+				if ($id) {
 					$update = $this->md->updateTahunPelajaran($id, $data);
 					if ($update) {
 						$ret = array(
@@ -129,6 +133,10 @@ class Tahun_pelajaran extends CI_Controller
 					}
 				}
 			
+			}
+		} else {
+			$ret['status'] = false;
+			$ret['message'] = 'Tahun Pelajaran tidak boleh kosong';
 		}
 		echo json_encode($ret);
 	}
