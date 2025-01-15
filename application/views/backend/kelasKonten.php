@@ -90,6 +90,7 @@
 			let url = '<?php echo base_url('kelas/option_jurusan'); ?>';
 			$('#id_jurusan').load(url + '/' + id);
 		})
+		
 
 	})
 
@@ -131,6 +132,7 @@
 		$('#formKelas').trigger('reset');
 		$('#modal').modal('show');
 	});
+	
 	$('.saveBtn').click(function() {
 		// lakukan proses simpan data, lalu tutup modal , lalu reload tabel
 		$.ajax({

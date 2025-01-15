@@ -33,6 +33,18 @@
 				<p>Data Kelas</p>
 			</a>
 		</li>
+		<li class="nav-item">
+			<a href="<?php echo base_url('biaya') ?>" class="nav-link ">
+				<i class="far fa-circle nav-icon"></i>
+				<p>Data Biaya</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="<?php echo base_url('seragam') ?>" class="nav-link ">
+				<i class="far fa-circle nav-icon"></i>
+				<p>Data Seragam</p>
+			</a>
+		</li>
 	</ul>
 </li>
 

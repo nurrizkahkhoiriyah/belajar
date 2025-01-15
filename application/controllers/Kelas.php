@@ -71,7 +71,7 @@ class Kelas extends CI_Controller
 	{
 
 		$id = $this->input->post('id');
-		$id_tahun_pelajaran = $this->input->post('id_tahun_pelajaran');
+		$data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');//terakhir diganti
 		$data['nama_kelas'] = $this->input->post('nama_kelas');
 		$data['id_jurusan'] = $this->input->post('id_jurusan');
 		$data['created_at'] = date('Y-m-d H:i:s');

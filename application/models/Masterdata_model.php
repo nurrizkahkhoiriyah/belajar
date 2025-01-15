@@ -7,6 +7,8 @@ class Masterdata_model extends CI_Model
 	protected $tableTahunPelajaran = 'data_tahun_pelajaran';
 	protected $tableKelas = 'data_kelas';
 	protected $tableJurusan = 'data_jurusan';
+	protected $tableBiaya = 'data_biaya';
+	protected $tableHargaBiaya = 'data_harga_biaya';
 
 	public function __construct()
 	{
@@ -113,6 +115,7 @@ class Masterdata_model extends CI_Model
 	}
 
 
+	//Data Kelas
 
 	public function getAllKelas() {
 		return  $this->db->get($this->tableKelas);
@@ -163,10 +166,128 @@ class Masterdata_model extends CI_Model
 		return $this->db->affected_rows();
 	}
 
-	public function savetKelas($data)
+	public function saveKelas($data)
 	{
 		$this->db->insert($this->tableKelas, $data);
 		return $this->db->insert_id();
 	}
+
+	// Data Biaya
+	public function getAllBiayaNotDeleted(){
+		$this->db->where('deleted_at', 0);
+		return  $this->db->get($this->tableBiaya);
+	}
+
+	public function cekBiayaDuplicate($nama_biaya, $id){
+		if ($id) {
+			$this->db->where('id !=', $id);
+		}
+		$this->db->where('nama_biaya', $nama_biaya);
+		return $this->db->get($this->tableBiaya);
+	}
+
+	public function getBiayaByID($id){
+		return $this->db->where('id', $id)->get($this->tableBiaya);
+	}
+
+	public function updateBiaya($id, $data){
+		$this->db->where('id', $id);
+		$this->db->update($this->tableBiaya, $data);
+		return $this->db->affected_rows();
+	}
+
+	public function insertBiaya($data){
+		$this->db->insert($this->tableBiaya, $data);
+		return $this->db->insert_id();
+	}
+
+	public function deleteBiaya($id = null)
+	{
+		$this->db->where('id', $id);
+		$this->db->delete($this->tableBiaya);
+		return $this->db->affected_rows();
+	}
+
+	// data harga biaya
+	public function getAllHargaBiayaNotDeleted(){
+		$this->db->select($this->tableHargaBiaya . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' . $this->tableJurusan . '.nama_jurusan,' . $this->tableKelas . '.nama_kelas,' . $this->tableBiaya . '.nama_biaya,');
+		$this->db->join($this->tableBiaya, $this->tableBiaya . '.id = ' . $this->tableHargaBiaya . '.id_biaya');
+		$this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tableHargaBiaya . '.id_kelas');
+		$this->db->join($this->tableJurusan, $this->tableJurusan . '.id = ' . $this->tableKelas . '.id_jurusan');
+		$this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableJurusan . '.id_tahun_pelajaran');
+		$this->db->where($this->tableHargaBiaya . '.deleted_at', 0);
+		return $this->db->get($this->tableHargaBiaya);
+	}
+
+	public function getKelasByJurusanID($id){
+		$this->db->where('id_Jurusan', $id);
+		return $this->db->get($this->tableKelas);
+	}
+
+	public function updateHargaBiaya($id, $data){
+		$this->db->where('id', $id);
+		$this->db->update($this->tableHargaBiaya, $data);
+		return $this->db->affected_rows();
+	}
+
+	public function insertHargaBiaya($data){
+		$this->db->insert($this->tableHargaBiaya, $data);
+		return $this->db->insert_id();
+	}
+
+	public function getHargaBiayaByID($id){
+		$this->db->select($this->tableHargaBiaya . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' . $this->tableJurusan . '.nama_jurusan,' . $this->tableKelas . '.nama_kelas,' . $this->tableBiaya . '.nama_biaya,');
+		$this->db->join($this->tableBiaya, $this->tableBiaya . '.id = ' . $this->tableHargaBiaya . '.id_biaya');
+		$this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tableHargaBiaya . '.id_kelas');
+		$this->db->join($this->tableJurusan, $this->tableJurusan . '.id = ' . $this->tableKelas . '.id_jurusan');
+		$this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableJurusan . '.id_tahun_pelajaran');
+		$this->db->where($this->tableHargaBiaya . '.deleted_at', 0);
+		$this->db->where($this->tableHargaBiaya . '.id', $id);
+		return $this->db->get($this->tableHargaBiaya);
+	}
+
+	public function deleteHargaBiaya($id = null)
+	{
+		$this->db->where('id', $id);
+		$this->db->delete($this->tableHargaBiaya);
+		return $this->db->affected_rows();
+	}
+
+
+	// data seragam
+	public function getAllSeragamNotDeleted(){
+		$this->db->where('deleted_at', 0);
+		return  $this->db->get($this->tableSeragam);
+	}
+
+	public function getSeragamByID($id){
+		return $this->db->where('id', $id)->get($this->tableSeragam);
+	}
+
+	public function cekSeragamDuplicate($nama_seragam, $id){
+		if($id){
+			$this->db->where('id !=', $id);
+		}
+		$this->db->where('nama_seragam', $nama_seragam);
+		return $this->db->get($this->tableSeragam);
+	}
+
+	public function updateSeragam($id, $data){
+		$this->db->where('id', $id);
+		$this->db->update($this->tableSeragam, $data);
+		return $this->db->affected_rows();
+	}
+
+	public function insertSeragam($data){
+		$this->db->insert($this->tableSeragam, $data);
+		return $this->db->insert_id();
+	}
+
+	public function deleteSeragam($id){
+		$this->db->where('id', $id);
+		$this->db->delete($this->tableSeragam);
+		return $this->db->affected_rows();
+	}
+	
 
 }
