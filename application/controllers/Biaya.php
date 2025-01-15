@@ -214,7 +214,7 @@ class Biaya extends CI_Controller
 		echo $ret;
 	}
 
-    public function saveStok()
+    public function saveHargaBiaya()
 	{	
 		$id = $this->input->post('id');
 		$data['id_biaya'] = $this->input->post('id_biaya');
@@ -226,7 +226,14 @@ class Biaya extends CI_Controller
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
-		if ($data['harga']) {
+		if ($data['id_biaya']) {
+			$cek = $this->md->cekHargaBiayaDuplicate($data['id_biaya'], $data['id_tahun_pelajaran'], $data['id_jurusan'], $data['id_kelas'], $id);
+			if ($cek->num_rows() > 0) {
+				$ret['status'] = false;
+				$ret['message'] = 'Data terduplikasi';
+				$ret['query'] = $this->db->last_query();
+			} else {
+
 				if ($id) {
 					$update = $this->md->updateHargaBiaya($id, $data);
 					if ($update) {
@@ -256,13 +263,13 @@ class Biaya extends CI_Controller
 					}
 				}
 			
-			} else {
+			}
+		} else {
 			$ret['status'] = false;
 			$ret['message'] = 'Data tidak boleh kosong';
             $ret['query'] = $this->db->last_query();
-		
-	}
-    echo json_encode($ret);
+		}
+    	echo json_encode($ret);
     }
 
     public function editHargaBiaya()

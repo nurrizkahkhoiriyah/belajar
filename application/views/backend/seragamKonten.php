@@ -19,7 +19,6 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Seragam</th>
-                                <th>Ukuran</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -56,7 +55,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Jenis Biaya</h5>
+				<h5 class="modal-title">Jenis Seragam</h5>
 
 				<button type="button" class="close " data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -69,11 +68,6 @@
 						<div class="mb-1">
 							<label for="nama_seragam" class="form-label">Nama Seragam</label>
 							<input type="text" class="form-control" id="nama_seragam" name="nama_seragam" value="">
-							<div class="error-block"></div>
-						</div>
-						<div class="mb-1">
-							<label for="ukuran" class="form-label">Ukuran</label>
-							<input type="text" class="form-control" id="ukuran" name="ukuran" value="">
 							<div class="error-block"></div>
 						</div>
 					</form>
@@ -91,7 +85,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Harga Biaya</h5>
+				<h5 class="modal-title">Stok Seragam</h5>
 
 				<button type="button" class="close " data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -104,7 +98,7 @@
 						<div class="mb-1">
 							<label for="id_seragam" class="form-label">Nama Seragam</label>
 							<select class="form-control" name="id_seragam" id="id_seragam">
-								<option value="">- Pilih Biaya -</option>
+								<option value="">- Pilih Seragam -</option>
 							</select>
 							<div class="error-block"></div>
 						</div>
@@ -130,15 +124,13 @@
 							<div class="error-block"></div>
 						</div>
 						<div class="mb-1">
-							<label for="id_ukuran" class="form-label">Ukuran</label>
-							<select class="form-control" name="id_ukuran" id="id_ukuran">
-								<option value="">- Pilih Ukuran -</option>
-							</select>
+							<label for="ukuran" class="form-label">Ukuran</label>
+							<input type="text" class="form-control" id="ukuran" name="ukuran" value="">
 							<div class="error-block"></div>
 						</div>
-            <div class="mb-1">
-							<label for="Stok" class="form-label">Stok</label>
-							<input type="text" class="form-control" id="Stok" name="Stok" value="">
+            			<div class="mb-1">
+							<label for="stok" class="form-label">Stok</label>
+							<input type="text" class="form-control" id="stok" name="stok" value="">
 							<div class="error-block"></div>
 						</div>
 					</form>
@@ -158,19 +150,18 @@
       tabelStok();
     })
 
-    $('#id_tahun_pelajaran').load('<?php echo base_url('biaya/option_tahun_pelajaran'); ?>');
+    $('#id_tahun_pelajaran').load('<?php echo base_url('seragam/option_tahun_pelajaran'); ?>');
 	  $('#id_tahun_pelajaran').change(function() {
       let id = $(this).val(); // id tahun pelajaran
-      let url = '<?php echo base_url('biaya/option_jurusan'); ?>';
+      let url = '<?php echo base_url('seragam/option_jurusan'); ?>';
       $('#id_jurusan').load(url + '/' + id);
-
     })
     $('#id_jurusan').change(function() {
       let id = $(this).val();
-      let url = '<?php echo base_url('biaya/option_kelas'); ?>';
+      let url = '<?php echo base_url('seragam/option_kelas'); ?>';
       $('#id_kelas').load(url + '/' + id);
     })
-    $('#id_seragam').load('<?php echo base_url('biaya/option_seragam'); ?>');
+    $('#id_seragam').load('<?php echo base_url('seragam/option_seragam'); ?>');
 
 
     $('.btnTambahSeragam').click(function() {
@@ -179,17 +170,13 @@
       $('#modalSeragam').modal('show');
     });
 
-    $('.btnTambahStok').click(function() {
-      $('#id').val('');
-      $('#formStok').trigger('reset');
-      $('#modalStok').modal('show');
-    });
+
 
     function tabelSeragam() {
 		let tabelSeragam = $('#tabelSeragam');
 		let tr = $('<tr>');
 		$.ajax({
-			url: '<?php echo base_url('biaya/table_seragam'); ?>',
+			url: '<?php echo base_url('seragam/table_seragam'); ?>',
 			type: 'GET',
 
 			dataType: 'json',
@@ -201,9 +188,8 @@
 						let tr = $('<tr>');
 						tr.append('<td>' + no++ + '</td>');
 						tr.append('<td>' + item.nama_seragam + '</td>');
-						tr.append('<td>' + item.ukuran + '</td>');
 						tr.append('<td>	<button class="btn btn-primary" onclick="editSeragam(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteSeragam(' + item.id + ')">Delete</button></td>');
-						tabelBiaya.find('tbody').append(tr);
+						tabelSeragam.find('tbody').append(tr);
 					});
 
 				} else {
@@ -214,46 +200,13 @@
 		});
 	}
 
-    function tabelStok() {
-		let tabelStok = $('#tabelStok');
-		let tr = $('<tr>');
+	$('.saveBtnSeragam').click(function() {
 		$.ajax({
-			url: '<?php echo base_url('biaya/table_stok'); ?>',
-			type: 'GET',
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					tabelStok.find('tbody').html('');
-					let no = 1;
-					$.each(response.data, function(i, item) {
-						let tr = $('<tr>');
-						tr.append('<td>' + no++ + '</td>');
-						tr.append('<td>' + item.nama_seragam + '</td>');
-						tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
-						tr.append('<td>' + item.nama_jurusan + '</td>');
-						tr.append('<td>' + item.nama_kelas + '</td>');
-						tr.append('<td>' + item.ukuran + '</td>');
-						tr.append('<td>' + item.stok + '</td>');
-						tr.append('<td>	<button class="btn btn-primary" onclick="editStok(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteStok(' + item.id + ')">Delete</button></td>');
-						tabelStok.find('tbody').append(tr);
-					});
-
-				} else {
-					tabelStok.find('tbody').html('');
-					tr.append('<td colspan="4">' + response.message + '</td>');
-				}
-			}
-		});
-	}
-
-    $('.saveBtnSeragam').click(function() {
-		$.ajax({
-			url: '<?php echo base_url('biaya/saveSeragam'); ?>',
+			url: '<?php echo base_url('seragam/saveSeragam'); ?>',
 			type: 'POST',
 			data: {
 				id: $('#id').val(),
 				nama_seragam: $('#nama_seragam').val(),
-				ukuran: $('#ukuran').val(),
 			},
 			dataType: 'json',
 			success: function(response) {
@@ -268,36 +221,10 @@
 
 		})
 	})
-    $('.saveBtnStok').click(function() {
-		$.ajax({
-			url: '<?php echo base_url('biaya/saveStok'); ?>',
-			type: 'POST',
-			data: {
-				id: $('#id').val(),
-				id_seragam: $('#id_seragam').val(),
-				id_tahun_pelajaran: $('#id_tahun_pelajaran').val(),
-				id_jurusan: $('#id_jurusan').val(),
-				id_kelas: $('#id_kelas').val(),
-				id_ukuran: $('#id_ukuran').val(),
-				stok: $('#stok').val(),
-			},
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					alert(response.message);
-					$('#modalStok').modal('hide');
-					tabelStok();
-				} else {
-					alert(response.message);
-				}
-			}
 
-		})
-	})
-
-    function editSeragam(id){
+	function editSeragam(id){
 			$.ajax({
-				url: '<?php echo base_url('biaya/editSeragam'); ?>',
+				url: '<?php echo base_url('seragam/editSeragam'); ?>',
 				type: 'POST',
 				data: {
 					id: id
@@ -307,36 +234,8 @@
 					if (response.status) {
 						$('#id').val(response.data.id);
 						$('#nama_seragam').val(response.data.nama_seragam);
-						$('#deskripsi').val(response.data.deskripsi);
 						$('#modalSeragam').modal('show');
-						tableSeragam();
-					} else {
-						alert(response.message);
-					}
-				}
-			});
-	}
-    function editStok(id){
-			$.ajax({
-				url: '<?php echo base_url('biaya/editStok'); ?>',
-				type: 'POST',
-				data: {
-					id: id
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (response.status) {
-						$('#id').val(response.data.id);
-						$('#id_seragam').val(response.data.id_seragam);
-            $('#id_tahun_pelajaran').val(response.data.id_tahun_pelajaran);
-            $('#id_jurusan').val(response.data.id_jurusan);
-            $('#id_kelas').val(response.data.id_kelas);
-            $('#id_ukuran').val(response.data.id_ukuran);
-            $('#stok').val(response.data.stok);
-            setJurusan(response.data.id_tahun_pelajaran, response.data.id_jurusan);
-            setKelas(response.data.id_jurusan, response.data.id_kelas);
-						$('#modalStok').modal('show');
-						tableStok();
+						tabelSeragam();
 					} else {
 						alert(response.message);
 					}
@@ -344,9 +243,9 @@
 			});
 	}
 
-    function deleteSeragam(id) {
+	function deleteSeragam(id) {
 		if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-			let url = '<?php echo base_url('biaya/deleteSeragam'); ?>';
+			let url = '<?php echo base_url('seragam/deleteSeragam'); ?>';
 			$.ajax({
 				url: url,
 				type: 'POST',
@@ -366,9 +265,105 @@
 		}
 
 	}
+
+	$('.btnTambahStok').click(function() {
+      $('#id').val('');
+      $('#formStok').trigger('reset');
+      $('#modalStok').modal('show');
+    });
+
+    function tabelStok() {
+		let tabelStok = $('#tabelStok');
+		let tr = $('<tr>');
+		$.ajax({
+			url: '<?php echo base_url('seragam/table_stok'); ?>',
+			type: 'GET',
+			dataType: 'json',
+			success: function(response) {
+				if (response.status) {
+					tabelStok.find('tbody').html('');
+					let no = 1;
+					$.each(response.data, function(i, item) {
+						let tr = $('<tr>');
+						tr.append('<td>' + no++ + '</td>');
+						tr.append('<td>' + item.nama_seragam + '</td>');
+						tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
+						tr.append('<td>' + item.nama_jurusan + '</td>');
+						tr.append('<td>' + item.nama_kelas + '</td>');
+						tr.append('<td>' + item.ukuran + '</td>');
+						tr.append('<td>' + item.stok + '</td>');
+						tr.append('<td>	<button class="btn btn-primary" onclick="editStok(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteStok(' + item.id + ')">Delete</button></td>');
+						tabelStok.find('tbody').append(tr);
+					});
+				} else {
+					tabelStok.find('tbody').html('');
+					tr.append('<td colspan="4">' + response.message + '</td>');
+				}
+			}
+		});
+	}
+
+    
+    $('.saveBtnStok').click(function() {
+		$.ajax({
+			url: '<?php echo base_url('seragam/saveStok'); ?>',
+			type: 'POST',
+			data: {
+				id: $('#id').val(),
+				id_seragam: $('#id_seragam').val(),
+				id_tahun_pelajaran: $('#id_tahun_pelajaran').val(),
+				id_jurusan: $('#id_jurusan').val(),
+				id_kelas: $('#id_kelas').val(),
+				ukuran: $('#ukuran').val(),
+				stok: $('#stok').val(),
+			},
+			dataType: 'json',
+			success: function(response) {
+				if (response.status) {
+					alert(response.message);
+					$('#modalStok').modal('hide');
+					tabelStok();
+				} else {
+					alert(response.message);
+				}
+			}
+
+		})
+	})
+
+    
+    function editStok(id){
+			$.ajax({
+				url: '<?php echo base_url('seragam/editStok'); ?>',
+				type: 'POST',
+				data: {
+					id: id
+				},
+				dataType: 'json',
+				success: function(response) {
+					if (response.status) {
+						$('#id').val(response.data.id);
+						$('#id_seragam').val(response.data.id_seragam);
+						$('#id_tahun_pelajaran').val(response.data.id_tahun_pelajaran);
+						$('#id_jurusan').val(response.data.id_jurusan);
+						$('#id_kelas').val(response.data.id_kelas);
+						$('#ukuran').val(response.data.ukuran);
+						$('#stok').val(response.data.stok);
+						setJurusan(response.data.id_tahun_pelajaran, response.data.id_jurusan);
+						setKelas(response.data.id_jurusan, response.data.id_kelas);
+						$('#modalStok').modal('show');
+						tableStok();
+					} else {
+						alert(response.message);
+					}
+				}
+			});
+	}
+
+    
     function deleteStok(id) {
 		if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-			let url = '<?php echo base_url('biaya/deleteStok'); ?>';
+			let url = '<?php echo base_url('seragam/deleteStok'); ?>';
 			$.ajax({
 				url: url,
 				type: 'POST',
@@ -390,14 +385,14 @@
 	}
 
     function setJurusan(id_tahun_pelajaran, id) {
-		let url = '<?php echo base_url('biaya/option_jurusan'); ?>';
+		let url = '<?php echo base_url('seragam/option_jurusan'); ?>';
 		$('#id_jurusan').load(url + '/' + id_tahun_pelajaran, function() {
 			$('#id_jurusan').val(id);
 		});
 
 	}
     function setKelas(id_jurusan, id) {
-		let url = '<?php echo base_url('biaya/option_kelas'); ?>';
+		let url = '<?php echo base_url('seragam/option_kelas'); ?>';
 		$('#id_kelas').load(url + '/' + id_jurusan, function() {
 			$('#id_kelas').val(id);
 		});

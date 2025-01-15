@@ -9,6 +9,10 @@ class Masterdata_model extends CI_Model
 	protected $tableJurusan = 'data_jurusan';
 	protected $tableBiaya = 'data_biaya';
 	protected $tableHargaBiaya = 'data_harga_biaya';
+	protected $tableSeragam = 'data_seragam';
+	protected $tableStok = 'data_stok';
+
+	protected $table = 'user';
 
 	public function __construct()
 	{
@@ -219,6 +223,17 @@ class Masterdata_model extends CI_Model
 		return $this->db->get($this->tableHargaBiaya);
 	}
 
+	public function cekHargaBiayaDuplicate($id_biaya, $id_tahun_pelajaran, $id_jurusan, $id_kelas, $id){
+		if ($id) {
+			$this->db->where('id !=', $id);
+		}
+		$this->db->where('id_biaya', $id_biaya);
+		$this->db->where('id_tahun_pelajaran', $id_tahun_pelajaran);
+		$this->db->where('id_jurusan', $id_jurusan);
+		$this->db->where('id_kelas', $id_kelas);
+		return $this->db->get($this->tableHargaBiaya);
+	}
+
 	public function getKelasByJurusanID($id){
 		$this->db->where('id_Jurusan', $id);
 		return $this->db->get($this->tableKelas);
@@ -265,7 +280,7 @@ class Masterdata_model extends CI_Model
 	}
 
 	public function cekSeragamDuplicate($nama_seragam, $id){
-		if($id){
+		if ($id) {
 			$this->db->where('id !=', $id);
 		}
 		$this->db->where('nama_seragam', $nama_seragam);
@@ -278,16 +293,118 @@ class Masterdata_model extends CI_Model
 		return $this->db->affected_rows();
 	}
 
+
 	public function insertSeragam($data){
 		$this->db->insert($this->tableSeragam, $data);
 		return $this->db->insert_id();
 	}
 
-	public function deleteSeragam($id){
+	public function deleteSeragam($id = null){
 		$this->db->where('id', $id);
 		$this->db->delete($this->tableSeragam);
 		return $this->db->affected_rows();
 	}
+
 	
+
+	//data stok
+	
+	public function getAllStokNotDeleted(){
+		$this->db->select($this->tableStok . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' . $this->tableJurusan . '.nama_jurusan,' . $this->tableKelas . '.nama_kelas,' . $this->tableSeragam . '.nama_seragam,');
+		$this->db->join($this->tableSeragam, $this->tableSeragam . '.id = ' . $this->tableStok . '.id_seragam');
+		$this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tableHargaBiaya . '.id_kelas');
+		$this->db->join($this->tableJurusan, $this->tableJurusan . '.id = ' . $this->tableKelas . '.id_jurusan');
+		$this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableJurusan . '.id_tahun_pelajaran');
+		$this->db->where($this->tableStok . '.deleted_at', 0);
+		return $this->db->get($this->tableStok);
+	}
+
+	public function cekStokDuplicate($id_seragam, $id_tahun_pelajaran, $id_jurusan, $id_kelas, $id){
+		if ($id) {
+			$this->db->where('id !=', $id);
+		}
+		$this->db->where('id_biaya', $id_seragam);
+		$this->db->where('id_tahun_pelajaran', $id_tahun_pelajaran);
+		$this->db->where('id_jurusan', $id_jurusan);
+		$this->db->where('id_kelas', $id_kelas);
+		return $this->db->get($this->tableStok);
+	}
+
+	public function updateStok($id, $data){
+		$this->db->where('id', $id);
+		$this->db->update($this->tableStok, $data);
+		return $this->db->affected_rows();
+	}
+
+	public function insertStok($data){
+		$this->db->insert($this->tableStok, $data);
+		return $this->db->insert_id();
+	}
+
+	public function getStokByID($id){
+		$this->db->select($this->tableStok . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' . $this->tableJurusan . '.nama_jurusan,' . $this->tableKelas . '.nama_kelas,' . $this->tableSeragam . '.nama_seragam,');
+		$this->db->join($this->tableSeragam, $this->tableSeragam . '.id = ' . $this->tableStok . '.id_seragam');
+		$this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tableStok . '.id_kelas');
+		$this->db->join($this->tableJurusan, $this->tableJurusan . '.id = ' . $this->tableKelas . '.id_jurusan');
+		$this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableJurusan . '.id_tahun_pelajaran');
+		$this->db->where($this->tableStok . '.deleted_at', 0);
+		$this->db->where($this->tableStok . '.id', $id);
+		return $this->db->get($this->tableStok);
+	}
+
+	public function deleteStok($id = null)
+	{
+		$this->db->where('id', $id);
+		$this->db->delete($this->tableStok);
+		return $this->db->affected_rows();
+	}
+
+
+	//Data User
+	public function getUserAll(){
+		$q = $this->db->get($this->table);
+		return $q->result();
+	}
+
+	public function getUserByID($id = null){
+		$q = $this->db->where('id', $id)->get($this->table);
+		return $q;
+	}
+
+	public function getUserByUsername($username) {
+		$this->db->where('username', $username);
+		return $this->db->get('users')->row();
+	}
+	
+
+	public function updateUser($id, $data){
+		$this->db->where('id', $id);
+		$this->db->update($this->table, $data);
+		return $this->db->affected_rows();
+	}
+
+	public function insertUser($data){
+		$this->db->insert($this->table, $data);
+		return $this->db->insert_id();
+	}
+
+	public function deleteUser($id = null){
+		$this->db->where('id', $id);
+		$this->db->delete($this->table);
+		return $this->db->affected_rows();
+	}
+
+    public function check_user($username, $password) {
+        $this->db->where('username', $username);
+        $this->db->where('password', $password); 
+        $q = $this->db->get('user');
+        return $q->row();
+    }
+
+	public function getUserByUsernameExceptId($username, $id) {
+		$this->db->where('username', $username);
+		$this->db->where('id !=', $id);
+		return $this->db->get('users')->row();
+	}
 
 }

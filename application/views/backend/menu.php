@@ -47,9 +47,38 @@
 		</li>
 	</ul>
 </li>
+<li class="nav-item ">
+	<a href="#" class="nav-link ">
+		<i class="nav-icon fas fa-copy"></i>
+		<p>
+			Pendaftaran
+			<i class="right fas fa-angle-left"></i>
+		</p>
+	</a>
+	<ul class="nav nav-treeview">
+		<li class="nav-item">
+			<a href="<?php echo base_url('pendaftaran_awal') ?>" class="nav-link ">
+				<i class="far fa-circle nav-icon"></i>
+				<p>Pendaftaran Awal</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="<?php echo base_url('pendaftaran_ulang') ?>" class="nav-link ">
+				<i class="far fa-circle nav-icon"></i>
+				<p>Pendaftaran Ulang</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="<?php echo base_url('pembatalan_pendaftaran') ?>" class="nav-link ">
+				<i class="far fa-circle nav-icon"></i>
+				<p>Pembatalan Pendaftaran</p>
+			</a>
+		</li>
+	</ul>
+</li>
 
 <li class="nav-item">
-	<a href="<?php echo base_url('user_akun') ?>" class="nav-link">
+	<a href="<?php echo base_url('akun_pengguna') ?>" class="nav-link">
 		<i class="nav-icon fas fa-users "></i>
 		<p>
 			Akun Pengguna

@@ -171,7 +171,7 @@
 	}
 
 	function deleteTahunPelajaran(id) {
-		if (confirm('Apakah Anda yakin ingin menghapus user ini?')) {
+		if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
 			let url = '<?php echo base_url('tahun_pelajaran/delete'); ?>';
 			$.ajax({
 				url: url,

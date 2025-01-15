@@ -47,7 +47,6 @@ class Seragam extends CI_Controller
 	{	
 		$id = $this->input->post('id');
 		$data['nama_seragam'] = $this->input->post('nama_seragam');
-		$data['ukuran'] = $this->input->post('ukuran');
 		$data['created_at'] = date('Y-m-d H:i:s');
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
@@ -56,7 +55,7 @@ class Seragam extends CI_Controller
 			$cek = $this->md->cekSeragamDuplicate($data['nama_seragam'], $id);
 			if ($cek->num_rows() > 0) {
 				$ret['status'] = false;
-				$ret['message'] = 'Nama Seragam sudah ada';
+				$ret['message'] = 'Data terduplikasi';
 				$ret['query'] = $this->db->last_query();
 			} else {
 
@@ -192,7 +191,7 @@ class Seragam extends CI_Controller
 	{
 
 		$q = $this->md->getKelasByJurusanID($id);
-		$ret = '<option value="">Pilih kelas</option>';
+		$ret = '<option value="">Pilih Kelas</option>';
 		if ($q->num_rows() > 0) {
 			foreach ($q->result() as $row) {
 				$ret .= '<option value="' . $row->id . '">' . $row->nama_kelas . '</option>';
@@ -221,13 +220,20 @@ class Seragam extends CI_Controller
 		$data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');
 		$data['id_jurusan'] = $this->input->post('id_jurusan');
 		$data['id_kelas'] = $this->input->post('id_kelas');
-		$data['id_ukuran'] = $this->input->post('id_ukuran');
+		$data['ukuran'] = $this->input->post('ukuran');
 		$data['stok'] = $this->input->post('stok');
 		$data['created_at'] = date('Y-m-d H:i:s');
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
 		if ($data['stok']) {
+			$cek = $this->md->cekHargaBiayaDuplicate($data['id_seragam'], $data['id_tahun_pelajaran'], $data['id_jurusan'], $data['ukuran'], $data['ukuran'], $id);
+			if ($cek->num_rows() > 0) {
+				$ret['status'] = false;
+				$ret['message'] = 'Data terduplikasi';
+				$ret['query'] = $this->db->last_query();
+			} else {
+
 				if ($id) {
 					$update = $this->md->updateStok($id, $data);
 					if ($update) {
@@ -257,11 +263,11 @@ class Seragam extends CI_Controller
 					}
 				}
 			
-			} else {
+			}
+		} else {
 			$ret['status'] = false;
 			$ret['message'] = 'Data tidak boleh kosong';
             $ret['query'] = $this->db->last_query();
-		
 		}
     	echo json_encode($ret);
     }
