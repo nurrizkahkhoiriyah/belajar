@@ -21,7 +21,7 @@ class Seragam extends CI_Controller
 		$this->load->view('template', $data);
 	}
 
-	public function table_seragam()
+	public function tabel_seragam()
 	{
 
 		$q = $this->md->getAllSeragamNotDeleted();
@@ -226,7 +226,7 @@ class Seragam extends CI_Controller
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
-		if ($data['id_seragam']) {
+		if ($data['id']) {
 			$cek = $this->md->cekStokDuplicate($data['id_seragam'], $data['id_tahun_pelajaran'], $data['id_jurusan'], $data['id_kelas'], $data['ukuran'], $id);
 			if ($cek->num_rows() > 0) {
 				$ret['status'] = false;

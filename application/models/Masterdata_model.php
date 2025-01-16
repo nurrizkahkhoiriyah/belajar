@@ -299,6 +299,8 @@ class Masterdata_model extends CI_Model
 		return $this->db->insert_id();
 	}
 
+	
+
 	public function deleteSeragam($id = null){
 		$this->db->where('id', $id);
 		$this->db->delete($this->tableSeragam);

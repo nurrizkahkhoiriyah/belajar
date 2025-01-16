@@ -181,7 +181,7 @@
 		let tabelSeragam = $('#tabelSeragam');
 		let tr = $('<tr>');
 		$.ajax({
-			url: '<?php echo base_url('seragam/table_seragam'); ?>',
+			url: '<?php echo base_url('seragam/tabel_seragam'); ?>',
 			type: 'GET',
 
 			dataType: 'json',

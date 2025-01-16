@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 16, 2025 at 12:45 AM
+-- Generation Time: Jan 16, 2025 at 03:02 AM
 -- Server version: 8.0.30
 -- PHP Version: 7.4.33
 
@@ -41,9 +41,10 @@ CREATE TABLE `data_biaya` (
 --
 
 INSERT INTO `data_biaya` (`id`, `nama_biaya`, `deskripsi`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Pendaftaran', 'Uang masuk', '2025-01-15 04:00:32', '2025-01-15 04:00:32', 0),
+(1, 'Pendaftaran', '.', '2025-01-16 00:52:51', '2025-01-16 00:52:51', 0),
 (4, 'SPP', 'Uang sekolah', '2025-01-15 07:36:46', '2025-01-15 07:36:46', 0),
-(5, 'Pembangunan', '-', '2025-01-15 12:54:39', '2025-01-15 12:54:39', 0);
+(5, 'Pembangunan', '-', '2025-01-15 12:54:39', '2025-01-15 12:54:39', 0),
+(6, 'Uang Buku', '.', '2025-01-16 01:00:27', '2025-01-16 01:00:27', 0);
 
 -- --------------------------------------------------------
 
@@ -277,7 +278,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `data_biaya`
 --
 ALTER TABLE `data_biaya`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `data_harga_biaya`
