@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 15, 2025 at 03:59 PM
+-- Generation Time: Jan 16, 2025 at 12:45 AM
 -- Server version: 8.0.30
 -- PHP Version: 7.4.33
 
@@ -147,8 +147,7 @@ CREATE TABLE `data_seragam` (
 --
 
 INSERT INTO `data_seragam` (`id`, `nama_seragam`, `created_at`, `updated _at`, `deleted_at`) VALUES
-(1, 'Pramuka', '2025-01-15 11:51:53', '2025-01-15 11:51:53', 0),
-(2, 'Putih Abu-abu', '2025-01-15 15:57:34', '2025-01-15 15:57:34', 0);
+(1, 'Pramuka', '2025-01-15 11:51:53', '2025-01-15 11:51:53', 0);
 
 -- --------------------------------------------------------
 
@@ -205,18 +204,17 @@ CREATE TABLE `user` (
   `id` int NOT NULL,
   `username` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `deleted_at` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `password`, `updated_at`) VALUES
-(3, 'nur', 'dfg', '2025-01-09 18:37:36'),
-(8, 'nurrizkahkhoriyah', 'rizkah', '2025-01-10 07:02:42'),
-(21, 'rizkah', '23', '2025-01-11 12:59:24'),
-(29, 'nur rizkah', 'ddd', '2025-01-11 20:30:17');
+INSERT INTO `user` (`id`, `username`, `password`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'rizkah', '123', '2025-01-16 00:25:02', '2025-01-16 00:25:02', 0);
 
 --
 -- Indexes for dumped tables

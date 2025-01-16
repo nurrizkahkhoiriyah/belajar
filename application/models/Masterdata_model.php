@@ -312,21 +312,22 @@ class Masterdata_model extends CI_Model
 	public function getAllStokNotDeleted(){
 		$this->db->select($this->tableStok . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' . $this->tableJurusan . '.nama_jurusan,' . $this->tableKelas . '.nama_kelas,' . $this->tableSeragam . '.nama_seragam,');
 		$this->db->join($this->tableSeragam, $this->tableSeragam . '.id = ' . $this->tableStok . '.id_seragam');
-		$this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tableHargaBiaya . '.id_kelas');
+		$this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tableStok . '.id_kelas');
 		$this->db->join($this->tableJurusan, $this->tableJurusan . '.id = ' . $this->tableKelas . '.id_jurusan');
 		$this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableJurusan . '.id_tahun_pelajaran');
 		$this->db->where($this->tableStok . '.deleted_at', 0);
 		return $this->db->get($this->tableStok);
 	}
 
-	public function cekStokDuplicate($id_seragam, $id_tahun_pelajaran, $id_jurusan, $id_kelas, $id){
+	public function cekStokDuplicate($id_seragam, $id_tahun_pelajaran, $id_jurusan, $id_kelas, $ukuran, $id){
 		if ($id) {
 			$this->db->where('id !=', $id);
 		}
-		$this->db->where('id_biaya', $id_seragam);
+		$this->db->where('id_seragam', $id_seragam);
 		$this->db->where('id_tahun_pelajaran', $id_tahun_pelajaran);
 		$this->db->where('id_jurusan', $id_jurusan);
 		$this->db->where('id_kelas', $id_kelas);
+		$this->db->where('ukuran', $ukuran);
 		return $this->db->get($this->tableStok);
 	}
 
@@ -361,21 +362,22 @@ class Masterdata_model extends CI_Model
 
 
 	//Data User
-	public function getUserAll(){
-		$q = $this->db->get($this->table);
-		return $q->result();
+	public function getAllUserNotDeleted(){
+		$this->db->where('deleted_at', 0);
+		return  $this->db->get($this->table);
 	}
 
-	public function getUserByID($id = null){
-		$q = $this->db->where('id', $id)->get($this->table);
-		return $q;
-	}
-
-	public function getUserByUsername($username) {
+	public function cekUsernameDuplicate($username, $id){
+		if ($id) {
+			$this->db->where('id !=', $id);
+		}
 		$this->db->where('username', $username);
-		return $this->db->get('users')->row();
+		return $this->db->get($this->table);
 	}
-	
+
+	public function getUsernameByID($id){
+		return $this->db->where('id', $id)->get($this->table);
+	}
 
 	public function updateUser($id, $data){
 		$this->db->where('id', $id);
@@ -388,23 +390,13 @@ class Masterdata_model extends CI_Model
 		return $this->db->insert_id();
 	}
 
-	public function deleteUser($id = null){
+	public function deleteUser($id = null)
+	{
 		$this->db->where('id', $id);
 		$this->db->delete($this->table);
 		return $this->db->affected_rows();
 	}
+	
 
-    public function check_user($username, $password) {
-        $this->db->where('username', $username);
-        $this->db->where('password', $password); 
-        $q = $this->db->get('user');
-        return $q->row();
-    }
-
-	public function getUserByUsernameExceptId($username, $id) {
-		$this->db->where('username', $username);
-		$this->db->where('id !=', $id);
-		return $this->db->get('users')->row();
-	}
 
 }

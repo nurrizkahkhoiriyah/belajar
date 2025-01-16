@@ -40,6 +40,7 @@
 								<th>Kelas</th>
 								<th>Ukuran</th>
 								<th>Stok</th>
+								<th>Aksi</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -170,7 +171,11 @@
       $('#modalSeragam').modal('show');
     });
 
-
+	$('.btnTambahStok').click(function() {
+      $('#id').val('');
+      $('#formStok').trigger('reset');
+      $('#modalStok').modal('show');
+    });
 
     function tabelSeragam() {
 		let tabelSeragam = $('#tabelSeragam');
@@ -200,79 +205,7 @@
 		});
 	}
 
-	$('.saveBtnSeragam').click(function() {
-		$.ajax({
-			url: '<?php echo base_url('seragam/saveSeragam'); ?>',
-			type: 'POST',
-			data: {
-				id: $('#id').val(),
-				nama_seragam: $('#nama_seragam').val(),
-			},
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					alert(response.message);
-					$('#modalSeragam').modal('hide');
-					tabelSeragam();
-				} else {
-					alert(response.message);
-				}
-			}
-
-		})
-	})
-
-	function editSeragam(id){
-			$.ajax({
-				url: '<?php echo base_url('seragam/editSeragam'); ?>',
-				type: 'POST',
-				data: {
-					id: id
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (response.status) {
-						$('#id').val(response.data.id);
-						$('#nama_seragam').val(response.data.nama_seragam);
-						$('#modalSeragam').modal('show');
-						tabelSeragam();
-					} else {
-						alert(response.message);
-					}
-				}
-			});
-	}
-
-	function deleteSeragam(id) {
-		if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-			let url = '<?php echo base_url('seragam/deleteSeragam'); ?>';
-			$.ajax({
-				url: url,
-				type: 'POST',
-				data: {
-					id: id
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (response.status) {
-						alert(response.message);
-						tabelSeragam();
-					} else {
-						alert(response.message);
-					}
-				}
-			});
-		}
-
-	}
-
-	$('.btnTambahStok').click(function() {
-      $('#id').val('');
-      $('#formStok').trigger('reset');
-      $('#modalStok').modal('show');
-    });
-
-    function tabelStok() {
+	function tabelStok() {
 		let tabelStok = $('#tabelStok');
 		let tr = $('<tr>');
 		$.ajax({
@@ -303,8 +236,29 @@
 		});
 	}
 
-    
-    $('.saveBtnStok').click(function() {
+	$('.saveBtnSeragam').click(function() {
+		$.ajax({
+			url: '<?php echo base_url('seragam/saveSeragam'); ?>',
+			type: 'POST',
+			data: {
+				id: $('#id').val(),
+				nama_seragam: $('#nama_seragam').val(),
+			},
+			dataType: 'json',
+			success: function(response) {
+				if (response.status) {
+					alert(response.message);
+					$('#modalSeragam').modal('hide');
+					tabelSeragam();
+				} else {
+					alert(response.message);
+				}
+			}
+
+		})
+	})
+
+	$('.saveBtnStok').click(function() {
 		$.ajax({
 			url: '<?php echo base_url('seragam/saveStok'); ?>',
 			type: 'POST',
@@ -331,8 +285,28 @@
 		})
 	})
 
-    
-    function editStok(id){
+	function editSeragam(id){
+			$.ajax({
+				url: '<?php echo base_url('seragam/editSeragam'); ?>',
+				type: 'POST',
+				data: {
+					id: id
+				},
+				dataType: 'json',
+				success: function(response) {
+					if (response.status) {
+						$('#id').val(response.data.id);
+						$('#nama_seragam').val(response.data.nama_seragam);
+						$('#modalSeragam').modal('show');
+						tabelSeragam();
+					} else {
+						alert(response.message);
+					}
+				}
+			});
+	}
+
+	function editStok(id){
 			$.ajax({
 				url: '<?php echo base_url('seragam/editStok'); ?>',
 				type: 'POST',
@@ -360,6 +334,28 @@
 			});
 	}
 
+	function deleteSeragam(id) {
+		if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+			let url = '<?php echo base_url('seragam/deleteSeragam'); ?>';
+			$.ajax({
+				url: url,
+				type: 'POST',
+				data: {
+					id: id
+				},
+				dataType: 'json',
+				success: function(response) {
+					if (response.status) {
+						alert(response.message);
+						tabelSeragam();
+					} else {
+						alert(response.message);
+					}
+				}
+			});
+		}
+
+	}
     
     function deleteStok(id) {
 		if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {

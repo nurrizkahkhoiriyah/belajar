@@ -300,7 +300,7 @@
 						$('#nama_biaya').val(response.data.nama_biaya);
 						$('#deskripsi').val(response.data.deskripsi);
 						$('#modalBiaya').modal('show');
-						tableBiaya();
+						tabelBiaya();
 					} else {
 						alert(response.message);
 					}
@@ -326,7 +326,7 @@
                         setJurusan(response.data.id_tahun_pelajaran, response.data.id_jurusan);
                         setKelas(response.data.id_jurusan, response.data.id_kelas);
 						$('#modalHargaBiaya').modal('show');
-						tableHargaBiaya();
+						tabelHargaBiaya();
 					} else {
 						alert(response.message);
 					}

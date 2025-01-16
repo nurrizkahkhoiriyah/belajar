@@ -22,7 +22,7 @@ class Akun_pengguna extends CI_Controller
 	}
 
     public function table_user(){
-        $q = $this->md->getUserAll();
+        $q = $this->md->getAllUserDeleted();
 		$dt = [];
 		if ($q->num_rows() > 0) {
 			foreach ($q->result() as $row) {
@@ -41,48 +41,102 @@ class Akun_pengguna extends CI_Controller
 		echo json_encode($ret);
     }
 
-
-	public function get_all(){
-		$q = $this->md->getUserAll(); 
-		echo json_encode($q); 
-	}
-
-	public function save(){
-		$data = array(
-			'username' => $this->input->post('username'),
-			'password' => $this->input->post('password')
-		);
-	
-		$this->md->insertUser($data);
-		$users = $this->md->getUserAll();
-		echo json_encode($users);
-	}
-
-
-	public function update_user(){
+	public function save()
+	{	
 		$id = $this->input->post('id');
+		$data['username'] = $this->input->post('username');
+		$data['password'] = $this->input->post('password');
+		$data['created_at'] = date('Y-m-d H:i:s');
+		$data['updated_at'] = date('Y-m-d H:i:s');
+		$data['deleted_at'] = 0;
 
-		$data = array(
-			'username' => $this->input->post('username'),
-			'password' => $this->input->post('password')
-		);
+		if ($data['username']) {
+			$cek = $this->md->cekUsernameDuplicate($data['username'], $id);
+			if ($cek->num_rows() > 0) {
+				$ret['status'] = false;
+				$ret['message'] = 'Username sudah ada';
+				$ret['query'] = $this->db->last_query();
+			} else {
 
-		$update = $this->md->updateUser($id, $data);
-		echo json_encode($update);
+				if ($id) {
+					$update = $this->md->updateUser($id, $data);
+					if ($update) {
+						$ret = array(
+							'status' => true,
+							'message' => 'Data berhasil diupdate'
+						);
+					} else {
+						$ret = array(
+							'status' => false,
+							'message' => 'Data gagal diupdate'
+						);
+					}
+				} else {
+					$insert = $this->md->insertUser($data);
+
+					if ($insert) {
+						$ret = array(
+							'status' => true,
+							'message' => 'Data berhasil disimpan'
+						);
+					} else {
+						$ret = array(
+							'status' => false,
+							'message' => 'Data gagal disimpan'
+						);
+					}
+				}
+			
+			}
+		} else {
+			$ret['status'] = false;
+			$ret['message'] = 'Data tidak boleh kosong';
+            $ret['query'] = $this->db->last_query();
+		}
+		echo json_encode($ret);
 	}
 
-	public function edit($id = null){
-		$edit = $this->md->getUserByID($id);
-		echo json_encode($edit);
-	}
+	public function edit()
+	{
 
-	public function delete($id = null){
 		$id = $this->input->post('id');
+		$q = $this->md->getUsernameByID($id);
 
-		$delete = $this->md->deleteUser($id);
-		echo json_encode($delete);
+		if ($q->num_rows() > 0) {
+			$ret = array(
+				'status' => true,
+				'data' => $q->row(),
+				'message' => '',
+			);
+		} else {
+			$ret = array(
+				'status' => false,
+				'data' => [],
+				'message' => 'Data tidak ditemukan',
+				'query' => $this->db->last_query()
+			);
+		}
 
+		echo json_encode($ret);
 	}
+
+	public function delete()
+	{
+
+		$id = $this->input->post('id');
+		$q = $this->md->deleteUser($id);
+
+		if ($q) {
+			$ret['status'] = true;
+			$ret['message'] = 'Data berhasil dihapus';
+		} else {
+			$ret['status'] = false;
+			$ret['message'] = 'Data gagal dihapus';
+		}
+
+		echo json_encode($ret);
+	}
+
 
 	public function logout() {
         $this->session->sess_destroy();

@@ -109,7 +109,6 @@
 				id: $('#id').val(),
 				username: $('#username').val(),
 				password: $('#password').val(),
-
 			},
 			dataType: 'json',
 			success: function(response) {

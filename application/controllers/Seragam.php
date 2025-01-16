@@ -51,7 +51,7 @@ class Seragam extends CI_Controller
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
-		if ($data['nama_seragam']) {
+		if ($data['id']) {
 			$cek = $this->md->cekSeragamDuplicate($data['nama_seragam'], $id);
 			if ($cek->num_rows() > 0) {
 				$ret['status'] = false;
@@ -139,7 +139,7 @@ class Seragam extends CI_Controller
 	}
 
 
-    // harga biaya
+    // stok
     public function table_stok()
 	{
 
@@ -226,8 +226,8 @@ class Seragam extends CI_Controller
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
-		if ($data['stok']) {
-			$cek = $this->md->cekHargaBiayaDuplicate($data['id_seragam'], $data['id_tahun_pelajaran'], $data['id_jurusan'], $data['ukuran'], $data['ukuran'], $id);
+		if ($data['id_seragam']) {
+			$cek = $this->md->cekStokDuplicate($data['id_seragam'], $data['id_tahun_pelajaran'], $data['id_jurusan'], $data['id_kelas'], $data['ukuran'], $id);
 			if ($cek->num_rows() > 0) {
 				$ret['status'] = false;
 				$ret['message'] = 'Data terduplikasi';
