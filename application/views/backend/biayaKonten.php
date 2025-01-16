@@ -37,8 +37,6 @@
 								<th>No</th>
 								<th>Nama Biaya</th>
 								<th>Tahun Pelajaran</th>
-								<th>Jurusan</th>
-								<th>Kelas</th>
 								<th>Harga</th>
 								<th>Aksi</th>
 							</tr>
@@ -115,20 +113,6 @@
 							</select>
 							<div class="error-block"></div>
 						</div>
-						<div class="mb-1">
-							<label for="id_jurusan" class="form-label">Jurusan</label>
-							<select class="form-control" name="id_jurusan" id="id_jurusan">
-								<option value="">- Pilih Jurusan -</option>
-							</select>
-							<div class="error-block"></div>
-						</div>
-						<div class="mb-1">
-							<label for="id_kelas" class="form-label">Kelas</label>
-							<select class="form-control" name="id_kelas" id="id_kelas">
-								<option value="">- Pilih Kelas -</option>
-							</select>
-							<div class="error-block"></div>
-						</div>
                         <div class="mb-1">
 							<label for="harga" class="form-label">Harga</label>
 							<input type="text" class="form-control" id="harga" name="harga" value="">
@@ -152,17 +136,6 @@
 	})
 
     $('#id_tahun_pelajaran').load('<?php echo base_url('biaya/option_tahun_pelajaran'); ?>');
-	$('#id_tahun_pelajaran').change(function() {
-		let id = $(this).val(); // id tahun pelajaran
-		let url = '<?php echo base_url('biaya/option_jurusan'); ?>';
-		$('#id_jurusan').load(url + '/' + id);
-
-	})
-    $('#id_jurusan').change(function() {
-		let id = $(this).val();
-		let url = '<?php echo base_url('biaya/option_kelas'); ?>';
-		$('#id_kelas').load(url + '/' + id);
-	})
     $('#id_biaya').load('<?php echo base_url('biaya/option_biaya'); ?>');
 
 
@@ -223,8 +196,6 @@
 						tr.append('<td>' + no++ + '</td>');
 						tr.append('<td>' + item.nama_biaya + '</td>');
 						tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
-						tr.append('<td>' + item.nama_jurusan + '</td>');
-						tr.append('<td>' + item.nama_kelas + '</td>');
 						tr.append('<td>' + item.harga + '</td>');
 						tr.append('<td>	<button class="btn btn-primary" onclick="editHargaBiaya(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteHargaBiaya(' + item.id + ')">Delete</button></td>');
 						tabelHargaBiaya.find('tbody').append(tr);
@@ -268,8 +239,6 @@
 				id: $('#id').val(),
 				id_biaya: $('#id_biaya').val(),
 				id_tahun_pelajaran: $('#id_tahun_pelajaran').val(),
-				id_jurusan: $('#id_jurusan').val(),
-				id_kelas: $('#id_kelas').val(),
 				harga: $('#harga').val(),
 			},
 			dataType: 'json',
@@ -320,11 +289,6 @@
 						$('#id').val(response.data.id);
 						$('#id_biaya').val(response.data.id_biaya);
                         $('#id_tahun_pelajaran').val(response.data.id_tahun_pelajaran);
-                        $('#id_jurusan').val(response.data.id_jurusan);
-                        $('#id_kelas').val(response.data.id_kelas);
-                        $('#harga').val(response.data.harga);
-                        setJurusan(response.data.id_tahun_pelajaran, response.data.id_jurusan);
-                        setKelas(response.data.id_jurusan, response.data.id_kelas);
 						$('#modalHargaBiaya').modal('show');
 						tabelHargaBiaya();
 					} else {
@@ -379,18 +343,4 @@
 
 	}
 
-    function setJurusan(id_tahun_pelajaran, id) {
-		let url = '<?php echo base_url('biaya/option_jurusan'); ?>';
-		$('#id_jurusan').load(url + '/' + id_tahun_pelajaran, function() {
-			$('#id_jurusan').val(id);
-		});
-
-	}
-    function setKelas(id_jurusan, id) {
-		let url = '<?php echo base_url('biaya/option_kelas'); ?>';
-		$('#id_kelas').load(url + '/' + id_jurusan, function() {
-			$('#id_kelas').val(id);
-		});
-
-	}
 </script>
