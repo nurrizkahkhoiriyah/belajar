@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 16, 2025 at 03:02 AM
+-- Generation Time: Jan 16, 2025 at 08:02 AM
 -- Server version: 8.0.30
 -- PHP Version: 7.4.33
 
@@ -41,10 +41,9 @@ CREATE TABLE `data_biaya` (
 --
 
 INSERT INTO `data_biaya` (`id`, `nama_biaya`, `deskripsi`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Pendaftaran', '.', '2025-01-16 00:52:51', '2025-01-16 00:52:51', 0),
+(1, 'Pendaftaran', 'aa', '2025-01-16 03:26:18', '2025-01-16 03:26:18', 0),
 (4, 'SPP', 'Uang sekolah', '2025-01-15 07:36:46', '2025-01-15 07:36:46', 0),
-(5, 'Pembangunan', '-', '2025-01-15 12:54:39', '2025-01-15 12:54:39', 0),
-(6, 'Uang Buku', '.', '2025-01-16 01:00:27', '2025-01-16 01:00:27', 0);
+(5, 'Pembangunan', '-', '2025-01-15 12:54:39', '2025-01-15 12:54:39', 0);
 
 -- --------------------------------------------------------
 
@@ -56,8 +55,6 @@ CREATE TABLE `data_harga_biaya` (
   `id` int NOT NULL,
   `id_biaya` int NOT NULL,
   `id_tahun_pelajaran` int NOT NULL,
-  `id_jurusan` int NOT NULL,
-  `id_kelas` int NOT NULL,
   `harga` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -68,10 +65,10 @@ CREATE TABLE `data_harga_biaya` (
 -- Dumping data for table `data_harga_biaya`
 --
 
-INSERT INTO `data_harga_biaya` (`id`, `id_biaya`, `id_tahun_pelajaran`, `id_jurusan`, `id_kelas`, `harga`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 8, 2, 2, 'Rp 200.000', '2025-01-15 06:36:31', '2025-01-15 06:36:31', 0),
-(2, 1, 1, 1, 3, 'Rp 350.000', '2025-01-15 07:36:22', '2025-01-15 07:36:22', 0),
-(5, 4, 8, 2, 2, 'Rp 200.000', '2025-01-15 14:13:29', '2025-01-15 14:13:29', 0);
+INSERT INTO `data_harga_biaya` (`id`, `id_biaya`, `id_tahun_pelajaran`, `harga`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 8, 'Rp 200.000', '2025-01-15 06:36:31', '2025-01-15 06:36:31', 0),
+(2, 1, 9, 'Rp 350.000', '2025-01-15 07:36:22', '2025-01-16 07:48:43', 0),
+(5, 4, 8, 'Rp 200.000', '2025-01-15 14:13:29', '2025-01-15 14:13:29', 0);
 
 -- --------------------------------------------------------
 
@@ -139,7 +136,7 @@ CREATE TABLE `data_seragam` (
   `id` int NOT NULL,
   `nama_seragam` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated _at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -147,8 +144,11 @@ CREATE TABLE `data_seragam` (
 -- Dumping data for table `data_seragam`
 --
 
-INSERT INTO `data_seragam` (`id`, `nama_seragam`, `created_at`, `updated _at`, `deleted_at`) VALUES
-(1, 'Pramuka', '2025-01-15 11:51:53', '2025-01-15 11:51:53', 0);
+INSERT INTO `data_seragam` (`id`, `nama_seragam`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Pramukaa', '2025-01-15 11:51:53', '2025-01-16 07:19:15', 0),
+(3, 'ddttt', '2025-01-16 05:07:48', '2025-01-16 05:08:06', 0),
+(4, 'Putih Abu-abu', '0000-00-00 00:00:00', '2025-01-16 07:49:37', 0),
+(5, 'olahraga', '0000-00-00 00:00:00', '2025-01-16 07:28:54', 0);
 
 -- --------------------------------------------------------
 
@@ -160,14 +160,21 @@ CREATE TABLE `data_stok` (
   `id` int NOT NULL,
   `id_seragam` int NOT NULL,
   `id_tahun_pelajaran` int NOT NULL,
-  `id_jurusan` int NOT NULL,
-  `id_kelas` int NOT NULL,
   `ukuran` varchar(50) NOT NULL,
   `stok` int NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated _at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `data_stok`
+--
+
+INSERT INTO `data_stok` (`id`, `id_seragam`, `id_tahun_pelajaran`, `ukuran`, `stok`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 1, 'S', 20, '2025-01-16 05:14:32', '2025-01-16 07:50:16', 0),
+(2, 4, 1, 'M', 30, '0000-00-00 00:00:00', '2025-01-16 07:56:30', 0),
+(3, 5, 1, 'L', 30, '0000-00-00 00:00:00', '2025-01-16 07:50:44', 0);
 
 -- --------------------------------------------------------
 
@@ -302,13 +309,13 @@ ALTER TABLE `data_kelas`
 -- AUTO_INCREMENT for table `data_seragam`
 --
 ALTER TABLE `data_seragam`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `data_stok`
 --
 ALTER TABLE `data_stok`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `data_tahun_pelajaran`
