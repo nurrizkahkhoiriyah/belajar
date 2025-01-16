@@ -4,8 +4,8 @@
         tabelHargaBiaya();
 	})
 
-    $('#id_tahun_pelajaran').load('<?php echo base_url('biaya/option_tahun_pelajaran'); ?>');
-    $('#id_biaya').load('<?php echo base_url('biaya/option_biaya'); ?>');
+    // $('#id_tahun_pelajaran').load('<?php echo base_url('biaya/option_tahun_pelajaran'); ?>');
+    // $('#id_biaya').load('<?php echo base_url('biaya/option_biaya'); ?>');
 
 
     $('.btnTambahBiaya').click(function() {
@@ -78,44 +78,25 @@
 		});
 	}
 
-    $('.saveBtnBiaya').click(function() {
+    $('.saveBtn').click(function() {
+		let base = '<?php echo base_url(); ?>';
+		var targetController = $(this).data('target');
+		var url = base + 'biaya/save_' + targetController;
+		var formData = new FormData($('#form_' + targetController)[0]);
 		$.ajax({
-			url: '<?php echo base_url('biaya/saveBiaya'); ?>',
+			url: url,
 			type: 'POST',
-			data: {
-				id: $('#id').val(),
-				nama_biaya: $('#nama_biaya').val(),
-				deskripsi: $('#deskripsi').val(),
-			},
+			data: formData,
+			processData: false,
+			contentType: false,
 			dataType: 'json',
 			success: function(response) {
 				if (response.status) {
 					alert(response.message);
-					$('#modalBiaya').modal('hide');
-					tabelBiaya();
-				} else {
-					alert(response.message);
-				}
-			}
+					$('#modal_' + targetController).modal('hide');
+					tabelHargaBiaya(); //nnti buat fungsi lagi
+					tabelJenisBiaya();
 
-		})
-	})
-    $('.saveBtnHargaBiaya').click(function() {
-		$.ajax({
-			url: '<?php echo base_url('biaya/saveHargaBiaya'); ?>',
-			type: 'POST',
-			data: {
-				id: $('#id').val(),
-				id_biaya: $('#id_biaya').val(),
-				id_tahun_pelajaran: $('#id_tahun_pelajaran').val(),
-				harga: $('#harga').val(),
-			},
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					alert(response.message);
-					$('#modalHargaBiaya').modal('hide');
-					tabelHargaBiaya();
 				} else {
 					alert(response.message);
 				}

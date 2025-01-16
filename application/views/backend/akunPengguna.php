@@ -46,7 +46,7 @@
 						</div>
 						<div class="mb-1">
 							<label for="password" class="form-label">Password</label>
-							<input type="date" class="form-control" id="password" name="password" value="">
+							<input type="text" class="form-control" id="password" name="password" value="">
 							<div class="error-block"></div>
 						</div>
 					</form>
@@ -83,7 +83,7 @@
 						tr.append('<td>' + no++ + '</td>');
 						tr.append('<td>' + item.username + '</td>');
 						tr.append('<td>' + item.password + '</td>');
-						tr.append('<td>	<button class="btn btn-primary" onclick="edit(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="delete(' + item.id + ')">Delete</button></td>');
+						tr.append('<td>	<button class="btn btn-primary" onclick="edit(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteBtn(' + item.id + ')">Delete</button></td>');
 						tabelUser.find('tbody').append(tr);
 					});
 
@@ -138,7 +138,7 @@
 						$('#username').val(response.data.username);
 						$('#password').val(response.data.password);
 						$('#modalUser').modal('show');
-						tableUser();
+						tabelUser();
 					} else {
 						alert(response.message);
 					}
@@ -146,7 +146,7 @@
 			});
 	}
 
-    function delete(id) {
+    function deleteBtn(id) {
 		if (confirm('Apakah Anda yakin ingin menghapus user ini?')) {
 			let url = '<?php echo base_url('akun_pengguna/delete'); ?>';
 			$.ajax({

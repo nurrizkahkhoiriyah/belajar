@@ -12,7 +12,7 @@
     <div class="card-body">
         <div class="tab-content" id="custom-tabs-one-tabContent">
             <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                <div class="btn btn-primary btnTambahBiaya mb-2"> <i class="fas fa-plus"></i> Tambah</div>
+                <div class="btn btn-primary btn_tambah_biaya mb-2"> <i class="fas fa-plus"></i> Tambah</div>
                 <div class="row">
                     <table class="table table-striped" id="tabelBiaya">
                         <thead>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                <div class="btn btn-primary btnTambahHargaBiaya mb-2"> <i class="fas fa-plus"></i> Tambah</div>
+                <div class="btn btn-primary btn_tambah_harga_biaya mb-2"> <i class="fas fa-plus"></i> Tambah</div>
 				<div class="row">
 					<table class="table table-striped" id="tabelHargaBiaya">
 						<thead>
@@ -50,7 +50,7 @@
     </div>
 </div>
 
-<div class="modal" id="modalBiaya" tabindex=" -1" role="dialog">
+<div class="modal" id="modal_biaya" tabindex=" -1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -62,7 +62,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-user">
-					<form id="formBiaya" action="#" method="post" enctype="multipart/form-data">
+					<form id="form_biaya" action="#" method="post" enctype="multipart/form-data">
 						<input type="hidden" class="form-control" id="id" name="id" value="">
 						<div class="mb-1">
 							<label for="nama_biaya" class="form-label">Nama Biaya</label>
@@ -78,14 +78,14 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtnBiaya">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn" data-target="biaya">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="modal" id="modalHargaBiaya" tabindex=" -1" role="dialog">
+<div class="modal" id="modal_harga_biaya" tabindex=" -1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -97,7 +97,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-user">
-					<form id="formHargaBiaya" action="#" method="post" enctype="multipart/form-data">
+					<form id="form_harga_biaya" action="#" method="post" enctype="multipart/form-data">
 						<input type="hidden" class="form-control" id="id" name="id" value="">
 						<div class="mb-1">
 							<label for="id_biaya" class="form-label">Nama Biaya</label>
@@ -122,7 +122,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtnHargaBiaya">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn" data-target="harga_biaya">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
@@ -139,16 +139,16 @@
     $('#id_biaya').load('<?php echo base_url('biaya/option_biaya'); ?>');
 
 
-    $('.btnTambahBiaya').click(function() {
+    $('.btn_tambah_biaya').click(function() {
 		$('#id').val('');
-		$('#formBiaya').trigger('reset');
-		$('#modalBiaya').modal('show');
+		$('#form_biaya').trigger('reset');
+		$('#modal_biaya').modal('show');
 	});
 
-    $('.btnTambahHargaBiaya').click(function() {
+    $('.btn_tambah_harga_biaya').click(function() {
 		$('#id').val('');
-		$('#formHargaBiaya').trigger('reset');
-		$('#modalHargaBiaya').modal('show');
+		$('#form_harga_biaya').trigger('reset');
+		$('#modal_harga_biaya').modal('show');
 	});
 
     function tabelBiaya() {
@@ -168,7 +168,7 @@
 						tr.append('<td>' + no++ + '</td>');
 						tr.append('<td>' + item.nama_biaya + '</td>');
 						tr.append('<td>' + item.deskripsi + '</td>');
-						tr.append('<td>	<button class="btn btn-primary" onclick="editBiaya(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteBiaya(' + item.id + ')">Delete</button></td>');
+						tr.append('<td>	<button class="btn btn-primary editBtn" data-target="biaya" (' + item.id + ')">Edit</button> <button class="btn btn-danger deleteBtn" data-target="biaya"(' + item.id + ')">Delete</button></td>');
 						tabelBiaya.find('tbody').append(tr);
 					});
 
@@ -197,7 +197,7 @@
 						tr.append('<td>' + item.nama_biaya + '</td>');
 						tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
 						tr.append('<td>' + item.harga + '</td>');
-						tr.append('<td>	<button class="btn btn-primary" onclick="editHargaBiaya(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteHargaBiaya(' + item.id + ')">Delete</button></td>');
+						tr.append('<td>	<button class="btn btn-primary editBtn" data-target="harga_biaya" (' + item.id + ')">Edit</button> <button class="btn btn-danger deleteBtn" data-target="harga_biaya"(' + item.id + ')">Delete</button></td>');
 						tabelHargaBiaya.find('tbody').append(tr);
 					});
 
@@ -209,21 +209,25 @@
 		});
 	}
 
-    $('.saveBtnBiaya').click(function() {
+    $('.saveBtn').click(function() {
+		let base = '<?php echo base_url(); ?>';
+		var targetController = $(this).data('target');
+		var url = base + 'biaya/save_' + targetController;
+		var formData = new FormData($('#form_' + targetController)[0]);
 		$.ajax({
-			url: '<?php echo base_url('biaya/saveBiaya'); ?>',
+			url: url,
 			type: 'POST',
-			data: {
-				id: $('#id').val(),
-				nama_biaya: $('#nama_biaya').val(),
-				deskripsi: $('#deskripsi').val(),
-			},
+			data: formData,
+			processData: false,
+			contentType: false,
 			dataType: 'json',
 			success: function(response) {
 				if (response.status) {
 					alert(response.message);
-					$('#modalBiaya').modal('hide');
+					$('#modal_' + targetController).modal('hide');
+					tabelHargaBiaya(); //nnti buat fungsi lagi
 					tabelBiaya();
+
 				} else {
 					alert(response.message);
 				}
@@ -231,77 +235,112 @@
 
 		})
 	})
-    $('.saveBtnHargaBiaya').click(function() {
+
+	$('.editBtn').click(function() {
+		let base = '<?php echo base_url(); ?>';
+		var targetController = $(this).data('target');
+    	var url = base + 'biaya/edit_' + targetController;
+		var formData = new FormData($('#form_' + targetController)[0]);
+
 		$.ajax({
-			url: '<?php echo base_url('biaya/saveHargaBiaya'); ?>',
-			type: 'POST',
-			data: {
-				id: $('#id').val(),
-				id_biaya: $('#id_biaya').val(),
-				id_tahun_pelajaran: $('#id_tahun_pelajaran').val(),
-				harga: $('#harga').val(),
-			},
+			url: url,
+			type: 'GET',
+			data: formData,
+			processData: false,
+			contentType: false,
 			dataType: 'json',
 			success: function(response) {
 				if (response.status) {
 					alert(response.message);
-					$('#modalHargaBiaya').modal('hide');
-					tabelHargaBiaya();
+					
+					$('#modal_' + targetController).modal('hide');
+					tabelHargaBiaya(); //nnti buat fungsi lagi
+					tabelBiaya();
+
 				} else {
 					alert(response.message);
 				}
 			}
 
 		})
-	})
+	});
 
-    function editBiaya(id){
-			$.ajax({
-				url: '<?php echo base_url('biaya/editBiaya'); ?>',
-				type: 'POST',
-				data: {
-					id: id
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (response.status) {
-						$('#id').val(response.data.id);
-						$('#nama_biaya').val(response.data.nama_biaya);
-						$('#deskripsi').val(response.data.deskripsi);
-						$('#modalBiaya').modal('show');
-						tabelBiaya();
-					} else {
-						alert(response.message);
-					}
-				}
-			});
-	}
-    function editHargaBiaya(id){
-			$.ajax({
-				url: '<?php echo base_url('biaya/editHargaBiaya'); ?>',
-				type: 'POST',
-				data: {
-					id: id
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (response.status) {
-						$('#id').val(response.data.id);
-						$('#id_biaya').val(response.data.id_biaya);
-                        $('#id_tahun_pelajaran').val(response.data.id_tahun_pelajaran);
-                        $('#harga').val(response.data.harga);
-						$('#modalHargaBiaya').modal('show');
-						tabelHargaBiaya();
-					} else {
-						alert(response.message);
-					}
-				}
-			});
-	}
+    // function editBiaya(id){
+	// 		$.ajax({
+	// 			url: '<?php echo base_url('biaya/edit_biaya'); ?>',
+	// 			type: 'POST',
+	// 			data: {
+	// 				id: id
+	// 			},
+	// 			dataType: 'json',
+	// 			success: function(response) {
+	// 				if (response.status) {
+	// 					$('#id').val(response.data.id);
+	// 					$('#nama_biaya').val(response.data.nama_biaya);
+	// 					$('#deskripsi').val(response.data.deskripsi);
+	// 					$('#modal_biaya').modal('show');
+	// 					tabelBiaya();
+	// 				} else {
+	// 					alert(response.message);
+	// 				}
+	// 			}
+	// 		});
+	// }
+    // function editHargaBiaya(id){
+	// 		$.ajax({
+	// 			url: '<?php echo base_url('biaya/edit_harga_biaya'); ?>',
+	// 			type: 'POST',
+	// 			data: {
+	// 				id: id
+	// 			},
+	// 			dataType: 'json',
+	// 			success: function(response) {
+	// 				if (response.status) {
+	// 					$('#id').val(response.data.id);
+	// 					$('#id_biaya').val(response.data.id_biaya);
+    //                     $('#id_tahun_pelajaran').val(response.data.id_tahun_pelajaran);
+    //                     $('#harga').val(response.data.harga);
+	// 					$('#modal_harga_biaya').modal('show');
+	// 					tabelHargaBiaya();
+	// 				} else {
+	// 					alert(response.message);
+	// 				}
+	// 			}
+	// 		});
+	// }
 
-    function deleteBiaya(id) {
+	// $('.deleteBtn').click(function() {
+	// 	let base = '<?php echo base_url(); ?>';
+	// 	var targetController = $(this).data('target');
+	// 	var id = $(this).data('id');
+    // 	var url = base + 'biaya/delete_' + targetController + '/' + id;
+	// 	$.ajax({
+	// 		url: url,
+	// 		type: 'POST',
+	// 		data: {
+	// 			id: id
+	// 		},
+	// 		processData: false,
+	// 		contentType: false,
+	// 		dataType: 'json',
+	// 		success: function(response) {
+	// 			if (response.status) {
+	// 				alert(response.message);
+	// 				$('#modal_' + targetController).modal('hide');
+	// 				tabelHargaBiaya(); //nnti buat fungsi lagi
+	// 				tabelBiaya();
+
+	// 			} else {
+	// 				alert(response.message);
+	// 			}
+	// 		}
+
+	// 	})
+	// })
+
+    $('.deleteBtn').click(function() {
 		if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-			let url = '<?php echo base_url('biaya/deleteBiaya'); ?>';
+			let url = '<?php echo base_url('biaya/delete_biaya'); ?>';
 			$.ajax({
 				url: url,
 				type: 'POST',
@@ -320,28 +359,28 @@
 			});
 		}
 
-	}
-    function deleteHargaBiaya(id) {
-		if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-			let url = '<?php echo base_url('biaya/deleteHargaBiaya'); ?>';
-			$.ajax({
-				url: url,
-				type: 'POST',
-				data: {
-					id: id
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (response.status) {
-						alert(response.message);
-						tabelHargaBiaya();
-					} else {
-						alert(response.message);
-					}
-				}
-			});
-		}
+	});
+    // function deleteHargaBiaya(id) {
+	// 	if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+	// 		let url = '<?php echo base_url('biaya/deleteHargaBiaya'); ?>';
+	// 		$.ajax({
+	// 			url: url,
+	// 			type: 'POST',
+	// 			data: {
+	// 				id: id
+	// 			},
+	// 			dataType: 'json',
+	// 			success: function(response) {
+	// 				if (response.status) {
+	// 					alert(response.message);
+	// 					tabelHargaBiaya();
+	// 				} else {
+	// 					alert(response.message);
+	// 				}
+	// 			}
+	// 		});
+	// 	}
 
-	}
+	// }
 
 </script>
