@@ -253,7 +253,7 @@ class Seragam extends CI_Controller
 		$data['deleted_at'] = 0;
 
 		if ($data['id_seragam']) {
-			$cek = $this->md->cekHargaBiayaDuplicate($data['id_tahun_pelajaran'], $data['ukuran'], $id);
+			$cek = $this->md->cekStokDuplicate($data['id_tahun_pelajaran'], $data['ukuran'], $data['id_seragam'], $id);
 			if ($cek->num_rows() > 0) {
 				$ret['status'] = false;
 				$ret['message'] = 'Data terduplikasi';

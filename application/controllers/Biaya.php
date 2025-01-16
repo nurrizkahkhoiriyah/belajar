@@ -220,7 +220,7 @@ class Biaya extends CI_Controller
 		$data['id_biaya'] = $this->input->post('id_biaya');
 		$data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');
 		$data['harga'] = $this->input->post('harga');
-		$data['created_at'] = date('Y-m-d H:i:s');
+
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
@@ -246,6 +246,7 @@ class Biaya extends CI_Controller
 						);
 					}
 				} else {
+					$data['created_at'] = date('Y-m-d H:i:s');
 					$insert = $this->md->insertHargaBiaya($data);
 
 					if ($insert) {

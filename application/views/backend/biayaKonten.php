@@ -289,6 +289,7 @@
 						$('#id').val(response.data.id);
 						$('#id_biaya').val(response.data.id_biaya);
                         $('#id_tahun_pelajaran').val(response.data.id_tahun_pelajaran);
+                        $('#harga').val(response.data.harga);
 						$('#modalHargaBiaya').modal('show');
 						tabelHargaBiaya();
 					} else {

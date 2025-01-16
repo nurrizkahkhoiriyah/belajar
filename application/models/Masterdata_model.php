@@ -221,14 +221,12 @@ class Masterdata_model extends CI_Model
 		return $this->db->get($this->tableHargaBiaya);
 	}
 
-	public function cekHargaBiayaDuplicate($id_biaya, $id_tahun_pelajaran, $id_jurusan, $id_kelas, $id){
+	public function cekHargaBiayaDuplicate($id_biaya, $id_tahun_pelajaran, $id){
 		if ($id) {
 			$this->db->where('id !=', $id);
 		}
 		$this->db->where('id_biaya', $id_biaya);
 		$this->db->where('id_tahun_pelajaran', $id_tahun_pelajaran);
-		$this->db->where('id_jurusan', $id_jurusan);
-		$this->db->where('id_kelas', $id_kelas);
 		return $this->db->get($this->tableHargaBiaya);
 	}
 
@@ -315,11 +313,12 @@ class Masterdata_model extends CI_Model
 		return $this->db->get($this->tableStok);
 	}
 
-	public function cekStokDuplicate($id_tahun_pelajaran, $ukuran, $id){
+	public function cekStokDuplicate($id_tahun_pelajaran, $ukuran, $id_seragam, $id){
 		if ($id) {
 			$this->db->where('id !=', $id);
 		}
 		$this->db->where('id_tahun_pelajaran', $id_tahun_pelajaran);
+		$this->db->where('id_seragam', $id_seragam);
 		$this->db->where('ukuran', $ukuran);
 		return $this->db->get($this->tableStok);
 	}

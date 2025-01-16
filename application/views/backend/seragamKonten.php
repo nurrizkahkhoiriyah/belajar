@@ -291,8 +291,6 @@
 						$('#id_tahun_pelajaran').val(response.data.id_tahun_pelajaran);
 						$('#ukuran').val(response.data.ukuran);
 						$('#stok').val(response.data.stok);
-						setJurusan(response.data.id_tahun_pelajaran, response.data.id_jurusan);
-						setKelas(response.data.id_jurusan, response.data.id_kelas);
 						$('#modalStok').modal('show');
 						tableStok();
 					} else {
