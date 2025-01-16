@@ -22,7 +22,7 @@ class Akun_pengguna extends CI_Controller
 	}
 
     public function table_user(){
-        $q = $this->md->getAllUserDeleted();
+        $q = $this->md->getAllUserNotDeleted();
 		$dt = [];
 		if ($q->num_rows() > 0) {
 			foreach ($q->result() as $row) {

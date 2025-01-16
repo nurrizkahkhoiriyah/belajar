@@ -43,59 +43,43 @@ class Seragam extends CI_Controller
 		echo json_encode($ret);
 	}
 
-    public function saveSeragam()
-	{	
+	public function saveSeragam(){
 		$id = $this->input->post('id');
-		$data['nama_seragam'] = $this->input->post('nama_seragam');
-		$data['created_at'] = date('Y-m-d H:i:s');
-		$data['updated_at'] = date('Y-m-d H:i:s');
-		$data['deleted_at'] = 0;
+		$nama_seragam = $this->input->post('nama_seragam');
 
-		if ($data['id']) {
-			$cek = $this->md->cekSeragamDuplicate($data['nama_seragam'], $id);
-			if ($cek->num_rows() > 0) {
-				$ret['status'] = false;
-				$ret['message'] = 'Data terduplikasi';
-				$ret['query'] = $this->db->last_query();
+		$data = array(
+			'nama_seragam' => $nama_seragam,
+
+			'updated_at' => date('Y-m-d H:i:s'),
+			'deleted_at' => 0
+		);
+
+		if ($id) {
+			$q = $this->md->updateSeragam($id, $data);
+			if ($q) {
+				$ret['status'] = true;
+				$ret['message'] = 'Data berhasil diupdate';
 			} else {
-
-				if ($id) {
-					$update = $this->md->updateSeragam($id, $data);
-					if ($update) {
-						$ret = array(
-							'status' => true,
-							'message' => 'Data berhasil diupdate'
-						);
-					} else {
-						$ret = array(
-							'status' => false,
-							'message' => 'Data gagal diupdate'
-						);
-					}
-				} else {
-					$insert = $this->md->insertSeragam($data);
-
-					if ($insert) {
-						$ret = array(
-							'status' => true,
-							'message' => 'Data berhasil disimpan'
-						);
-					} else {
-						$ret = array(
-							'status' => false,
-							'message' => 'Data gagal disimpan'
-						);
-					}
-				}
-			
+				$ret['status'] = false;
+				$ret['message'] = 'Data gagal diupdate';
 			}
 		} else {
-			$ret['status'] = false;
-			$ret['message'] = 'Data tidak boleh kosong';
-            $ret['query'] = $this->db->last_query();
+			$data['created_at'] = date('Y-m-d H:i:s');
+			$q = $this->md->insertSeragam($data);
+
+			if ($q) {
+				$ret['status'] = true;
+				$ret['message'] = 'Data berhasil disimpan';
+			} else {
+				$ret['status'] = false;
+				$ret['message'] = 'Data gagal disimpan';
+			}
 		}
+
+
 		echo json_encode($ret);
 	}
+	
 
     public function editSeragam()
 	{
@@ -222,52 +206,30 @@ class Seragam extends CI_Controller
 		$data['id_kelas'] = $this->input->post('id_kelas');
 		$data['ukuran'] = $this->input->post('ukuran');
 		$data['stok'] = $this->input->post('stok');
-		$data['created_at'] = date('Y-m-d H:i:s');
+
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
-		if ($data['id']) {
-			$cek = $this->md->cekStokDuplicate($data['id_seragam'], $data['id_tahun_pelajaran'], $data['id_jurusan'], $data['id_kelas'], $data['ukuran'], $id);
-			if ($cek->num_rows() > 0) {
-				$ret['status'] = false;
-				$ret['message'] = 'Data terduplikasi';
-				$ret['query'] = $this->db->last_query();
+		if ($id) {
+			$q = $this->md->updateStok($id, $data);
+			if ($q) {
+				$ret['status'] = true;
+				$ret['message'] = 'Data berhasil diupdate';
 			} else {
-
-				if ($id) {
-					$update = $this->md->updateStok($id, $data);
-					if ($update) {
-						$ret = array(
-							'status' => true,
-							'message' => 'Data berhasil diupdate'
-						);
-					} else {
-						$ret = array(
-							'status' => false,
-							'message' => 'Data gagal diupdate'
-						);
-					}
-				} else {
-					$insert = $this->md->insertStok($data);
-
-					if ($insert) {
-						$ret = array(
-							'status' => true,
-							'message' => 'Data berhasil disimpan'
-						);
-					} else {
-						$ret = array(
-							'status' => false,
-							'message' => 'Data gagal disimpan'
-						);
-					}
-				}
-			
+				$ret['status'] = false;
+				$ret['message'] = 'Data gagal diupdate';
 			}
 		} else {
-			$ret['status'] = false;
-			$ret['message'] = 'Data tidak boleh kosong';
-            $ret['query'] = $this->db->last_query();
+			$data['created_at'] = date('Y-m-d H:i:s');
+			$q = $this->md->insertStok($data);
+
+			if ($q) {
+				$ret['status'] = true;
+				$ret['message'] = 'Data berhasil disimpan';
+			} else {
+				$ret['status'] = false;
+				$ret['message'] = 'Data gagal disimpan';
+			}
 		}
     	echo json_encode($ret);
     }
