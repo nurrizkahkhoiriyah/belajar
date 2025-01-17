@@ -18,6 +18,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<link rel="stylesheet" href="<?php echo base_url(); ?>public/template/css/adminlte.min.css">
 	<!-- jQuery -->
 	<script src="<?php echo base_url(); ?>public/template/plugins/jquery/jquery.min.js"></script>
+	<script src="<?php echo base_url('public/lib/crud.js');?>"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -135,8 +136,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<!-- ./wrapper -->
 
 	<!-- REQUIRED SCRIPTS -->
-
-
 	<!-- Bootstrap 4 -->
 	<script src="<?php echo base_url(); ?>public/template/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- AdminLTE App -->

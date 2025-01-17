@@ -12,9 +12,9 @@
     <div class="card-body">
         <div class="tab-content" id="custom-tabs-one-tabContent">
             <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                <div class="btn btn-primary btnTambahSeragam mb-2"> <i class="fas fa-plus"></i> Tambah</div>
+                <div class="btn btn-primary btn_tambah_seragam mb-2"> <i class="fas fa-plus"></i> Tambah</div>
                 <div class="row">
-                    <table class="table table-striped" id="tabelSeragam">
+                    <table class="table table-striped" id="table_seragam">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -28,9 +28,9 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                <div class="btn btn-primary btnTambahStok mb-2"> <i class="fas fa-plus"></i> Tambah</div>
+                <div class="btn btn-primary btn_tambah_stok mb-2"> <i class="fas fa-plus"></i> Tambah</div>
 				<div class="row">
-					<table class="table table-striped" id="tabelStok">
+					<table class="table table-striped" id="table_stok">
 						<thead>
 							<tr>
 								<th>No</th>
@@ -50,7 +50,7 @@
     </div>
 </div>
 
-<div class="modal" id="modalSeragam" tabindex=" -1" role="dialog">
+<div class="modal" id="modal_seragam" tabindex=" -1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -62,7 +62,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-user">
-					<form id="formSeragam" action="#" method="post" enctype="multipart/form-data">
+					<form id="form_seragam" action="#" method="post" enctype="multipart/form-data">
 						<input type="hidden" class="form-control" id="id" name="id" value="">
 						<div class="mb-1">
 							<label for="nama_seragam" class="form-label">Nama Seragam</label>
@@ -73,14 +73,14 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtnSeragam">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="modal" id="modalStok" tabindex=" -1" role="dialog">
+<div class="modal" id="modal_stok" tabindex=" -1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -92,7 +92,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-user">
-					<form id="formStok" action="#" method="post" enctype="multipart/form-data">
+					<form id="form_stok" action="#" method="post" enctype="multipart/form-data">
 						<input type="hidden" class="form-control" id="id" name="id" value="">
 						<div class="mb-1">
 							<label for="id_seragam" class="form-label">Nama Seragam</label>
@@ -122,7 +122,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtnStok">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
@@ -139,20 +139,20 @@
     $('#id_seragam').load('<?php echo base_url('seragam/option_seragam'); ?>');
 
 
-    $('.btnTambahSeragam').click(function() {
+    $('.btn_tambah_seragam').click(function() {
       $('#id').val('');
-      $('#formSeragam').trigger('reset');
-      $('#modalSeragam').modal('show');
+      $('#form_seragam').trigger('reset');
+      $('#modal_seragam').modal('show');
     });
 
-	$('.btnTambahStok').click(function() {
+	$('.btn_tambah_stok').click(function() {
       $('#id').val('');
-      $('#formStok').trigger('reset');
-      $('#modalStok').modal('show');
+      $('#form_stok').trigger('reset');
+      $('#modal_stok').modal('show');
     });
 
     function tabelSeragam() {
-		let tabelSeragam = $('#tabelSeragam');
+		let tabelSeragam = $('#tabel_seragam');
 		let tr = $('<tr>');
 		$.ajax({
 			url: '<?php echo base_url('seragam/tabel_seragam'); ?>',

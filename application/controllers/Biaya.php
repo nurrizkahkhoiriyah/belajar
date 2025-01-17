@@ -21,6 +21,54 @@ class Biaya extends CI_Controller
 		$this->load->view('template', $data);
 	}
 
+	// public function tampilkan_data($table) {
+	// 	switch ($table) {
+	// 		case 'biaya':
+	// 			$q = $this->md->getAllBiayaNotDeleted();
+	// 			$dt = [];
+	// 			if ($q->num_rows() > 0) {
+	// 				foreach ($q->result() as $row) {
+	// 					$dt[] = $row;
+	// 				}
+
+	// 				$ret['status'] = true;
+	// 				$ret['data'] = $dt;
+	// 				$ret['message'] = '';
+	// 			} else {
+	// 				$ret['status'] = false;
+	// 				$ret['data'] = [];
+	// 				$ret['message'] = 'Data tidak tersedia';
+	// 			}
+
+	// 			echo json_encode($ret);
+	// 			break;
+	// 		case 'harga_biaya':
+	// 			$q = $this->md->getAllHargaBiayaNotDeleted();
+	// 			$dt = [];
+	// 			if ($q->num_rows() > 0) {
+	// 				foreach ($q->result() as $row) {
+	// 					$dt[] = $row;
+	// 				}
+
+	// 				$ret['status'] = true;
+	// 				$ret['data'] = $dt;
+	// 				$ret['message'] = '';
+	// 			} else {
+	// 				$ret['status'] = false;
+	// 				$ret['data'] = [];
+	// 				$ret['message'] = 'Data tidak tersedia';
+	// 			}
+
+	// 			echo json_encode($ret);
+	// 			break;
+	// 		default:
+	// 			$data = [];
+	// 			break;
+	// 	}
+		
+	// }
+	
+
     public function table_biaya()
 	{
 
@@ -48,7 +96,7 @@ class Biaya extends CI_Controller
 		$id = $this->input->post('id');
 		$data['nama_biaya'] = $this->input->post('nama_biaya');
 		$data['deskripsi'] = $this->input->post('deskripsi');
-		$data['created_at'] = date('Y-m-d H:i:s');
+
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
@@ -74,6 +122,7 @@ class Biaya extends CI_Controller
 						);
 					}
 				} else {
+					$data['created_at'] = date('Y-m-d H:i:s');
 					$insert = $this->md->insertBiaya($data);
 
 					if ($insert) {
@@ -140,7 +189,7 @@ class Biaya extends CI_Controller
 	}
 
 
-    // harga biaya
+    //harga biaya
     public function table_harga_biaya()
 	{
 
@@ -224,13 +273,7 @@ class Biaya extends CI_Controller
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
-		if ($data['id_biaya']) {
-			$cek = $this->md->cekHargaBiayaDuplicate($data['id_biaya'], $data['id_tahun_pelajaran'], $id);
-			if ($cek->num_rows() > 0) {
-				$ret['status'] = false;
-				$ret['message'] = 'Data terduplikasi';
-				$ret['query'] = $this->db->last_query();
-			} else {
+		
 
 				if ($id) {
 					$update = $this->md->updateHargaBiaya($id, $data);
@@ -262,12 +305,6 @@ class Biaya extends CI_Controller
 					}
 				}
 			
-			}
-		} else {
-			$ret['status'] = false;
-			$ret['message'] = 'Data tidak boleh kosong';
-            $ret['query'] = $this->db->last_query();
-		}
     	echo json_encode($ret);
     }
 
