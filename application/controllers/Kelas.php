@@ -67,7 +67,7 @@ class Kelas extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function save()
+	public function save_kelas()
 	{
 
 		$id = $this->input->post('id');
@@ -105,7 +105,7 @@ class Kelas extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function edit()
+	public function edit_kelas()
 	{
 		$id = $this->input->post('id');
 		$q = $this->md->getKelasByID($id);
@@ -122,7 +122,7 @@ class Kelas extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function delete()
+	public function delete_kelas()
 	{
 		$id = $this->input->post('id');
 		$data['deleted_at'] = time();

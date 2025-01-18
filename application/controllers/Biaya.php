@@ -20,53 +20,6 @@ class Biaya extends CI_Controller
 		);
 		$this->load->view('template', $data);
 	}
-
-	// public function tampilkan_data($table) {
-	// 	switch ($table) {
-	// 		case 'biaya':
-	// 			$q = $this->md->getAllBiayaNotDeleted();
-	// 			$dt = [];
-	// 			if ($q->num_rows() > 0) {
-	// 				foreach ($q->result() as $row) {
-	// 					$dt[] = $row;
-	// 				}
-
-	// 				$ret['status'] = true;
-	// 				$ret['data'] = $dt;
-	// 				$ret['message'] = '';
-	// 			} else {
-	// 				$ret['status'] = false;
-	// 				$ret['data'] = [];
-	// 				$ret['message'] = 'Data tidak tersedia';
-	// 			}
-
-	// 			echo json_encode($ret);
-	// 			break;
-	// 		case 'harga_biaya':
-	// 			$q = $this->md->getAllHargaBiayaNotDeleted();
-	// 			$dt = [];
-	// 			if ($q->num_rows() > 0) {
-	// 				foreach ($q->result() as $row) {
-	// 					$dt[] = $row;
-	// 				}
-
-	// 				$ret['status'] = true;
-	// 				$ret['data'] = $dt;
-	// 				$ret['message'] = '';
-	// 			} else {
-	// 				$ret['status'] = false;
-	// 				$ret['data'] = [];
-	// 				$ret['message'] = 'Data tidak tersedia';
-	// 			}
-
-	// 			echo json_encode($ret);
-	// 			break;
-	// 		default:
-	// 			$data = [];
-	// 			break;
-	// 	}
-		
-	// }
 	
 
     public function table_biaya()
@@ -175,7 +128,8 @@ class Biaya extends CI_Controller
 	{
 
 		$id = $this->input->post('id');
-		$q = $this->md->deleteBiaya($id);
+		$data['deleted_at'] = time();
+		$q = $this->md->updateBiaya($id, $data);
 
 		if ($q) {
 			$ret['status'] = true;
@@ -190,10 +144,9 @@ class Biaya extends CI_Controller
 
 
     //harga biaya
-    public function table_harga_biaya()
-	{
 
-		$q = $this->md->getAllHargaBiayaNotDeleted();
+	public function table_harga_biaya(){
+		$q = $this->md->getAllHargaBiaya();
 		$dt = [];
 		if ($q->num_rows() > 0) {
 			foreach ($q->result() as $row) {
@@ -212,59 +165,7 @@ class Biaya extends CI_Controller
 		echo json_encode($ret);
 	}
 
-    public function option_tahun_pelajaran()
-	{
-		$q = $this->md->getAllTahunPelajaranNotDeleted();
-		$ret = '<option value="">Pilih Tahun Pelajaran</option>';
-		if ($q->num_rows() > 0) {
-			foreach ($q->result() as $row) {
-				$ret .= '<option value="' . $row->id . '">' . $row->nama_tahun_pelajaran . '</option>';
-			}
-		}
-		echo $ret;
-	}
-
-	// public function option_jurusan($id)
-	// {
-
-	// 	$q = $this->md->getJurusanByTahunPelajaranID($id);
-	// 	$ret = '<option value="">Pilih Jurusan</option>';
-	// 	if ($q->num_rows() > 0) {
-	// 		foreach ($q->result() as $row) {
-	// 			$ret .= '<option value="' . $row->id . '">' . $row->nama_jurusan . '</option>';
-	// 		}
-	// 	}
-	// 	echo $ret;
-	// }
-
-    // public function option_kelas($id)
-	// {
-
-	// 	$q = $this->md->getKelasByJurusanID($id);
-	// 	$ret = '<option value="">Pilih kelas</option>';
-	// 	if ($q->num_rows() > 0) {
-	// 		foreach ($q->result() as $row) {
-	// 			$ret .= '<option value="' . $row->id . '">' . $row->nama_kelas . '</option>';
-	// 		}
-	// 	}
-	// 	echo $ret;
-	// }
-
-    public function option_biaya()
-	{
-
-		$q = $this->md->getAllBiayaNotDeleted();
-		$ret = '<option value="">Pilih Biaya</option>';
-		if ($q->num_rows() > 0) {
-			foreach ($q->result() as $row) {
-				$ret .= '<option value="' . $row->id . '">' . $row->nama_biaya . '</option>';
-			}
-		}
-		echo $ret;
-	}
-
-    public function save_harga_biaya()
-	{	
+	public function save_harga_biaya(){
 		$id = $this->input->post('id');
 		$data['id_biaya'] = $this->input->post('id_biaya');
 		$data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');
@@ -273,7 +174,13 @@ class Biaya extends CI_Controller
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
-		
+		if ($data['id_biaya']) {
+			$cek = $this->md->cekHargaBiayaDuplicate($data['id_biaya'], $data['id_tahun_pelajaran'], $id);
+			if ($cek->num_rows() > 0) {
+				$ret['status'] = false;
+				$ret['message'] = 'Nama Biaya sudah ada';
+				$ret['query'] = $this->db->last_query();
+			} else {
 
 				if ($id) {
 					$update = $this->md->updateHargaBiaya($id, $data);
@@ -305,39 +212,34 @@ class Biaya extends CI_Controller
 					}
 				}
 			
-    	echo json_encode($ret);
-    }
-
-    public function edit_harga_biaya()
-	{
-
-		$id = $this->input->post('id');
-		$q = $this->md->getHargaBiayaByID($id);
-
-		if ($q->num_rows() > 0) {
-			$ret = array(
-				'status' => true,
-				'data' => $q->row(),
-				'message' => '',
-			);
+			}
 		} else {
-			$ret = array(
-				'status' => false,
-				'data' => [],
-				'message' => 'Data tidak ditemukan',
-				'query' => $this->db->last_query()
-			);
+			$ret['status'] = false;
+			$ret['message'] = 'Data tidak boleh kosong';
+            $ret['query'] = $this->db->last_query();
 		}
-
 		echo json_encode($ret);
 	}
 
-    public function delete_harga_biaya()
-	{
-
+	public function edit_harga_biaya(){
 		$id = $this->input->post('id');
-		$q = $this->md->deleteHargaBiaya($id);
+		$q = $this->md->getHargaBiayaByID($id);
+		if ($q->num_rows() > 0) {
+			$ret['status'] = true;
+			$ret['data'] = $q->row();
+			$ret['message'] = '';
+		} else {
+			$ret['status'] = false;
+			$ret['data'] = [];
+			$ret['message'] = 'Data tidak tersedia';
+		}
+		echo json_encode($ret);
+	}
 
+	public function delete_harga_biaya(){
+		$id = $this->input->post('id');
+		$data['deleted_at'] = time();
+		$q = $this->md->updateHargaBiaya($id, $data);
 		if ($q) {
 			$ret['status'] = true;
 			$ret['message'] = 'Data berhasil dihapus';
@@ -345,9 +247,142 @@ class Biaya extends CI_Controller
 			$ret['status'] = false;
 			$ret['message'] = 'Data gagal dihapus';
 		}
-
 		echo json_encode($ret);
 	}
+
+	public function option_biaya(){
+		$q = $this->md->getBiayaNotDeleted();
+		$opt = '<option value="">Pilih Jenis Biaya</option>';
+		if ($q->num_rows() > 0) {
+			foreach ($q->result() as $row) {
+				$opt .= '<option value="' . $row->id . '">' . $row->nama_biaya . '</option>';
+			}
+		}
+		echo $opt;
+	}
+
+
+
+    // public function table_harga_biaya()
+	// {
+
+	// 	$q = $this->md->getAllHargaBiayaNotDeleted();
+	// 	$dt = [];
+	// 	if ($q->num_rows() > 0) {
+	// 		foreach ($q->result() as $row) {
+	// 			$dt[] = $row;
+	// 		}
+
+	// 		$ret['status'] = true;
+	// 		$ret['data'] = $dt;
+	// 		$ret['message'] = '';
+	// 	} else {
+	// 		$ret['status'] = false;
+	// 		$ret['data'] = [];
+	// 		$ret['message'] = 'Data tidak tersedia';
+	// 	}
+
+	// 	echo json_encode($ret);
+	// }
+
+    // public function option_tahun_pelajaran()
+	// {
+	// 	$q = $this->md->getAllTahunPelajaranNotDeleted();
+	// 	$ret = '<option value="">Pilih Tahun Pelajaran</option>';
+	// 	if ($q->num_rows() > 0) {
+	// 		foreach ($q->result() as $row) {
+	// 			$ret .= '<option value="' . $row->id . '">' . $row->nama_tahun_pelajaran . '</option>';
+	// 		}
+	// 	}
+	// 	echo $ret;
+	// }
+
+    // public function option_biaya()
+	// {
+
+	// 	$q = $this->md->getAllBiayaNotDeleted();
+	// 	$ret = '<option value="">Pilih Biaya</option>';
+	// 	if ($q->num_rows() > 0) {
+	// 		foreach ($q->result() as $row) {
+	// 			$ret .= '<option value="' . $row->id . '">' . $row->nama_biaya . '</option>';
+	// 		}
+	// 	}
+	// 	echo $ret;
+	// }
+
+    // public function save_harga_biaya()
+	// {	
+	// 	$id = $this->input->post('id');
+	// 	$id_biaya = $this->input->post('id_biaya');
+	// 	$id_tahun_pelajaran = $this->input->post('id_tahun_pelajaran');
+	// 	$harga = $this->input->post('harga');
+
+	// 	$data = array(
+	// 		'id_biaya' => $id_biaya,
+	// 		'id_tahun_pelajaran' => $id_tahun_pelajaran,
+	// 		'harga' => $harga,
+
+	// 		'updated_at' => date('Y-m-d H:i:s'),
+	// 		'deleted_at' => 0
+	// 	);
+
+
+	// 	if ($id) {
+	// 		$q = $this->md->updateHargaBiaya($id, $data);
+	// 		if ($q) {
+	// 			$ret['status'] = true;
+	// 			$ret['message'] = 'Data berhasil diupdate';
+	// 		} else {
+	// 			$ret['status'] = false;
+	// 			$ret['message'] = 'Data gagal diupdate';
+	// 		}
+	// 	} else {
+	// 		$data['created_at'] = date('Y-m-d H:i:s');
+	// 		$q = $this->md->insertHargaBiaya($data);
+
+	// 		if ($q) {
+	// 			$ret['status'] = true;
+	// 			$ret['message'] = 'Data berhasil disimpan';
+	// 		} else {
+	// 			$ret['status'] = false;
+	// 			$ret['message'] = 'Data gagal disimpan';
+	// 		}
+	// 	}
+			
+    // 	echo json_encode($ret);
+    // }
+
+    // public function edit_harga_biaya()
+	// {
+
+	// 	$id = $this->input->post('id');
+	// 	$q = $this->md->getHargaBiayaByID($id);
+	// 	if ($q->num_rows() > 0) {
+	// 		$ret['status'] = true;
+	// 		$ret['data'] = $q->row();
+	// 		$ret['message'] = '';
+	// 	} else {
+	// 		$ret['status'] = false;
+	// 		$ret['data'] = [];
+	// 		$ret['message'] = 'Data tidak tersedia';
+	// 	}
+	// 	echo json_encode($ret);
+
+	// }
+
+    // public function delete_harga_biaya()
+	// {
+
+	// 	$id = $this->input->post('id');
+	// 	$data['deleted_at'] = time();
+	// 	$q = $this->md->updateHargaBiaya($id, $data);
+	// 	if ($q) {
+	// 		$ret['status'] = true;
+	// 		$ret['message'] = 'Data berhasil dihapus';
+	// 	} else {
+	// 		$ret['status'] = false;
+	// 		$ret['message'] = 'Data gagal dihapus';
+	// 	}
+	// 	echo json_encode($ret);
+	// }
 }
-
-

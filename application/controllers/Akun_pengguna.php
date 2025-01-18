@@ -21,7 +21,7 @@ class Akun_pengguna extends CI_Controller
 		$this->load->view('template', $data);
 	}
 
-    public function table_user(){
+    public function table_akun_pengguna(){
         $q = $this->md->getAllUserNotDeleted();
 		$dt = [];
 		if ($q->num_rows() > 0) {
@@ -41,12 +41,12 @@ class Akun_pengguna extends CI_Controller
 		echo json_encode($ret);
     }
 
-	public function save()
+	public function save_akun_pengguna()
 	{	
 		$id = $this->input->post('id');
 		$data['username'] = $this->input->post('username');
 		$data['password'] = $this->input->post('password');
-		$data['created_at'] = date('Y-m-d H:i:s');
+
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
@@ -72,6 +72,7 @@ class Akun_pengguna extends CI_Controller
 						);
 					}
 				} else {
+					$data['created_at'] = date('Y-m-d H:i:s');
 					$insert = $this->md->insertUser($data);
 
 					if ($insert) {
@@ -96,7 +97,7 @@ class Akun_pengguna extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function edit()
+	public function edit_akun_pengguna()
 	{
 
 		$id = $this->input->post('id');
@@ -120,11 +121,12 @@ class Akun_pengguna extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function delete()
+	public function delete_akun_pengguna()
 	{
 
 		$id = $this->input->post('id');
-		$q = $this->md->deleteUser($id);
+		$data['deleted_at'] = time();
+		$q = $this->md->updateUser($id, $data);
 
 		if ($q) {
 			$ret['status'] = true;

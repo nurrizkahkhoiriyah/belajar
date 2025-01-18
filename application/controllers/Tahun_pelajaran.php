@@ -43,7 +43,7 @@ class Tahun_pelajaran extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function edit()
+	public function edit_tahun_pelajaran()
 	{
 
 		$id = $this->input->post('id');
@@ -68,7 +68,7 @@ class Tahun_pelajaran extends CI_Controller
 	}
 
 	
-	public function delete()
+	public function delete_tahun_pelajaran()
 	{
 
 		$id = $this->input->post('id');
@@ -85,14 +85,14 @@ class Tahun_pelajaran extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function save()
+	public function save_tahun_pelajaran()
 	{	
 		$id = $this->input->post('id');
 		$data['nama_tahun_pelajaran'] = $this->input->post('nama_tahun_pelajaran');
 		$data['tanggal_mulai'] = $this->input->post('tanggal_mulai');
 		$data['tanggal_akhir'] = $this->input->post('tanggal_akhir');
 		$data['status_tahun_pelajaran'] = $this->input->post('status_tahun_pelajaran');
-		$data['created_at'] = date('Y-m-d H:i:s');
+
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
@@ -118,6 +118,7 @@ class Tahun_pelajaran extends CI_Controller
 						);
 					}
 				} else {
+					$data['created_at'] = date('Y-m-d H:i:s');
 					$insert = $this->md->insertTahunPelajaran($data);
 
 					if ($insert) {
@@ -141,37 +142,37 @@ class Tahun_pelajaran extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function update()
-	{
-		$id = $this->input->post('id');
-		$nama_tahun_pelajaran = $this->input->post('nama_tahun_pelajaran');
-		$tanggal_mulai = $this->input->post('tanggal_mulai');
-		$tanggal_akhir = $this->input->post('tanggal_akhir');
-		$status_tahun_pelajaran = $this->input('status_tahun_pelajaran');
+	// public function update()
+	// {
+	// 	$id = $this->input->post('id');
+	// 	$nama_tahun_pelajaran = $this->input->post('nama_tahun_pelajaran');
+	// 	$tanggal_mulai = $this->input->post('tanggal_mulai');
+	// 	$tanggal_akhir = $this->input->post('tanggal_akhir');
+	// 	$status_tahun_pelajaran = $this->input('status_tahun_pelajaran');
 
-		$data = array(
-			'nama_tahun_pelajaran' => $nama_tahun_pelajaran,
-			'tanggal_mulai' => $tanggal_mulai,
-			'tanggal_akhir' => $tanggal_akhir,
-			'status_tahun_pelajaran' => $status_tahun_pelajaran,
-		);
+	// 	$data = array(
+	// 		'nama_tahun_pelajaran' => $nama_tahun_pelajaran,
+	// 		'tanggal_mulai' => $tanggal_mulai,
+	// 		'tanggal_akhir' => $tanggal_akhir,
+	// 		'status_tahun_pelajaran' => $status_tahun_pelajaran,
+	// 	);
 
-		$update = $this->md->updateUser($id, $data);
+	// 	$update = $this->md->updateUser($id, $data);
 
-		if ($update) {
-			$ret = array(
-				'status' => true,
-				'message' => 'Data berhasil diupdate'
-			);
-		} else {
-			$ret = array(
-				'status' => false,
-				'message' => 'Data gagal diupdate'
-			);
-		}
+	// 	if ($update) {
+	// 		$ret = array(
+	// 			'status' => true,
+	// 			'message' => 'Data berhasil diupdate'
+	// 		);
+	// 	} else {
+	// 		$ret = array(
+	// 			'status' => false,
+	// 			'message' => 'Data gagal diupdate'
+	// 		);
+	// 	}
 
-		echo json_encode($ret);
-	}
+	// 	echo json_encode($ret);
+	// }
 
 	
 

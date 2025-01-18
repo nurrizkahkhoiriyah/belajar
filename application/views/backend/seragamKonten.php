@@ -12,7 +12,7 @@
     <div class="card-body">
         <div class="tab-content" id="custom-tabs-one-tabContent">
             <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                <div class="btn btn-primary btn_tambah_seragam mb-2"> <i class="fas fa-plus"></i> Tambah</div>
+                <div class="btn btn-primary tambahBtn mb-2" data-method="seragam"> <i class="fas fa-plus"></i> Tambah</div>
                 <div class="row">
                     <table class="table table-striped" id="table_seragam">
                         <thead>
@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                <div class="btn btn-primary btn_tambah_stok mb-2"> <i class="fas fa-plus"></i> Tambah</div>
+                <div class="btn btn-primary tambahBtn mb-2" data-method="stok"> <i class="fas fa-plus"></i> Tambah</div>
 				<div class="row">
 					<table class="table table-striped" id="table_stok">
 						<thead>
@@ -73,7 +73,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtn">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn" data-target="seragam" data-method="seragam">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
@@ -122,14 +122,14 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtn">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn"  data-target="seragam" data-method="stok">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<script>
+<!-- <script>
     $(document).ready(function() {
       tabelSeragam();
       tabelStok();
@@ -346,4 +346,4 @@
 
 	}
 
-</script>
+</script> -->

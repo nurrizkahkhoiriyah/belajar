@@ -5,9 +5,9 @@
 				<h3 class="card-title">Akun Pengguna</h3>
 			</div>
 			<div class="card-body">
-				<div class="btn btn-primary btnTambahUser mb-2"> <i class="fas fa-plus"></i> Tambah</div>
+				<div class="btn btn-primary tambahBtn mb-2" data-method="akun_pengguna"> <i class="fas fa-plus"></i> Tambah</div>
 				<div class="row">
-					<table class="table table-striped" id="tabelUser">
+					<table class="table table-striped" id="table_akun_pengguna">
 						<thead>
 							<tr>
 								<th>No</th>
@@ -25,7 +25,7 @@
 	</div>
 </div>
 
-<div class="modal" id="modalUser" tabindex=" -1" role="dialog">
+<div class="modal" id="modal_akun_pengguna" tabindex=" -1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -37,7 +37,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-user">
-					<form id="formUser" action="#" method="post" enctype="multipart/form-data">
+					<form id="form_akun_pengguna" action="#" method="post" enctype="multipart/form-data">
 						<input type="hidden" class="form-control" id="id" name="id" value="">
 						<div class="mb-1">
 							<label for="username" class="form-label">Username</label>
@@ -53,14 +53,14 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtn">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn" data-target="akun_pengguna" data-method="akun_pengguna">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<script>
+<!-- <script>
     $(document).ready(function() {
 		tabelUser();
 		
@@ -169,4 +169,4 @@
 
 	}
 
-</script>
+</script> -->

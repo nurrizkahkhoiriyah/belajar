@@ -5,9 +5,9 @@
 				<h3 class="card-title">Tahun Pelajaran</h3>
 			</div>
 			<div class="card-body">
-				<div class="btn btn-primary btnTambahTahunPelajaran mb-2"> <i class="fas fa-plus"></i> Tambah</div>
+				<div class="btn btn-primary tambahBtn mb-2" data-method="tahun_pelajaran"> <i class="fas fa-plus"></i> Tambah</div>
 				<div class="row">
-					<table class="table table-striped" id="tabelTahunPelajaran">
+					<table class="table table-striped" id="table_tahun_pelajaran">
 						<thead>
 							<tr>
 								<th>No</th>
@@ -27,7 +27,7 @@
 	</div>
 </div>
 
-<div class="modal" id="modalTahunPelajaran" tabindex=" -1" role="dialog">
+<div class="modal" id="modal_tahun_pelajaran" tabindex=" -1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -39,7 +39,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-user">
-					<form id="formTahunPelajaran" action="#" method="post" enctype="multipart/form-data">
+					<form id="form_tahun_pelajaran" action="#" method="post" enctype="multipart/form-data">
 						<input type="hidden" class="form-control" id="id" name="id" value="">
 						<div class="mb-1">
 							<label for="nama_tahun_pelajaran" class="form-label">Nama Tahun Pelajaran</label>
@@ -68,7 +68,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtn">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn" data-target="tahun_pelajaran" data-method="tahun_pelajaran">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
@@ -78,7 +78,7 @@
 
 
 
-<script>
+<!-- <script>
 	$(document).ready(function() {
 		tabelTahunPelajaran();
 		
@@ -192,4 +192,4 @@
 		}
 
 	}
-</script>
+</script> -->

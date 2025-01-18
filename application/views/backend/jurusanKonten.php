@@ -5,9 +5,9 @@
 				<h3 class="card-title">Data Jurusan</h3>
 			</div>
 			<div class="card-body">
-				<div class="btn btn-primary btnTambahJurusan mb-2"> <i class="fas fa-plus"></i> Tambah</div>
+				<div class="btn btn-primary tambahBtn mb-2" data-method="jurusan"> <i class="fas fa-plus"></i> Tambah</div>
 				<div class="row">
-					<table class="table table-striped" id="tabelJurusan">
+					<table class="table table-striped" id="table_jurusan">
 						<thead>
 							<tr>
 								<th>No</th>
@@ -25,7 +25,7 @@
 	</div>
 </div>
 
-<div class="modal" id="modalJurusan" tabindex=" -1" role="dialog">
+<div class="modal" id="modal_jurusan" tabindex=" -1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -37,7 +37,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-user">
-					<form id="formJurusan" action="#" method="post" enctype="multipart/form-data">
+					<form id="form_jurusan" action="#" method="post" enctype="multipart/form-data">
 						<input type="hidden" class="form-control" id="id" name="id" value="">
 
 						<div class="mb-1">
@@ -61,7 +61,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtn">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn" data-target="jurusan" data-method="jurusan">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
@@ -72,7 +72,7 @@
 
 
 
-<script>
+<!-- <script>
 	$(document).ready(function() {
 		tabelJurusan();
 		$('#id_tahun_pelajaran').load('<?php echo base_url('jurusan/option_tahun_pelajaran'); ?>');
@@ -181,4 +181,4 @@
 		}
 
 	}
-</script>
+</script> -->

@@ -21,7 +21,7 @@ class Seragam extends CI_Controller
 		$this->load->view('template', $data);
 	}
 
-	public function tabel_seragam()
+	public function table_seragam()
 	{
 
 		$q = $this->md->getAllSeragamNotDeleted();
@@ -43,7 +43,7 @@ class Seragam extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function saveSeragam(){
+	public function save_seragam(){
 		$id = $this->input->post('id');
 		$nama_seragam = $this->input->post('nama_seragam');
 
@@ -58,7 +58,7 @@ class Seragam extends CI_Controller
 			$cek = $this->md->cekSeragamDuplicate($data['nama_seragam'], $id);
 			if ($cek->num_rows() > 0) {
 				$ret['status'] = false;
-				$ret['message'] = 'Nama Biaya sudah ada';
+				$ret['message'] = 'Nama Seragam sudah ada';
 				$ret['query'] = $this->db->last_query();
 			} else {
 
@@ -76,6 +76,7 @@ class Seragam extends CI_Controller
 						);
 					}
 				} else {
+					$data['created_at'] = date('Y-m-d H:i:s');
 					$insert = $this->md->insertSeragam($data);
 
 					if ($insert) {
@@ -125,7 +126,7 @@ class Seragam extends CI_Controller
 	}
 	
 
-    public function editSeragam()
+    public function edit_seragam()
 	{
 
 		$id = $this->input->post('id');
@@ -149,11 +150,12 @@ class Seragam extends CI_Controller
 		echo json_encode($ret);
 	}
 
-    public function deleteSeragam()
+    public function delete_seragam()
 	{
 
 		$id = $this->input->post('id');
-		$q = $this->md->deleteSeragam($id);
+		$data['deleted_at'] = time();
+		$q = $this->md->updateSeragam($id, $data);
 
 		if ($q) {
 			$ret['status'] = true;
@@ -202,31 +204,6 @@ class Seragam extends CI_Controller
 		echo $ret;
 	}
 
-	public function option_jurusan($id)
-	{
-
-		$q = $this->md->getJurusanByTahunPelajaranID($id);
-		$ret = '<option value="">Pilih Jurusan</option>';
-		if ($q->num_rows() > 0) {
-			foreach ($q->result() as $row) {
-				$ret .= '<option value="' . $row->id . '">' . $row->nama_jurusan . '</option>';
-			}
-		}
-		echo $ret;
-	}
-
-    public function option_kelas($id)
-	{
-
-		$q = $this->md->getKelasByJurusanID($id);
-		$ret = '<option value="">Pilih Kelas</option>';
-		if ($q->num_rows() > 0) {
-			foreach ($q->result() as $row) {
-				$ret .= '<option value="' . $row->id . '">' . $row->nama_kelas . '</option>';
-			}
-		}
-		echo $ret;
-	}
 
     public function option_seragam()
 	{
@@ -241,7 +218,7 @@ class Seragam extends CI_Controller
 		echo $ret;
 	}
 
-    public function saveStok()
+    public function save_stok()
 	{	
 		$id = $this->input->post('id');
 		$data['id_seragam'] = $this->input->post('id_seragam');
@@ -274,6 +251,7 @@ class Seragam extends CI_Controller
 						);
 					}
 				} else {
+					$data['created_at'] = date('Y-m-d H:i:s');
 					$insert = $this->md->insertStok($data);
 
 					if ($insert) {
@@ -320,7 +298,7 @@ class Seragam extends CI_Controller
     	echo json_encode($ret);
     }
 
-    public function editStok()
+    public function edit_stok()
 	{
 
 		$id = $this->input->post('id');
@@ -344,11 +322,12 @@ class Seragam extends CI_Controller
 		echo json_encode($ret);
 	}
 
-    public function deleteStok()
+    public function delete_stok()
 	{
 
 		$id = $this->input->post('id');
-		$q = $this->md->deleteStok($id);
+		$data['deleted_at'] = time();
+		$q = $this->md->updateStok($id, $data);
 
 		if ($q) {
 			$ret['status'] = true;

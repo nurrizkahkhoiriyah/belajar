@@ -54,7 +54,7 @@ class Jurusan extends CI_Controller
 		echo $ret;
 	}
 
-	public function edit()
+	public function edit_jurusan()
 	{
 
 		$id = $this->input->post('id');
@@ -79,7 +79,7 @@ class Jurusan extends CI_Controller
 	}
 
 	
-	public function delete()
+	public function delete_jurusan()
 	{
 
 		$id = $this->input->post('id');
@@ -97,10 +97,9 @@ class Jurusan extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function save()
+	public function save_jurusan()
 	{	
 		$id = $this->input->post('id');
-		$id_tahun_pelajaran = $this->input->post('id_tahun_pelajaran');
         $data['nama_jurusan'] = $this->input->post('nama_jurusan');
 		$data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');
 		$data['created_at'] = date('Y-m-d H:i:s');
@@ -108,7 +107,7 @@ class Jurusan extends CI_Controller
 		$data['deleted_at'] = 0;
 
 		if ($data['nama_jurusan']) {
-			$cek = $this->md->cekJurusanDuplicate($data['nama_jurusan'], $id_tahun_pelajaran, $id);
+			$cek = $this->md->cekJurusanDuplicate($data['nama_jurusan'], $data['id_tahun_pelajaran'], $id);
 			if ($cek->num_rows() > 0) {
 				$ret['status'] = false;
 				$ret['message'] = 'Jurusan sudah ada';
