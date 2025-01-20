@@ -18,13 +18,13 @@
             <div class="mb-1">
               <label for="username" class="form-label">Username</label>
               <input type="text" class="form-control" id="username" name="username">
-              <div class="error-block text-danger" id="usernameError">
+              <div class="error-block" id="usernameError">
               </div>
             </div>
             <div class="mb-1">
               <label for="password" class="form-label">Password</label>
               <input type="password" class="form-control" id="password" name="password">
-              <div class="error-block text-danger" id="passwordError">
+              <div class="error-block" id="passwordError">
               </div>
             </div>
 

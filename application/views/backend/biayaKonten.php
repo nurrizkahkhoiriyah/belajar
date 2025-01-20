@@ -12,15 +12,15 @@
     <div class="card-body">
         <div class="tab-content" id="custom-tabs-one-tabContent">
             <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                <div class="btn btn-primary tambahBtn mb-2" data-method="biaya"> <i class="fas fa-plus"></i> Tambah</div>
+                <div class="btn btn-primary tambahBtn mb-2" data-target="biaya"> <i class="fas fa-plus"></i> Tambah</div>
                 <div class="row">
                     <table class="table table-striped" data-target="biaya"  id="table_biaya">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Nama Biaya</th>
-                                <th>Deskripsi</th>
-                                <th>Aksi</th>
+                                <th data-key="no">No</th>
+                                <th data-key="nama_biaya">Nama Biaya</th>
+                                <th data-key="deskripsi">Deskripsi</th>
+                                <th data-key="btn_aksi">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,16 +29,16 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                <div class="btn btn-primary tambahBtn mb-2" data-method="harga_biaya"> <i class="fas fa-plus"></i> Tambah</div>
+                <div class="btn btn-primary tambahBtn mb-2" data-target="harga_biaya"> <i class="fas fa-plus"></i> Tambah</div>
 				<div class="row">
-					<table class="table table-striped" data-target="biaya" id="table_harga_biaya">
+					<table class="table table-striped" data-target="harga_biaya" id="table_harga_biaya">
 						<thead>
 							<tr>
-								<th>No</th>
-								<th>Nama Biaya</th>
-								<th>Tahun Pelajaran</th>
-								<th>Harga</th>
-								<th>Aksi</th>
+								<th data-key="no">No</th>
+								<th data-key="nama_biaya">Nama Biaya</th>
+								<th data-key="nama_tahun_pelajaran">Tahun Pelajaran</th>
+								<th data-key="harga">Harga</th>
+								<th data-key="btn_aksi">Aksi</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -78,7 +78,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtn" data-target="biaya" data-method="biaya">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn" data-target="biaya">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
@@ -101,14 +101,14 @@
 						<input type="hidden" class="form-control" id="id" name="id" value="">
 						<div class="mb-1">
 							<label for="id_biaya" class="form-label">Nama Biaya</label>
-							<select class="form-control " name="id_biaya" id="id_biaya">
+							<select class="form-control loadSelect" data-target="biaya" name="id_biaya" id="id_biaya">
 								<option value="">- Pilih Biaya -</option>
 							</select>
 							<div class="error-block"></div>
 						</div>
 						<div class="mb-1">
 							<label for="id_tahun_pelajaran" class="form-label">Tahun Pelajaran</label>
-							<select class="form-control " name="id_tahun_pelajaran" id="id_tahun_pelajaran">
+							<select class="form-control loadSelect" data-target="tahun_pelajaran" name="id_tahun_pelajaran" id="id_tahun_pelajaran">
 								<option value="">- Pilih Tahun Pelajaran -</option>
 							</select>
 							<div class="error-block"></div>
@@ -122,7 +122,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtn" data-target="biaya" data-method="harga_biaya">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn" data-target="harga_biaya">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
@@ -130,157 +130,3 @@
 </div>
 <!-- <script src="<?php echo base_url(); ?>public/template/plugins/jquery/jquery.min.js"></script>
 <script src="<?php echo base_url('public/lib/crud.js'); ?>"></script> -->
-
-<!-- <script>
-    $(document).ready(function() {
-		tampilkan_table('biaya', 'biaya');
-        tampilkan_table('biaya', 'harga_biaya');	
-	})
-
-
-    $('#id_tahun_pelajaran').load('<?php echo base_url('biaya/option_tahun_pelajaran'); ?>');
-    $('#id_biaya').load('<?php echo base_url('biaya/option_biaya'); ?>');
-
-
-    $('.btn_tambah_biaya').click(function() {
-		$('#id').val('');
-		$('#form_biaya').trigger('reset');
-		$('#modal_biaya').modal('show');
-	});
-
-    $('.btn_tambah_harga_biaya').click(function() {
-		$('#id').val('');
-		$('#form_harga_biaya').trigger('reset');
-		$('#modal_harga_biaya').modal('show');
-	});
-
-	function tampilkan_table(targetController, table){
-		let tableElement = $('#table_' + table);
-		$.ajax({
-			url: '<?php echo base_url(); ?>' + targetController + '/table_' + table,
-			type: 'GET',
-			dataType: 'json',
-			success: function(response){
-				console.log(tableElement);
-				if(response.status){
-					let no = 1;
-					tableElement.find('tbody').html('');
-					$.each(response.data, function(i, item){
-						let tr = $('<tr>');
-						tr.append('<td>' + no++ + '</td>');
-
-						if(table === 'biaya'){
-							tr.append('<td>' + item.nama_biaya + '</td>');
-							tr.append('<td>' + item.deskripsi + '</td>');
-							
-						} else if(table === 'harga_biaya'){
-							tr.append('<td>' + item.nama_biaya + '</td>');
-							tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
-							tr.append('<td>' + item.harga + '</td>');
-						}
-
-						tr.append('<td> <button class="btn btn-primary editBtn" data-method="'+ table +'" data-target="'+ targetController +'" data-id="' + item.id + '">Edit</button> <button class="btn btn-danger deleteBtn" data-method="'+ table +'" data-target="' + targetController + '" data-id="' + item.id + '">Delete</button></td>');
-                    	tableElement.find('tbody').append(tr);
-					});
-				} else {
-                	tableElement.find('tbody').html('<tr><td colspan="4">' + response.message + '</td></tr>');
-            }
-			}
-		})
-	}
-
-
-    $(document).on('click', '.saveBtn', function()  {
-		let base = '<?php echo base_url(); ?>';
-		var targetController = $(this).data('target');
-		var targetMethod = $(this).data('method');
-		var url = base + targetController +'/save_' + targetMethod;
-		var formData = new FormData($('#form_' + targetMethod)[0]);
-		$.ajax({
-			url: url,
-			type: 'POST',
-			data: formData,
-			processData: false,
-			contentType: false,
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					alert(response.message);
-					$('#modal_' + targetMethod).modal('hide');
-					tampilkan_table(targetController, targetMethod); 
-
-				} else {
-					alert(response.message);
-				}
-			}
-
-		})
-	})
-
-	$(document).on('click', '.editBtn', function() {
-		let base = '<?php echo base_url(); ?>';
-		var targetController = $(this).data('target');
-		var targetMethod = $(this).data('method');
-    	var url = base + targetController +'/edit_' + targetMethod;
-		var formData = new FormData($('#form_' + targetMethod)[0]);
-
-		$.ajax({
-			url: url,
-			type: 'POST',
-			data: formData,
-			processData: false,
-			contentType: false,
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					if(targetMethod === 'biaya'){
-						$('#id').val(response.data.id);
-						$('#nama_biaya').val(response.data.nama_biaya);
-						$('#deskripsi').val(response.data.deskripsi);
-						$('#modal_' + targetMethod).modal('show');
-						tampilkan_table(targetController, targetMethod); 
-					} else if (targetMethod === 'harga_biaya'){
-						$('#id').val(response.data.id);
-						$('#id_biaya').val(response.data.id_biaya);
-                        $('#id_tahun_pelajaran').val(response.data.id_tahun_pelajaran);
-                        $('#harga').val(response.data.harga);
-						$('#modal_' + targetMethod).modal('show');
-						tampilkan_table(targetController, targetMethod); 
-
-					}
-				} else {
-					alert(response.message);
-				}
-			}
-
-		})
-	});
-
-
-	$(document).on('click', '.deleteBtn', function() {
-		let base = '<?php echo base_url(); ?>';
-		var targetController = $(this).data('target');
-		var targetMethod = $(this).data('method');
-		var id = $(this).data('id');
-    	var url = base + targetController +'/delete_' + targetMethod;
-		$.ajax({
-			url: url,
-			type: 'POST',
-			data: {
-				id: id
-			},
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					alert(response.message);
-					tampilkan_table(targetController, targetMethod); 
-				} else {
-					alert(response.message);
-				}
-			}
-
-		})
-	})
-
-
-</script> -->

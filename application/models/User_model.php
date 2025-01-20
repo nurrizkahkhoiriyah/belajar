@@ -57,6 +57,13 @@ class User_model extends CI_Model
 		$this->db->where('id !=', $id);
 		return $this->db->get('users')->row();
 	}
+
+	public function login($username, $password)
+	{
+
+		$q = $this->db->where('username', $username)->where('password', $password)->get($this->table);
+		return $q;
+	}
 	
 	
 	

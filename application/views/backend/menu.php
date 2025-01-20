@@ -94,27 +94,3 @@
 		</p>
 	</a>
 </li>
-
-<!-- <script>
-	$('#logoutBtn').click(function () {
-                // Konfirmasi logout
-                if (confirm('Apakah Anda yakin ingin keluar?')) {
-                    $.ajax({
-                        url: '<?= base_url('login/logout'); ?>', // URL ke fungsi logout
-                        type: 'POST',
-                        success: function (response) {
-                            let res = JSON.parse(response);
-                            if (res.status) {
-                                // Redirect ke halaman login
-                                window.location.href = '<?= base_url('login'); ?>';
-                            } else {
-                                alert('Logout gagal. Silakan coba lagi.');
-                            }
-                        },
-                        error: function () {
-                            alert('Terjadi kesalahan. Tidak dapat logout.');
-                        }
-                    });
-                }
-            });
-</script> -->

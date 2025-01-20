@@ -32,9 +32,10 @@ class Kelas extends CI_Controller
 		echo $ret;
 	}
 
-	public function option_jurusan($id)
+	public function option_jurusan()
 	{
 
+		$id = $this->input->post('id');
 		$q = $this->md->getJurusanByTahunPelajaranID($id);
 		$ret = '<option value="">Pilih Jurusan</option>';
 		if ($q->num_rows() > 0) {

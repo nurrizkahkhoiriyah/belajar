@@ -5,17 +5,17 @@
 				<h3 class="card-title">Tahun Pelajaran</h3>
 			</div>
 			<div class="card-body">
-				<div class="btn btn-primary tambahBtn mb-2" data-method="tahun_pelajaran"> <i class="fas fa-plus"></i> Tambah</div>
+				<div class="btn btn-primary tambahBtn mb-2" data-target="tahun_pelajaran"> <i class="fas fa-plus"></i> Tambah</div>
 				<div class="row">
-					<table class="table table-striped" id="table_tahun_pelajaran">
+					<table class="table table-striped" id="table_tahun_pelajaran" data-target="tahun_pelajaran">
 						<thead>
 							<tr>
-								<th>No</th>
-								<th>Tahun Pelajaran</th>
-								<th>Mulai</th>
-								<th>Akhir</th>
-								<th>Status</th>
-								<th>Aksi</th>
+								<th data-key="no">No</th>
+								<th data-key="nama_tahun_pelajaran">Tahun Pelajaran</th>
+								<th data-key="tanggal_mulai">Mulai</th>
+								<th data-key="tanggal_akhir">Akhir</th>
+								<th data-key="status_tahun_pelajaran">Status</th>
+								<th data-key="btn_aksi">Aksi</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -68,128 +68,9 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtn" data-target="tahun_pelajaran" data-method="tahun_pelajaran">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn" data-target="tahun_pelajaran">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>
 	</div>
 </div>
-
-
-
-
-<!-- <script>
-	$(document).ready(function() {
-		tabelTahunPelajaran();
-		
-	})
-
-	function tabelTahunPelajaran() {
-		let tabelTahunPelajaran = $('#tabelTahunPelajaran');
-		let tr = $('<tr>');
-		$.ajax({
-			url: '<?php echo base_url('tahun_pelajaran/table_tahun_pelajaran'); ?>',
-			type: 'GET',
-
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					tabelTahunPelajaran.find('tbody').html('');
-					let no = 1;
-					$.each(response.data, function(i, item) {
-						let tr = $('<tr>');
-						tr.append('<td>' + no++ + '</td>');
-						tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
-						tr.append('<td>' + item.tanggal_mulai + '</td>');
-						tr.append('<td>' + item.tanggal_akhir + '</td>');
-						tr.append('<td>' + item.status_tahun_pelajaran + '</td>');
-						tr.append('<td>	<button class="btn btn-primary" onclick="editTahunPelajaran(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteTahunPelajaran(' + item.id + ')">Delete</button></td>');
-						tabelTahunPelajaran.find('tbody').append(tr);
-					});
-
-				} else {
-					tabelTahunPelajaran.find('tbody').html('');
-					tr.append('<td colspan="4">' + response.message + '</td>');
-				}
-			}
-		});
-	}
-
-	$('.btnTambahTahunPelajaran').click(function() {
-		$('#id').val('');
-		$('#formTahunPelajaran').trigger('reset');
-		$('#modalTahunPelajaran').modal('show');
-	});
-
-	$('.saveBtn').click(function() {
-		$.ajax({
-			url: '<?php echo base_url('tahun_pelajaran/save'); ?>',
-			type: 'POST',
-			data: {
-				id: $('#id').val(),
-				nama_tahun_pelajaran: $('#nama_tahun_pelajaran').val(),
-				tanggal_mulai: $('#tanggal_mulai').val(),
-				tanggal_akhir: $('#tanggal_akhir').val(),
-				status_tahun_pelajaran: $('#status_tahun_pelajaran').val(),
-			},
-			dataType: 'json',
-			success: function(response) {
-				if (response.status) {
-					alert(response.message);
-					$('#modalTahunPelajaran').modal('hide');
-					tabelTahunPelajaran();
-				} else {
-					alert(response.message);
-				}
-			}
-
-		})
-	})
-	
-	function editTahunPelajaran(id){
-			$.ajax({
-				url: '<?php echo base_url('tahun_pelajaran/edit'); ?>',
-				type: 'POST',
-				data: {
-					id: id
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (response.status) {
-						$('#id').val(response.data.id);
-						$('#nama_tahun_pelajaran').val(response.data.nama_tahun_pelajaran);
-						$('#tanggal_mulai').val(response.data.tanggal_mulai);
-						$('#tanggal_akhir').val(response.data.tanggal_akhir);
-						$('#status_tahun_pelajaran').val(response.data.status_tahun_pelajaran);
-						$('#modalTahunPelajaran').modal('show');
-						tableTahunPelajaran();
-					} else {
-						alert(response.message);
-					}
-				}
-			});
-	}
-
-	function deleteTahunPelajaran(id) {
-		if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-			let url = '<?php echo base_url('tahun_pelajaran/delete'); ?>';
-			$.ajax({
-				url: url,
-				type: 'POST',
-				data: {
-					id: id
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (response.status) {
-						alert(response.message);
-						tabelTahunPelajaran();
-					} else {
-						alert(response.message);
-					}
-				}
-			});
-		}
-
-	}
-</script> -->

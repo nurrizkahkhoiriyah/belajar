@@ -261,6 +261,18 @@ class Biaya extends CI_Controller
 		echo $opt;
 	}
 
+	public function option_tahun_pelajaran()
+	{
+		$q = $this->md->getAllTahunPelajaranNotDeleted();
+		$ret = '<option value="">Pilih Tahun Pelajaran</option>';
+		if ($q->num_rows() > 0) {
+			foreach ($q->result() as $row) {
+				$ret .= '<option value="' . $row->id . '">' . $row->nama_tahun_pelajaran . '</option>';
+			}
+		}
+		echo $ret;
+	}
+
 
 
     // public function table_harga_biaya()
