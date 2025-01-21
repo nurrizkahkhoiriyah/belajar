@@ -113,6 +113,8 @@ function generateTable(data, target) {
 
 
 $(document).on('click', '.saveBtn', function()  {
+	$('.error-block').html('');
+	$('input').removeClass('is-invalid');
 	var targetController = $(this).data('target');
 	var formData = new FormData($('#form_' + targetController)[0]);
 	$.ajax({
@@ -126,10 +128,18 @@ $(document).on('click', '.saveBtn', function()  {
 			if (response.status) {
 				alert(response.message);
 				$('#modal_' + targetController).modal('hide');
-				loadTable(targetController)
+				loadTabel(targetController);
 
 			} else {
-				alert(response.message);
+				if (response.error) {
+					for (var prop in response.error) {
+						if (response.error[prop] !== '') {
+							$('#form_' + targetController + " [name= " + prop + "] ").addClass('is-invalid').next('div .error-block').html(response.error[prop]);
+						}
+					}
+				} else {
+					// console.log('error3: not found');
+				}
 			}
 		}
 
@@ -178,7 +188,7 @@ $(document).on('click', '.deleteBtn', function() {
 		success: function(response) {
 			if (response.status) {
 				alert(response.message);
-				loadTable(targetController)
+				loadTabel(targetController);
 			} else {
 				alert(response.message);
 			}
@@ -187,13 +197,13 @@ $(document).on('click', '.deleteBtn', function() {
 	})
 })
 
-function setJurusan(id_tahun_pelajaran, id) {
-	let url = 'kelas/option_jurusan';
-	$('#id_jurusan').load(url + '/' + id_tahun_pelajaran, function() {
-		$('#id_jurusan').val(id);
-	});
+// function setJurusan(id_tahun_pelajaran, id) {
+// 	let url = 'kelas/option_jurusan';
+// 	$('#id_jurusan').load(url + '/' + id_tahun_pelajaran, function() {
+// 		$('#id_jurusan').val(id);
+// 	});
 
-}
+// }
 
 
 $(document).on('click', '#logoutBtn', function() {

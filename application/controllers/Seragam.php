@@ -54,72 +54,45 @@ class Seragam extends CI_Controller
 			'deleted_at' => 0
 		);
 
-		if ($data['nama_seragam']) {
-			$cek = $this->md->cekSeragamDuplicate($data['nama_seragam'], $id);
-			if ($cek->num_rows() > 0) {
-				$ret['status'] = false;
-				$ret['message'] = 'Nama Seragam sudah ada';
-				$ret['query'] = $this->db->last_query();
-			} else {
+		$this->form_validation->set_rules('nama_seragam', 'Nama Seragam', 'trim|required|alpha_numeric_space', array('required' => '%s harus diisi', 'alpha_numeric_space' => '%s hanya boleh mengandung huruf, angka dan spasi'));
 
-				if ($id) {
-					$update = $this->md->updateSeragam($id, $data);
-					if ($update) {
-						$ret = array(
-							'status' => true,
-							'message' => 'Data berhasil diupdate'
-						);
-					} else {
-						$ret = array(
-							'status' => false,
-							'message' => 'Data gagal diupdate'
-						);
-					}
-				} else {
-					$data['created_at'] = date('Y-m-d H:i:s');
-					$insert = $this->md->insertSeragam($data);
-
-					if ($insert) {
-						$ret = array(
-							'status' => true,
-							'message' => 'Data berhasil disimpan'
-						);
-					} else {
-						$ret = array(
-							'status' => false,
-							'message' => 'Data gagal disimpan'
-						);
-					}
-				}
-			
-			}
-		} else {
+		if ($this->form_validation->run() == FALSE) {
 			$ret['status'] = false;
-			$ret['message'] = 'Data tidak boleh kosong';
-            $ret['query'] = $this->db->last_query();
+			foreach ($_POST as $key => $value) {
+				$ret['error'][$key] = form_error($key);
+			}	
+		
+		} else {
+			if ($id) {
+				$update = $this->md->updateSeragam($id, $data);
+				if ($update) {
+					$ret = array(
+						'status' => true,
+						'message' => 'Data berhasil diupdate'
+					);
+				} else {
+					$ret = array(
+						'status' => false,
+						'message' => 'Data gagal diupdate'
+					);
+				}
+			} else {
+				$data['created_at'] = date('Y-m-d H:i:s');
+				$insert = $this->md->insertSeragam($data);
+
+				if ($insert) {
+					$ret = array(
+						'status' => true,
+						'message' => 'Data berhasil disimpan'
+					);
+				} else {
+					$ret = array(
+						'status' => false,
+						'message' => 'Data gagal disimpan'
+					);
+				}
+			}			
 		}
-
-		// if ($id) {
-		// 	$q = $this->md->updateSeragam($id, $data);
-		// 	if ($q) {
-		// 		$ret['status'] = true;
-		// 		$ret['message'] = 'Data berhasil diupdate';
-		// 	} else {
-		// 		$ret['status'] = false;
-		// 		$ret['message'] = 'Data gagal diupdate';
-		// 	}
-		// } else {
-		// 	$data['created_at'] = date('Y-m-d H:i:s');
-		// 	$q = $this->md->insertSeragam($data);
-
-		// 	if ($q) {
-		// 		$ret['status'] = true;
-		// 		$ret['message'] = 'Data berhasil disimpan';
-		// 	} else {
-		// 		$ret['status'] = false;
-		// 		$ret['message'] = 'Data gagal disimpan';
-		// 	}
-		// }
 
 
 		echo json_encode($ret);
@@ -229,50 +202,50 @@ class Seragam extends CI_Controller
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
-		if ($data['id_seragam']) {
-			$cek = $this->md->cekStokDuplicate($data['id_tahun_pelajaran'], $data['ukuran'], $data['id_seragam'], $id);
-			if ($cek->num_rows() > 0) {
-				$ret['status'] = false;
-				$ret['message'] = 'Data terduplikasi';
-				$ret['query'] = $this->db->last_query();
-			} else {
+		$this->form_validation->set_rules('id_seragam', 'Nama Seragam', 'trim|required', array('required' => '%s harus diisi'));
+		$this->form_validation->set_rules('id_tahun_pelajaran', 'Tahun Pelajaran', 'trim|required', array('required' => '%s harus diisi'));
+		$this->form_validation->set_rules('ukuran', 'Ukuran', 'trim|required', array('required' => '%s harus diisi'));
+		$this->form_validation->set_rules('stok', 'Stok', 'trim|required|integer', array('required' => '%s harus diisi', 'numeric' => 'Diisi harus angka'));
 
-				if ($id) {
-					$update = $this->md->updateStok($id, $data);
-					if ($update) {
-						$ret = array(
-							'status' => true,
-							'message' => 'Data berhasil diupdate'
-						);
-					} else {
-						$ret = array(
-							'status' => false,
-							'message' => 'Data gagal diupdate'
-						);
-					}
-				} else {
-					$data['created_at'] = date('Y-m-d H:i:s');
-					$insert = $this->md->insertStok($data);
 
-					if ($insert) {
-						$ret = array(
-							'status' => true,
-							'message' => 'Data berhasil disimpan'
-						);
-					} else {
-						$ret = array(
-							'status' => false,
-							'message' => 'Data gagal disimpan'
-						);
-					}
-				}
-			
+		if ($this->form_validation->run() == FALSE) {
+			$ret['status'] = false;
+			foreach ($_POST as $key => $value) {
+				$ret['error'][$key] = form_error($key);
 			}
 		} else {
-			$ret['status'] = false;
-			$ret['message'] = 'Data tidak boleh kosong';
-            $ret['query'] = $this->db->last_query();
+			if ($id) {
+				$update = $this->md->updateStok($id, $data);
+				if ($update) {
+					$ret = array(
+						'status' => true,
+						'message' => 'Data berhasil diupdate'
+					);
+				} else {
+					$ret = array(
+						'status' => false,
+						'message' => 'Data gagal diupdate'
+					);
+				}
+			} else {
+				$data['created_at'] = date('Y-m-d H:i:s');
+				$insert = $this->md->insertStok($data);
+
+				if ($insert) {
+					$ret = array(
+						'status' => true,
+						'message' => 'Data berhasil disimpan'
+					);
+				} else {
+					$ret = array(
+						'status' => false,
+						'message' => 'Data gagal disimpan'
+					);
+				}
+			}
+		
 		}
+	
 
 		// if ($id) {
 		// 	$q = $this->md->updateStok($id, $data);

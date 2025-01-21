@@ -32,10 +32,9 @@ class Kelas extends CI_Controller
 		echo $ret;
 	}
 
-	public function option_jurusan()
+	public function option_jurusan($id)
 	{
 
-		$id = $this->input->post('id');
 		$q = $this->md->getJurusanByTahunPelajaranID($id);
 		$ret = '<option value="">Pilih Jurusan</option>';
 		if ($q->num_rows() > 0) {
@@ -72,35 +71,50 @@ class Kelas extends CI_Controller
 	{
 
 		$id = $this->input->post('id');
-		$data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');//terakhir diganti
-		$data['nama_kelas'] = $this->input->post('nama_kelas');
+		$data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');
 		$data['id_jurusan'] = $this->input->post('id_jurusan');
+		$data['nama_kelas'] = $this->input->post('nama_kelas');
 		$data['created_at'] = date('Y-m-d H:i:s');
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
-		if ($data['nama_kelas']) {
-			$cek = $this->md->cekKelasDuplicate($data['nama_kelas'], $data['id_jurusan'], $id);
-			if ($cek->num_rows() > 0) {
-				$ret['status'] = false;
-				$ret['message'] = 'Kelas sudah ada';
-				$ret['query'] = $this->db->last_query();
-			} else {
-				if ($id) {
-					$this->md->updateKelas($id, $data);
-					$ret['status'] = true;
-					$ret['message'] = 'Data berhasil diupdate';
-				} else {
-					$this->md->saveKelas($data);
-					$ret['status'] = true;
-					$ret['message'] = 'Data berhasil disimpan';
-					$ret['query'] = $this->db->last_query();
-				}
-			}
-		} else {
+		$this->form_validation->set_rules('id_tahun_pelajaran', 'Tahun Pelajaran', 'trim|required', array('required' => '%s harus diisi'));
+		$this->form_validation->set_rules('id_jurusan', 'Jurusan', 'trim|required', array('required' => '%s harus diisi'));
+		$this->form_validation->set_rules('nama_kelas', 'Kelas', 'trim|required|alpha_numeric_space', array('required' => '%s harus diisi', 'alpha_numeric_space' => '%s hanya boleh mengandung huruf, angka dan spasi'));
+
+		if ($this->form_validation->run() == FALSE) {
 			$ret['status'] = false;
-			$ret['message'] = 'Data tidak boleh kosong';
-			$ret['query'] = $this->db->last_query();
+			foreach ($_POST as $key => $value) {
+				$ret['error'][$key] = form_error($key);
+			}
+			// $cek = $this->md->cekKelasDuplicate($data['nama_kelas'], $data['id_jurusan'], $id);
+			// if ($cek->num_rows() > 0) {
+			// 	$ret['status'] = false;
+			// 	$ret['message'] = 'Kelas sudah ada';
+			// 	$ret['query'] = $this->db->last_query();
+			// } else {
+				// if ($id) {
+				// 	$this->md->updateKelas($id, $data);
+				// 	$ret['status'] = true;
+				// 	$ret['message'] = 'Data berhasil diupdate';
+				// } else {
+				// 	$this->md->saveKelas($data);
+				// 	$ret['status'] = true;
+				// 	$ret['message'] = 'Data berhasil disimpan';
+				// 	$ret['query'] = $this->db->last_query();
+				// }
+			// }
+		} else {
+			if ($id) {
+				$this->md->updateKelas($id, $data);
+				$ret['status'] = true;
+				$ret['message'] = 'Data berhasil diupdate';
+			} else {
+				$this->md->insertKelas($data);
+				$ret['status'] = true;
+				$ret['message'] = 'Data berhasil disimpan';
+				$ret['query'] = $this->db->last_query();
+			}
 		}
 
 		echo json_encode($ret);

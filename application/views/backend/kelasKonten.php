@@ -43,14 +43,14 @@
 
 						<div class="mb-1">
 							<label for="id_tahun_pelajaran" class="form-label">Nama Tahun Pelajaran</label>
-							<select class="form-control loadSelect" data-target="tahun_pelajaran"  name="id_tahun_pelajaran" id="id_tahun_pelajaran">
+							<select class="form-control  chainedSelect" data-target="tahun_pelajaran"  name="id_tahun_pelajaran" id="id_tahun_pelajaran">
 								<option value="">- Pilih Tahun Pelajaran -</option>
 							</select>
 							<div class="error-block"></div>
 						</div>
 						<div class="mb-1">
 							<label for="id_jurusan" class="form-label">Nama Jurusan</label>
-							<select class="form-control loadSelect" data-source="jurusan" data-target="jurusan" name="id_jurusan" id="id_jurusan">
+							<select class="form-control  chainedSelect" data-parent="id_tahun_pelajaran" data-target="jurusan" name="id_jurusan" id="id_jurusan">
 								<option value="">- Pilih Jurusan -</option>
 							</select>
 							<div class="error-block"></div>
@@ -78,3 +78,4 @@
 </div>
 
 
+<script src="<?php echo base_url('public/lib/chainedSelect.js');?>"></script>

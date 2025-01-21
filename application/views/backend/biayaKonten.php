@@ -101,21 +101,21 @@
 						<input type="hidden" class="form-control" id="id" name="id" value="">
 						<div class="mb-1">
 							<label for="id_biaya" class="form-label">Nama Biaya</label>
-							<select class="form-control loadSelect" data-target="biaya" name="id_biaya" id="id_biaya">
+							<select class="form-control chainedSelect" data-target="biaya" name="id_biaya" id="id_biaya">
 								<option value="">- Pilih Biaya -</option>
 							</select>
 							<div class="error-block"></div>
 						</div>
 						<div class="mb-1">
 							<label for="id_tahun_pelajaran" class="form-label">Tahun Pelajaran</label>
-							<select class="form-control loadSelect" data-target="tahun_pelajaran" name="id_tahun_pelajaran" id="id_tahun_pelajaran">
+							<select class="form-control chainedSelect" data-target="tahun_pelajaran" name="id_tahun_pelajaran" id="id_tahun_pelajaran">
 								<option value="">- Pilih Tahun Pelajaran -</option>
 							</select>
 							<div class="error-block"></div>
 						</div>
                         <div class="mb-1">
 							<label for="harga" class="form-label">Harga</label>
-							<input type="text" class="form-control" id="harga" name="harga" value="">
+							<input type="text" class="form-control" id="harga" name="harga" placeholder="Contoh: Rp 100.000" value="">
 							<div class="error-block"></div>
 						</div>
 					</form>

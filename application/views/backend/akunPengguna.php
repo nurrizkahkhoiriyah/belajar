@@ -5,15 +5,15 @@
 				<h3 class="card-title">Akun Pengguna</h3>
 			</div>
 			<div class="card-body">
-				<div class="btn btn-primary tambahBtn mb-2" data-method="akun_pengguna"> <i class="fas fa-plus"></i> Tambah</div>
+				<div class="btn btn-primary tambahBtn mb-2" data-target="akun_pengguna"> <i class="fas fa-plus"></i> Tambah</div>
 				<div class="row">
-					<table class="table table-striped" id="table_akun_pengguna">
+					<table class="table table-striped" id="table_akun_pengguna" data-target="akun_pengguna">
 						<thead>
 							<tr>
-								<th>No</th>
-								<th>Username</th>
-								<th>Password</th>
-								<th>Aksi</th>
+								<th data-key="no">No</th>
+								<th data-key="username">Username</th>
+								<th data-key="password">Password</th>
+								<th data-key="btn_aksi">Aksi</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -53,7 +53,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtn" data-target="akun_pengguna" data-method="akun_pengguna">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn" data-target="akun_pengguna">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>

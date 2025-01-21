@@ -42,7 +42,7 @@
 
 						<div class="mb-1">
 							<label for="nama_tahun_pelajaran" class="form-label">Tahun Pelajaran</label>
-							<select class="form-control loadSelect" data-target="tahun_pelajaran" id="id_tahun_pelajaran" name="id_tahun_pelajaran" value="">
+							<select class="form-control chainedSelect" data-target="tahun_pelajaran" id="id_tahun_pelajaran" name="id_tahun_pelajaran" value="">
 								<option value="">Pilih Tahun Pelajaran</option>
 							</select>
 							<div class="error-block"></div>

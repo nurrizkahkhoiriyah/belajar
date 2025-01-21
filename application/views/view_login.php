@@ -14,7 +14,7 @@
           <div class="card-title fw-bold">Sign In</div>
         </div>
         <div class="card-body">
-          <form id="loginForm" action="#" method="post" enctype="multipart/form-data">
+          <form id="form_login" action="#" method="post" enctype="multipart/form-data">
             <div class="mb-1">
               <label for="username" class="form-label">Username</label>
               <input type="text" class="form-control" id="username" name="username">
@@ -42,10 +42,13 @@
         $(document).ready(function() {
             $('#loginBtn').click(function() {
                 // Reset error messages
-                $('#usernameError').text('');
-                $('#passwordError').text('');
-                $('.messageBlock').html('');
+                // $('#usernameError').text('');
+                // $('#passwordError').text('');
+                // $('.messageBlock').html('');
 
+				$('.error-block').html('');
+				$('input').removeClass('is-invalid');
+				let formdata = new FormData($("#form_login")[0])
                 // Submit form via AJAX
                 $.ajax({
                     url: '<?php echo base_url('login/proses_login'); ?>',
@@ -56,17 +59,19 @@
                     },
                     dataType: 'json',
                     success: function(response) {
-                      if (response.status === '1') {
-                          window.location.href = response.redirect; // Redirect ke dashboard
-                      } else if (response.status === '2') {
-                          $('#usernameError').text(response.usernameMessage);
-                      } else if (response.status === '3') {
-                          $('#passwordError').text(response.passwordMessage);
-                      } else if (response.status === '4') {
-                          $('.messageBlock').html(`<div class="text-danger">${response.message}</div>`);
-                      } else if (response.status === '5') {
-                          $('#usernameError').text(response.usernameMessage);
-                          $('#passwordError').text(response.passwordMessage);
+                      if (response.status) {
+                          window.location.href = '<?php echo base_url('admin'); ?>'; // Redirect ke dashboard
+                      } else {
+						if (response.error) {
+								for (var prop in response.error) {
+									if (response.error[prop] !== '') {
+
+										$("#form_login [name= " + prop + "] ").addClass('is-invalid').next('div .error-block').html(response.error[prop]);
+									}
+								}
+							} else {
+								// console.log('error3: not found');
+							}
                       }
                   }
 

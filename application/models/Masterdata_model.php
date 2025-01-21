@@ -45,6 +45,7 @@ class Masterdata_model extends CI_Model
 		if($id){
 			$this->db->where('id !=', $id);
 		}
+		$this->db->where('deleted_at', 0);
 		$this->db->where('nama_tahun_pelajaran', $nama_tahun_pelajaran);
 		return $this->db->get($this->tableTahunPelajaran);
 	}
@@ -137,7 +138,7 @@ class Masterdata_model extends CI_Model
 	}
 
 	public function getJurusanByTahunPelajaranID($id){
-		$this->db->where($this->tableJurusan . '.deleted_at', 0);
+		$this->db->where('deleted_at', 0);
 		$this->db->where('id_tahun_pelajaran', $id);
 		return $this->db->get($this->tableJurusan);
 	}
@@ -166,7 +167,7 @@ class Masterdata_model extends CI_Model
 		return $this->db->affected_rows();
 	}
 
-	public function saveKelas($data)
+	public function insertKelas($data)
 	{
 		$this->db->insert($this->tableKelas, $data);
 		return $this->db->insert_id();

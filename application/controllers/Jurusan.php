@@ -45,7 +45,7 @@ class Jurusan extends CI_Controller
 
 	public function option_tahun_pelajaran(){
 		$q = $this->md->getAllTahunPelajaranNotDeleted();
-		$ret = '';
+		$ret = '<option value="">Pilih Tahun Pelajaran</option>';
 		if ($q->num_rows() > 0) {
 			foreach ($q->result() as $row) {
 				$ret .= '<option value="' . $row->id . '">' . $row->nama_tahun_pelajaran . '</option>';
@@ -106,46 +106,85 @@ class Jurusan extends CI_Controller
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
-		if ($data['nama_jurusan']) {
-			$cek = $this->md->cekJurusanDuplicate($data['nama_jurusan'], $data['id_tahun_pelajaran'], $id);
-			if ($cek->num_rows() > 0) {
-				$ret['status'] = false;
-				$ret['message'] = 'Jurusan sudah ada';
-			} else {
-				if ($id) {
-					$update = $this->md->updateJurusan($id, $data);
-					if ($update) {
-						$ret = array(
-							'status' => true,
-							'message' => 'Data berhasil diupdate'
-						);
-					} else {
-						$ret = array(
-							'status' => false,
-							'message' => 'Data gagal diupdate'
-						);
-					}
-				} else {
-					$insert = $this->md->insertJurusan($data);
+		$this->form_validation->set_rules('nama_jurusan', 'Nama Jurusan', 'trim|required|alpha_numeric_space', array('required' => '%s harus diisi', 'alpha_numeric_space' => '%s hanya boleh mengandung huruf, angka dan spasi'));
+		$this->form_validation->set_rules('id_tahun_pelajaran', 'Tahun Pelajaran', 'trim|required', array('required' => '%s harus diisi'));
 
-					if ($insert) {
-						$ret = array(
-							'status' => true,
-							'message' => 'Data berhasil disimpan'
-						);
-					} else {
-						$ret = array(
-							'status' => false,
-							'message' => 'Data gagal disimpan'
-						);
-					}
+		if($this->form_validation->run() == FALSE){
+			$ret['status'] = false;
+			foreach ($_POST as $key => $value) {
+				$ret['error'][$key] = form_error($key);
+			}
+		} else {
+			if ($id) {
+				$update = $this->md->updateJurusan($id, $data);
+				if ($update) {
+					$ret = array(
+						'status' => true,
+						'message' => 'Data berhasil diupdate'
+					);
+				} else {
+					$ret = array(
+						'status' => false,
+						'message' => 'Data gagal diupdate'
+					);
+				}
+			} else {
+				$insert = $this->md->insertJurusan($data);
+
+				if ($insert) {
+					$ret = array(
+						'status' => true,
+						'message' => 'Data berhasil disimpan'
+					);
+				} else {
+					$ret = array(
+						'status' => false,
+						'message' => 'Data gagal disimpan'
+					);
 				}
 			}
-			
-		} else {
-			$ret['status'] = false;
-			$ret['message'] = 'Data gagal disimpan';
 		}
+
+		// if ($data['nama_jurusan']) {
+		// 	$cek = $this->md->cekJurusanDuplicate($data['nama_jurusan'], $data['id_tahun_pelajaran'], $id);
+		// 	if ($cek->num_rows() > 0) {
+		// 		$ret['status'] = false;
+		// 		$ret['message'] = 'Jurusan sudah ada';
+		// 	} else {
+				// if ($id) {
+				// 	$update = $this->md->updateJurusan($id, $data);
+				// 	if ($update) {
+				// 		$ret = array(
+				// 			'status' => true,
+				// 			'message' => 'Data berhasil diupdate'
+				// 		);
+				// 	} else {
+				// 		$ret = array(
+				// 			'status' => false,
+				// 			'message' => 'Data gagal diupdate'
+				// 		);
+				// 	}
+				// } else {
+				// 	$insert = $this->md->insertJurusan($data);
+
+				// 	if ($insert) {
+				// 		$ret = array(
+				// 			'status' => true,
+				// 			'message' => 'Data berhasil disimpan'
+				// 		);
+				// 	} else {
+				// 		$ret = array(
+				// 			'status' => false,
+				// 			'message' => 'Data gagal disimpan'
+				// 		);
+				// 	}
+				// }
+		// 	}
+			
+		// } else {
+		// 	$ret['status'] = false;
+		// 	$ret['message'] = 'Data gagal disimpan';
+		// }
 		echo json_encode($ret);
 	}
 

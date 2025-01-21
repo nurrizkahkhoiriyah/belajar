@@ -96,14 +96,14 @@
 						<input type="hidden" class="form-control" id="id" name="id" value="">
 						<div class="mb-1">
 							<label for="id_seragam" class="form-label">Nama Seragam</label>
-							<select class="form-control loadSelect" data-target="seragam" name="id_seragam" id="id_seragam">
+							<select class="form-control chainedSelect" data-target="seragam" name="id_seragam" id="id_seragam">
 								<option value="">- Pilih Seragam -</option>
 							</select>
 							<div class="error-block"></div>
 						</div>
 						<div class="mb-1">
 							<label for="id_tahun_pelajaran" class="form-label">Tahun Pelajaran</label>
-							<select class="form-control loadSelect" data-target="tahun_pelajaran" name="id_tahun_pelajaran" id="id_tahun_pelajaran">
+							<select class="form-control chainedSelect" data-target="tahun_pelajaran" name="id_tahun_pelajaran" id="id_tahun_pelajaran">
 								<option value="">- Pilih Tahun Pelajaran -</option>
 							</select>
 							<div class="error-block"></div>
@@ -128,7 +128,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary saveBtn" data-method="stok">Simpan</button>
+				<button type="button" class="btn btn-primary saveBtn" data-target="stok">Simpan</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 			</div>
 		</div>

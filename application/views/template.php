@@ -19,7 +19,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<!-- jQuery -->
 	<script src="<?php echo base_url(); ?>public/template/plugins/jquery/jquery.min.js"></script>
 	<script src="<?php echo base_url('public/lib/crud.js');?>"></script>
-	<script src="<?php echo base_url('public/lib/changeSelect.js');?>"></script>
+	<script src="<?php echo base_url('public/lib/chainedSelect.js');?>"></script>
 	<script>
 		var baseUrl = '<?php echo base_url(); ?>';
 		var currentClass = '<?php echo $this->router->fetch_class(); ?>';

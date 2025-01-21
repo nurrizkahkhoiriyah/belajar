@@ -7,7 +7,7 @@
 			<div class="card-body">
 				<div class="btn btn-primary tambahBtn mb-2" data-target="tahun_pelajaran"> <i class="fas fa-plus"></i> Tambah</div>
 				<div class="row">
-					<table class="table table-striped" id="table_tahun_pelajaran" data-target="tahun_pelajaran">
+					<table class="table table-striped" id="table_pendaftaran_awal" data-target="pendaftaran_awal">
 						<thead>
 							<tr>
 								<th data-key="no">No</th>

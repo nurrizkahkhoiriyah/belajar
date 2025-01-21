@@ -50,13 +50,22 @@ class Akun_pengguna extends CI_Controller
 		$data['updated_at'] = date('Y-m-d H:i:s');
 		$data['deleted_at'] = 0;
 
-		if ($data['username']) {
-			$cek = $this->md->cekUsernameDuplicate($data['username'], $id);
-			if ($cek->num_rows() > 0) {
-				$ret['status'] = false;
-				$ret['message'] = 'Username sudah ada';
-				$ret['query'] = $this->db->last_query();
-			} else {
+		$this->form_validation->set_rules('username', 'Username', 'trim|required|max_length[30]', array('required' => '%s harus diisi', 'max_length' => 'Tidak boleh lebih dari 30 karakter'));
+		$this->form_validation->set_rules('password', 'Password', 'trim|required|max_length[8]|alpha_numeric', array('required' => '%s harus diisi', 'max_length' => 'Tidak boleh lebih dari 8 karakter', 'alpha_numeric' => '%s tidak boleh mengandung spasi'));
+
+		if ($this->form_validation->run() == FALSE) {
+			$ret['status'] = false;
+			foreach ($_POST as $key => $value) {
+				$ret['error'][$key] = form_error($key);
+			}
+		} else {
+		// if ($data['username']) {
+		// 	$cek = $this->md->cekUsernameDuplicate($data['username'], $id);
+		// 	if ($cek->num_rows() > 0) {
+		// 		$ret['status'] = false;
+		// 		$ret['message'] = 'Username sudah ada';
+		// 		$ret['query'] = $this->db->last_query();
+		// 	} else {
 
 				if ($id) {
 					$update = $this->md->updateUser($id, $data);
@@ -89,11 +98,11 @@ class Akun_pengguna extends CI_Controller
 				}
 			
 			}
-		} else {
-			$ret['status'] = false;
-			$ret['message'] = 'Data tidak boleh kosong';
-            $ret['query'] = $this->db->last_query();
-		}
+		// } else {
+		// 	$ret['status'] = false;
+		// 	$ret['message'] = 'Data tidak boleh kosong';
+        //     $ret['query'] = $this->db->last_query();
+		// }
 		echo json_encode($ret);
 	}
 
