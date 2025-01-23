@@ -17,6 +17,22 @@ $(document).ready(function() {
 		// });
 	});
 
+	$(document).on('hidden.bs.modal', '.modal', function () {
+		const modal = $(this);
+		const form = modal.find('form')[0];
+	
+		if (form) {
+			form.reset(); // Reset form
+		}
+		
+		modal.find('.text-danger').text(''); // Hapus pesan error
+		modal.find('.is-invalid, .is-valid').removeClass('is-invalid is-valid'); // Hapus kelas validasi
+	});
+	
+	
+	
+	
+
 	// $(document).on('change', '.loadSelect', function() {
 	// 	let targetController = $(this).data('target');
 	// 	let source = $(this).data('source');
@@ -51,6 +67,8 @@ $(document).on('click', '.tambahBtn', function(){
 	$('#modal_' + targetController).modal('show');
 
 })
+
+
 
 function loadTabel(target) {
 	let table = $('#table_' + target);
@@ -95,8 +113,16 @@ function generateTable(data, target) {
 				// Kolom aksi
 				row += `
 					<td style="${$(this).attr('style')}">
-						<button class="btn btn-primary editBtn" data-id="${item.id}" data-target="${target}" >Edit</button>
-						<button class="btn btn-danger deleteBtn" data-id="${item.id}" data-target="${target}" >Delete</button>
+						<button class="btn btn-primary btn-sm editBtn" data-id="${item.id}" data-target="${target}" >Edit</button>
+						<button class="btn btn-danger btn-sm deleteBtn" data-id="${item.id}" data-target="${target}" >Delete</button>
+					</td>`;
+			} else if (key === "btn_pendaftaran") {
+				// Kolom aksi
+				row += `
+					<td style="${$(this).attr('style')}">
+						<button class="btn btn-primary btn-sm editBtn" data-id="${item.id}" data-target="${target}" >Edit</button>
+						<button class="btn btn-danger btn-sm deleteBtn" data-id="${item.id}" data-target="${target}" >Delete</button>
+						<button class="btn btn-success btn-sm detailBtn" data-id="${item.id}" data-target="${target}" >Lihat Detail</button>
 					</td>`;
 			} else {
 				// Kolom lainnya berdasarkan key
@@ -113,10 +139,11 @@ function generateTable(data, target) {
 
 
 $(document).on('click', '.saveBtn', function()  {
-	$('.error-block').html('');
+	$('.text-danger').html('');
 	$('input').removeClass('is-invalid');
 	var targetController = $(this).data('target');
-	var formData = new FormData($('#form_' + targetController)[0]);
+	var formElement = $('#form_' + targetController)[0];
+	var formData = new FormData(formElement);
 	$.ajax({
 		url: baseClass +'/save_' + targetController,
 		type: 'POST',
@@ -129,22 +156,25 @@ $(document).on('click', '.saveBtn', function()  {
 				alert(response.message);
 				$('#modal_' + targetController).modal('hide');
 				loadTabel(targetController);
-
 			} else {
+				// Bersihkan pesan error dan kelas invalid sebelum menampilkan yang baru
+				$('.text-danger').html('');
+				$('input').removeClass('is-invalid').removeClass('is-valid');
+				
 				if (response.error) {
 					for (var prop in response.error) {
 						if (response.error[prop] !== '') {
-							$('#form_' + targetController + " [name= " + prop + "] ").addClass('is-invalid').next('div .error-block').html(response.error[prop]);
+							$('#form_' + targetController + " [name=" + prop + "] ").addClass('is-invalid')
+								.next('.text-danger').html(response.error[prop]);
 						}
 					}
-				} else {
-					// console.log('error3: not found');
 				}
 			}
 		}
 
 	})
 })
+
 
 $(document).on('click', '.editBtn', function() {
 	let targetController = $(this).data('target');
@@ -175,6 +205,32 @@ $(document).on('click', '.editBtn', function() {
 });
 
 
+$(document).on('click', '.detailBtn', function() {
+    let targetController = $(this).data('target');
+    let id = $(this).data('id');
+    let url = baseClass + '/get_detail_' + targetController + '/' + id;
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: { id: id },
+        dataType: 'json',
+        success: function(response) {
+            if (response.status) {
+                // Mengisi data ke modal
+                $.each(response.data, function(i, item) {
+                    $('#detailModal [name="' + i + '"]').val(item);
+                });
+
+                // Menampilkan modal
+                $('#detailModal').modal('show');
+            } else {
+                alert(response.message);
+            }
+        }
+    });
+});
+
 $(document).on('click', '.deleteBtn', function() {
 	var targetController = $(this).data('target');
 	var id = $(this).data('id');
@@ -196,6 +252,8 @@ $(document).on('click', '.deleteBtn', function() {
 
 	})
 })
+
+
 
 // function setJurusan(id_tahun_pelajaran, id) {
 // 	let url = 'kelas/option_jurusan';
@@ -225,3 +283,5 @@ $(document).on('click', '#logoutBtn', function() {
     	});
     }
 });
+
+

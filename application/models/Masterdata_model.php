@@ -12,6 +12,12 @@ class Masterdata_model extends CI_Model
 	protected $tableSeragam = 'data_seragam';
 	protected $tableStok = 'data_stok';
 
+	protected $tablePendaftaranAwal = 'pendaftaran_awal';
+	protected $tableDataKelas = 'pendaftaran_awal_kelas';
+	protected $tableDataSiswa = 'pendaftaran_awal_data_siswa';
+	protected $tableDataOrtu = 'pendaftaran_awal_data_ortu';
+
+
 	protected $table = 'user';
 
 	public function __construct()
@@ -26,6 +32,7 @@ class Masterdata_model extends CI_Model
 	}
 
 	public function getAllTahunPelajaranNotDeleted(){
+
 		$this->db->where('deleted_at', 0);
 		return  $this->db->get($this->tableTahunPelajaran);
 	}
@@ -40,6 +47,23 @@ class Masterdata_model extends CI_Model
 
 		return $this->db->where('id', $id)->get($this->tableTahunPelajaran);
 	}
+
+	// public function dataTablesTahunPelajaran(){
+	// 	$col_order 	= array($this->tableTahunPelajaran . '.id', $this->tableTahunPelajaran . '.nama_tahun_pelajaran');
+	// 	$col_search = array($this->tableTahunPelajaran . '.id', $this->tableTahunPelajaran . '.nama_tahun_pelajaran');
+	// 	$order 		= array($this->tableTahunPelajaran . '.id' => 'desc');
+	// 	$filter 	= array($this->tableTahunPelajaran . '.deleted_at' => 0);
+	// 	$group_by 	= null;
+	// 	//$query = $this->tableTahunPelajaran;
+	// 	$this->db->from($this->tableTahunPelajaran);
+	// 	$this->db->select($this->tableTahunPelajaran . '.*');
+	// 	$query = substr($this->db->get_compiled_select(), 6);
+	// 	$data = $this->get_datatables($query, $col_order, $col_search, $order,  $filter, $group_by);
+
+	// 	$recordTotal =  $this->countAllQueryFiltered($query, $filter);
+	// 	$recordFiltered =  $this->count_filtered($query, $filter);
+	// 	return array('data' => $data, 'recordTotal' => $recordTotal, 'recordFiltered' => $recordFiltered);
+	// }
 
 	public function cekTahunPelajaranDuplicate($nama_tahun_pelajaran, $id){
 		if($id){
@@ -358,7 +382,277 @@ class Masterdata_model extends CI_Model
 		$this->db->insert($this->table, $data);
 		return $this->db->insert_id();
 	}
+
+
+	// //pendaftaran awal : data kelas
+
+	// public function generateNomorPendaftaran($tahun_pelajaran, $jurusan) {
+	// 	// Langkah 1: Ekstrak kode tahun pelajaran (4 digit terakhir)
+	// 	$tahun_parts = explode('/', $tahun_pelajaran);
+	// 	if (count($tahun_parts) !== 2) {
+	// 		throw new Exception("Format tahun pelajaran tidak valid. Gunakan format 'YYYY/YYYY'.");
+	// 	}
+	// 	$kode_tahun = substr($tahun_parts[0], -2) . substr($tahun_parts[1], -2);
 	
+	// 	// Langkah 2: Ambil kode jurusan (pastikan format string uppercase)
+	// 	$kode_jurusan = strtoupper($jurusan);
+	
+	// 	// Langkah 3: Cari nomor urut terakhir di database
+	// 	$this->db->select('MAX(CAST(SUBSTRING_INDEX(no_pendaftaran, "-", -1) AS UNSIGNED)) as nomor_urut_terakhir');
+	// 	$this->db->where('id_tahun_pelajaran', $tahun_pelajaran);
+	// 	$this->db->where('id_jurusan', $jurusan);
+	// 	$query = $this->db->get($this->tableDataKelas);
+	
+	// 	$result = $query->row();
+	// 	$nomor_urut_terakhir = isset($result->nomor_urut_terakhir) ? (int)$result->nomor_urut_terakhir : 0;
+	
+	// 	// Tambahkan 1 untuk nomor urut baru
+	// 	$nomor_urut_baru = str_pad($nomor_urut_terakhir + 1, 4, '0', STR_PAD_LEFT);
+	
+	// 	// Langkah 4: Gabungkan menjadi nomor pendaftaran
+	// 	$nomor_pendaftaran = "{$kode_tahun}-{$kode_jurusan}-{$nomor_urut_baru}";
+	
+	// 	return $nomor_pendaftaran;
+	// }
+
+	// public function get_combined_data() {
+	// 	$this->db->select('
+	// 		pendaftaran_awal_data_siswa.id AS id,
+	// 		pendaftaran_awal_kelas.no_pendaftaran,
+	// 		pendaftaran_awal_data_siswa.nama_siswa,
+	// 		pendaftaran_awal_data_siswa.jenis_kelamin,
+	// 		pendaftaran_awal_data_siswa.asal_sekolah,
+	// 		pendaftaran_awal_data_siswa.email,
+	// 		pendaftaran_awal_data_siswa.no_telepon,
+	// 		pendaftaran_awal_data_ortu.nama_ayah,
+	// 		pendaftaran_awal_data_ortu.nama_ibu,
+	// 		pendaftaran_awal_data_ortu.no_telepon_ayah,
+	// 		pendaftaran_awal_data_ortu.no_telepon_ibu,
+	// 		CONCAT(pendaftaran_awal_data_ortu.nama_ayah, " / ", pendaftaran_awal_data_ortu.nama_ibu) AS nama_orang_tua,
+    //     	CONCAT(pendaftaran_awal_data_ortu.no_telepon_ayah, " / ", pendaftaran_awal_data_ortu.no_telepon_ibu) AS no_orang_tua
+	// 	');
+	// 	$this->db->from('pendaftaran_awal_kelas');
+	// 	$this->db->join('pendaftaran_awal_data_siswa', 'pendaftaran_awal_kelas.no_pendaftaran = pendaftaran_awal_data_siswa.no_pendaftaran', 'inner');
+	// 	$this->db->join('pendaftaran_awal_data_ortu', 'pendaftaran_awal_data_siswa.id = pendaftaran_awal_data_ortu.id_siswa', 'inner');
+		
+	// 	$query = $this->db->get();
+	// 	return $query;
+	// }
+	
+	
+
+	// public function getPendaftaranAwalByIDSiswa($id) {
+	// 	$this->db->select('
+	// 		pendaftaran_awal_data_siswa.id AS id_siswa,
+	// 		pendaftaran_awal_kelas.no_pendaftaran,
+	// 		pendaftaran_awal_kelas.id_tahun_pelajaran,
+	// 		pendaftaran_awal_kelas.id_jurusan,
+	// 		pendaftaran_awal_kelas.id_kelas,
+	// 		pendaftaran_awal_data_siswa.nama_siswa,
+	// 		pendaftaran_awal_data_siswa.nik,
+	// 		pendaftaran_awal_data_siswa.agama,
+	// 		pendaftaran_awal_data_siswa.nisn,
+	// 		pendaftaran_awal_data_siswa.jenis_kelamin,
+	// 		pendaftaran_awal_data_siswa.tempat_lahir,
+	// 		pendaftaran_awal_data_siswa.tanggal_lahir,
+	// 		pendaftaran_awal_data_siswa.alamat,
+	// 		pendaftaran_awal_data_siswa.asal_sekolah,
+	// 		pendaftaran_awal_data_siswa.email,
+	// 		pendaftaran_awal_data_siswa.no_telepon,
+	// 		pendaftaran_awal_data_ortu.nama_ayah,
+	// 		pendaftaran_awal_data_ortu.nama_ibu,
+	// 		pendaftaran_awal_data_ortu.pekerjaan_ayah,
+	// 		pendaftaran_awal_data_ortu.pekerjaan_ibu,
+	// 		pendaftaran_awal_data_ortu.nama_wali,
+	// 		pendaftaran_awal_data_ortu.no_telepon_wali,
+	// 		pendaftaran_awal_data_ortu.pekerjaan_wali,
+	// 		pendaftaran_awal_data_ortu.alamat_wali,
+	// 		pendaftaran_awal_data_ortu.sumber_informasi,
+	// 		pendaftaran_awal_data_ortu.no_telepon_ayah,
+	// 		pendaftaran_awal_data_ortu.no_telepon_ibu,
+
+	// 	');
+	// 	$this->db->from('pendaftaran_awal_kelas');
+	// 	$this->db->join('pendaftaran_awal_data_siswa', 'pendaftaran_awal_kelas.no_pendaftaran = pendaftaran_awal_data_siswa.no_pendaftaran', 'inner');
+	// 	$this->db->join('pendaftaran_awal_data_ortu', 'pendaftaran_awal_data_siswa.id = pendaftaran_awal_data_ortu.id_siswa', 'inner');
+	// 	$this->db->where('pendaftaran_awal_data_siswa.id', $id); // Filter berdasarkan ID siswa
+	
+	// 	$query = $this->db->get();
+	// 	return $query;
+	// }
+
+
+	//pendaftaran awal
+	public function getAllPendaftaranAwalNotDeleted(){
+        $this->db->select($this->tablePendaftaranAwal . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' . $this->tableJurusan . '.nama_jurusan,' . $this->tableKelas . '.nama_kelas');
+		$this->db->join($this->tableJurusan, $this->tableJurusan . '.id = ' . $this->tablePendaftaranAwal . '.id_jurusan');
+		$this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tablePendaftaranAwal . '.id_tahun_pelajaran');
+		$this->db->join($this->tableKelas, $this->tableKelas . '.id = ' . $this->tablePendaftaranAwal . '.id_kelas');
+		$this->db->where($this->tablePendaftaranAwal . '.deleted_at', 0);
+		return $this->db->get($this->tablePendaftaranAwal);
+	}
+
+	public function getPendaftaranAwalByID($id){
+		$this->db->where($this->tablePendaftaranAwal . '.id', $id);
+		return $this->db->get($this->tablePendaftaranAwal);
+	}
+
+    public function updatePendaftaranAwal($id, $data){
+        $this->db->where('id', $id);
+		$this->db->update($this->tablePendaftaranAwal, $data);
+		return $this->db->affected_rows();
+    }
+
+    public function insertPendaftaranAwal($data){
+        $this->db->insert($this->tablePendaftaranAwal, $data);
+		return $this->db->insert_id();
+    }
+
+	public function getKelasByJurusanID($id){
+		$this->db->where('deleted_at', 0);
+		$this->db->where('id_jurusan', $id);
+		return $this->db->get($this->tableKelas);
+	}
+
+	public function getAllTahunPelajaranStatusNNotDeleted(){
+		$this->db->where('deleted_at', 0);
+		$this->db->where('status_tahun_pelajaran', 1);
+		return $this->db->get($this->tableTahunPelajaran);
+	}
+
+
+	public function getTahunPelajaranNama($id) {
+		// Mengambil nama_tahun_pelajaran berdasarkan id_tahun_pelajaran
+		$this->db->select('nama_tahun_pelajaran');
+		$this->db->from('data_tahun_pelajaran');  // Sesuaikan nama tabel
+		$this->db->where('id', $id);
+		$query = $this->db->get();
+	
+		if ($query->num_rows() > 0) {
+			return $query->row()->nama_tahun_pelajaran;  // Mengembalikan nama_tahun_pelajaran
+		} else {
+			return null;  // Jika tidak ditemukan
+		}
+	}
+	
+
+    // Fungsi untuk mengambil jurusan berdasarkan ID
+	public function getJurusanNama($id) {
+		// Mengambil nama_jurusan berdasarkan id_jurusan
+		$this->db->select('nama_jurusan');
+		$this->db->from('data_jurusan');  // Sesuaikan nama tabel
+		$this->db->where('id', $id);
+		$query = $this->db->get();
+	
+		if ($query->num_rows() > 0) {
+			return $query->row()->nama_jurusan;  // Mengembalikan nama_jurusan
+		} else {
+			return null;  // Jika tidak ditemukan
+		}
+	}
+	
+
+	public function getNamaJurusanByIdJurusan($id_jurusan)
+    {
+        $this->db->select('nama_jurusan');
+        $this->db->from($this->tableJurusan);
+        $this->db->where('id', $id_jurusan);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->row()->nama_jurusan; // Mengembalikan nama_jurusan
+        }
+
+        return null; // Jika tidak ditemukan
+    }
+	public function getNamaTahunPelajaranByIdTahunPelajaran($id_tahun_pelajaran)
+    {
+        $this->db->select('nama_tahun_pelajaran');
+        $this->db->from($this->tableTahunPelajaran);
+        $this->db->where('id', $id_tahun_pelajaran);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->row()->nama_tahun_pelajaran; // Mengembalikan nama_jurusan
+        }
+
+        return null; // Jika tidak ditemukan
+    }
+
+	public function formatTahunPelajaran($nama_tahun_pelajaran) {
+		// Pastikan formatnya adalah "2024/2025"
+		$tahun = explode('/', $nama_tahun_pelajaran);
+		
+		// Validasi apakah format sesuai
+		if (count($tahun) < 2) {
+			return '0000'; // Berikan nilai default jika format tidak sesuai
+		}
+	
+		// Ambil dua digit terakhir dari masing-masing tahun
+		$tahun_awal = substr($tahun[0], -2); // Contoh: "2024" jadi "24"
+		$tahun_akhir = substr($tahun[1], -2); // Contoh: "2025" jadi "25"
+	
+		// Gabungkan menjadi format "2425"
+		return $tahun_awal . $tahun_akhir;
+	}
+	
+
+	public function hitungUrutanPendaftaran($id_tahun_pelajaran, $id_jurusan) {
+		// Ambil ID terbesar untuk jurusan dan tahun pelajaran yang sesuai
+		$this->db->select_max('id'); // Cari ID tertinggi
+		$this->db->where('id_tahun_pelajaran', $id_tahun_pelajaran);
+		$this->db->where('id_jurusan', $id_jurusan);
+		$query = $this->db->get('pendaftaran_awal');
+		$result = $query->row();
+	
+		// Jika belum ada data, urutan dimulai dari 1
+		if (empty($result) || empty($result->id)) {
+			return 1;
+		}
+	
+		// Urutan berdasarkan ID tertinggi + 1
+		return $result->id + 1;
+	}
+	
+	
+
+    public function generate($id_jurusan, $id_tahun_pelajaran, $id) {
+		// Dapatkan nama jurusan dan tahun pelajaran
+		$nama_jurusan = $this->getNamaJurusanByIdJurusan($id_jurusan);
+		$nama_tahun_pelajaran = $this->getNamaTahunPelajaranByIdTahunPelajaran($id_tahun_pelajaran);
+	
+		// Format tahun pelajaran
+		$format_tahun = $this->formatTahunPelajaran($nama_tahun_pelajaran);
+	
+		// Nomor pendaftaran: Tahun-Jurusan-Urutan
+		$no_pendaftaran = $format_tahun . '-' . $nama_jurusan . '-' . str_pad($id, 4, '0', STR_PAD_LEFT);
+	
+		return $no_pendaftaran;
+	}
+	
+
+	
+
+
+	public function getById($tablePendaftaranAwal, $id) {
+        $this->db->where('id', $id);  // Menambahkan kondisi untuk ID
+        $query = $this->db->get($tablePendaftaranAwal);  // Melakukan query untuk mengambil data
+        return $query->row();  // Mengembalikan baris pertama data yang ditemukan
+    }
+
+
+	
+
+
+
+
+
+
+
+		
+
+	
+
 
 
 }

@@ -26,32 +26,29 @@ class Login extends CI_Controller {
 				$ret['error'][$key] = form_error($key);
 			}
 		} else {
-			$q = $this->User_model->login($username, $password);
-			if ($q->num_rows() > 0) {
+			// $q = $this->User_model->login($username, $password);
+			// if ($q->num_rows() > 0) {
 
-				$sess = array(
-					'is_login' => TRUE,
-					'username' => $q->row()->username
-				);
-
-				$this->session->set_userdata($sess);
-
-				$ret = array(
-					'username' => $username,
-					'password' => $password,
-					'error' => '',
-					'status' => true,
-					'message' => 'Login Berhasil',
-				);
-			} else {
-				$ret = array(
-					'element' => '',
-					'error' => '',
-					'status' => false,
-					'message' => 'Username atau Password Salah'
-				);
-			}
-		}
+				$user = $this->User_model->check_user($username, $password);
+            if ($user) {
+                // Simpan data user di session jika diperlukan
+                //$this->session->set_flashdata('success', 'Selamat datang, ' . $user->username . '!');
+                $this->session->set_userdata('user_id', $user->id);
+                $this->session->set_userdata('username', $user->username);
+                $this->session->set_flashdata('login_success', 'Selamat Datang di Dashboard!');
+                $ret = array(
+                    'status' => '1',
+                    'message' => 'Login berhasil',
+                    'redirect' => base_url('admin') 
+                );
+            } else {
+                $ret = array(
+                    'status' => '4',
+                    'message' => 'Login gagal. Username atau password salah.'
+                );
+            }
+        }
+		
     
         // Validasi input kosong
         // if (empty($username) && empty($password)) {

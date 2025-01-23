@@ -23,6 +23,7 @@ class Tahun_pelajaran extends CI_Controller
 
 	public function table_tahun_pelajaran()
 	{
+		
 
 		$q = $this->md->getAllTahunPelajaranNotDeleted();
 		$dt = [];

@@ -80,7 +80,7 @@ class Kelas extends CI_Controller
 
 		$this->form_validation->set_rules('id_tahun_pelajaran', 'Tahun Pelajaran', 'trim|required', array('required' => '%s harus diisi'));
 		$this->form_validation->set_rules('id_jurusan', 'Jurusan', 'trim|required', array('required' => '%s harus diisi'));
-		$this->form_validation->set_rules('nama_kelas', 'Kelas', 'trim|required|alpha_numeric_space', array('required' => '%s harus diisi', 'alpha_numeric_space' => '%s hanya boleh mengandung huruf, angka dan spasi'));
+		$this->form_validation->set_rules('nama_kelas', 'Kelas', 'trim|required|alpha_numeric_spaces', array('required' => '%s harus diisi', 'alpha_numeric_spaces' => '%s hanya boleh mengandung huruf, angka dan spasi'));
 
 		if ($this->form_validation->run() == FALSE) {
 			$ret['status'] = false;
