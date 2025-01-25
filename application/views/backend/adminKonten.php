@@ -1,1 +1,1 @@
-<h1>Ini Halaman Konten</h1>
+<h1>Ini Halaman Dashboard</h1>

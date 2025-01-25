@@ -8,6 +8,7 @@ class Biaya extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('Masterdata_model', 'md');
+		$this->load->helper('actionbtn');
 	}
 
 	public function index()
@@ -22,26 +23,47 @@ class Biaya extends CI_Controller
 	}
 	
 
-    public function table_biaya()
-	{
+    public function table_biaya(){
 
-		$q = $this->md->getAllBiayaNotDeleted();
-		$dt = [];
-		if ($q->num_rows() > 0) {
-			foreach ($q->result() as $row) {
-				$dt[] = $row;
-			}
+		$q = $this->md->dataTablesBiaya();
 
-			$ret['status'] = true;
-			$ret['data'] = $dt;
-			$ret['message'] = '';
-		} else {
-			$ret['status'] = false;
-			$ret['data'] = [];
-			$ret['message'] = 'Data tidak tersedia';
+		$data  = array();
+		$no    = $_POST['start'];
+		foreach ($q['data'] as $da) {
+			$no++;
+			$row   = array();
+			$row[] = '<input type="checkbox" class="data-check" value="' . $da->id . '">';
+			$row[] = $no;
+			$row[] = $da->nama_biaya;
+			$row[] = $da->deskripsi;
+			$row[] = actbtn($da->id, 'biaya');
+			$data[] = $row;
 		}
 
-		echo json_encode($ret);
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $q['recordTotal'],
+			"recordsFiltered" => $q['recordFiltered'],
+			"data" => $data,
+		);
+
+		// $q = $this->md->getAllBiayaNotDeleted();
+		// $dt = [];
+		// if ($q->num_rows() > 0) {
+		// 	foreach ($q->result() as $row) {
+		// 		$dt[] = $row;
+		// 	}
+
+		// 	$ret['status'] = true;
+		// 	$ret['data'] = $dt;
+		// 	$ret['message'] = '';
+		// } else {
+		// 	$ret['status'] = false;
+		// 	$ret['data'] = [];
+		// 	$ret['message'] = 'Data tidak tersedia';
+		// }
+
+		echo json_encode($output);
 	}
 
     public function save_biaya()
@@ -178,23 +200,46 @@ class Biaya extends CI_Controller
     //harga biaya
 
 	public function table_harga_biaya(){
-		$q = $this->md->getAllHargaBiaya();
-		$dt = [];
-		if ($q->num_rows() > 0) {
-			foreach ($q->result() as $row) {
-				$dt[] = $row;
-			}
+		
+		$q = $this->md->dataTablesHargaBiaya();
 
-			$ret['status'] = true;
-			$ret['data'] = $dt;
-			$ret['message'] = '';
-		} else {
-			$ret['status'] = false;
-			$ret['data'] = [];
-			$ret['message'] = 'Data tidak tersedia';
+		$data  = array();
+		$no    = $_POST['start'];
+		foreach ($q['data'] as $da) {
+			$no++;
+			$row   = array();
+			$row[] = '<input type="checkbox" class="data-check" value="' . $da->id . '">';
+			$row[] = $no;
+			$row[] = $da->nama_biaya;
+			$row[] = $da->nama_tahun_pelajaran;
+			$row[] = $da->harga;
+			$row[] = actbtn($da->id, 'harga_biaya');
+			$data[] = $row;
 		}
 
-		echo json_encode($ret);
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $q['recordTotal'],
+			"recordsFiltered" => $q['recordFiltered'],
+			"data" => $data,
+		);
+		// $q = $this->md->getAllHargaBiaya();
+		// $dt = [];
+		// if ($q->num_rows() > 0) {
+		// 	foreach ($q->result() as $row) {
+		// 		$dt[] = $row;
+		// 	}
+
+		// 	$ret['status'] = true;
+		// 	$ret['data'] = $dt;
+		// 	$ret['message'] = '';
+		// } else {
+		// 	$ret['status'] = false;
+		// 	$ret['data'] = [];
+		// 	$ret['message'] = 'Data tidak tersedia';
+		// }
+
+		echo json_encode($output);
 	}
 
 	public function save_harga_biaya(){

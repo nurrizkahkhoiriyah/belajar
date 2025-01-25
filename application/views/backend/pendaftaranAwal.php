@@ -5,20 +5,22 @@
 				<h3 class="card-title">Pendaftaran Awal</h3>
 			</div>
 			<div class="card-body">
+				<div class="btn btn-secondary btnRefresh mb-2" data-target="pendaftaran_awal"> <i class="fas fa-sync"></i> Refresh</div>
 				<div class="btn btn-primary tambahBtn mb-2" data-target="pendaftaran_awal"> <i class="fas fa-plus"></i> Tambah</div>
-				<div class="row table-responsive">
-					<table class="table table-striped" id="table_pendaftaran_awal" data-target="pendaftaran_awal">
-						<thead class="text-sm flex">
-							<tr class="flex">
-								<th data-key="no" style="text-align: center;">No</th>
-								<th data-key="no_pendaftaran" style="text-align: center; width: 10%;">Nomor Pendaftaran</th>
-								<th data-key="nama_siswa" style="text-align: center; width: 10%;">Nama Siswa</th>
-								<th data-key="jenis_kelamin" style="text-align: center; width: 10%;">Jenis Kelamin</th>
-								<th data-key="asal_sekolah" style="text-align: center; width: 10%;">Asal Sekolah</th>
-								<th data-key="email" style="text-align: center; width: 10%;">Email</th>
-								<th data-key="no_telepon" style="text-align: center; width: 10%;">No Telepon</th>
-								<th data-key="nama_ayah" style="text-align: center; width: 10%;">Nama Orang Tua</th>
-								<th data-key="no_telepon_ayah" style="text-align: center; width: 10%;">No Orang Tua</th>
+				<div class="">
+					<table class="table table-striped nowrap" width="100%" id="table_pendaftaran_awal" data-target="pendaftaran_awal">
+						<thead class="text-sm">
+							<tr>
+								<th><input type="checkbox" id="check-all"></th>
+								<th data-key="no">No</th>
+								<th data-key="no_pendaftaran">Nomor Pendaftaran</th>
+								<th data-key="nama_siswa">Nama Siswa</th>
+								<th data-key="jenis_kelamin">Jenis Kelamin</th>
+								<th data-key="asal_sekolah">Asal Sekolah</th>
+								<th data-key="email">Email</th>
+								<th data-key="no_telepon">No Telepon</th>
+								<th data-key="nama_ayah" >Nama Orang Tua</th>
+								<th data-key="no_telepon_ayah">No Orang Tua</th>
 								<th data-key="btn_pendaftaran">Aksi</th>
 							</tr>
 						</thead>
@@ -135,14 +137,14 @@
 							<div class="form-group row">
 								<label for="no_pendaftaran" class="form-label col-sm-3">Nomor Pendaftaran</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control " id="no_pendaftaran" name="no_pendaftaran" value="" readonly>
+									<input type="text" class="form-control" id="no_pendaftaran" name="no_pendaftaran" value="" readonly>
 									<div class="text-danger"></div>
 								</div>
 							</div>
 							<div class="form-group row">
 								<label for="id_tahun_pelajaran" class="form-label col-sm-3">Nama Tahun Pelajaran</label>
 								<div class="col-sm-9">
-									<select class="form-control chainedSelect" data-target="tahun_pelajaran"  name="id_tahun_pelajaran" id="id_tahun_pelajaran" required>
+									<select class="form-control loadSelect chainedSelect" data-target="tahun_pelajaran"  name="id_tahun_pelajaran" id="id_tahun_pelajaran" required>
 										<option value="">Pilih</option>
 									</select>
 									<div class="text-danger"></div>
@@ -152,7 +154,7 @@
 							<div class="form-group row">
 								<label for="id_jurusan" class="form-label col-sm-3">Nama Jurusan</label>
 								<div class="col-sm-9">
-									<select class="form-control chainedSelect" data-parent="id_tahun_pelajaran" data-target="jurusan" name="id_jurusan" id="id_jurusan" required>
+									<select class="form-control chainedSelect" data-parent="id_tahun_pelajaran" data-target="jurusan" name="id_jurusan" id="id_jurusan">
 										<option value="">Pilih</option>
 									</select>
 									<div class="text-danger"></div>
@@ -161,7 +163,7 @@
 							<div class="form-group row">
 								<label for="id_kelas" class="form-label col-sm-3">Nama Kelas</label>
 								<div class="col-sm-9">
-									<select class="form-control chainedSelect" data-parent="id_jurusan" data-target="kelas" name="id_kelas" id="id_kelas" required>
+									<select class="form-control chainedSelect" data-parent="id_jurusan" data-target="kelas" name="id_kelas" id="id_kelas">
 										<option value="">Pilih</option>
 									</select>
 									<div class="text-danger"></div>
@@ -257,7 +259,7 @@
 								<div class="form-group row">
 									<label for="tanggal_lahir" class="form-label col-sm-4">Tanggal Lahir</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control" id="tanggal_lahir" name="tanggal_lahir" placeholder="Contoh: 2003-05-08" value="">
+										<input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" placeholder="Contoh: 2003-05-08" value="">
 										<div class="text-danger"></div>
 									</div>
 									

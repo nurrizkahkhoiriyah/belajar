@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Pendaftaran_awal extends CI_Controller
-{
+class Pendaftaran_awal extends CI_Controller{
 
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model('Masterdata_model', 'md');
+		$this->load->helper('actionbtn');
 	}
 
 	public function index()
@@ -24,23 +24,51 @@ class Pendaftaran_awal extends CI_Controller
 
 	public function table_pendaftaran_awal(){
 
-		$q = $this->md->getAllPendaftaranAwalNotDeleted();
-		$dt = [];
-		if ($q->num_rows() > 0) {
-			foreach ($q->result() as $row) {
-				$dt[] = $row;
-			}
+	// 	// $q = $this->md->getAllPendaftaranAwalNotDeleted();
+	// 	// $dt = [];
+	// 	// if ($q->num_rows() > 0) {
+	// 	// 	foreach ($q->result() as $row) {
+	// 	// 		$dt[] = $row;
+	// 	// 	}
 
-			$ret['status'] = true;
-			$ret['data'] = $dt;
-			$ret['message'] = '';
-		} else {
-			$ret['status'] = false;
-			$ret['data'] = [];
-			$ret['message'] = 'Data tidak tersedia';
+	// 	// 	$ret['status'] = true;
+	// 	// 	$ret['data'] = $dt;
+	// 	// 	$ret['message'] = '';
+	// 	// } else {
+	// 	// 	$ret['status'] = false;
+	// 	// 	$ret['data'] = [];
+	// 	// 	$ret['message'] = 'Data tidak tersedia';
+	// 	// }
+
+		$q = $this->md->dataTablesPendaftaranAwal();
+
+		$data  = array();
+		$no    = $_POST['start'];
+		foreach ($q['data'] as $da) {
+			$no++;
+			$row   = array();
+			$row[] = '<input type="checkbox" class="data-check" value="' . $da->id . '">';
+			$row[] = $no;
+			$row[] = $da->no_pendaftaran;
+			$row[] = $da->nama_siswa;
+			$row[] = $da->jenis_kelamin;
+			$row[] = $da->asal_sekolah;
+			$row[] = $da->email;
+			$row[] = $da->no_telepon;
+			$row[] = $da->nama_ayah;
+			$row[] = $da->no_telepon_ayah;
+			$row[] = actBtnnnn($da->id, 'pendaftaran_awal');
+			$data[] = $row;
 		}
 
-		echo json_encode($ret);
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $q['recordTotal'],
+			"recordsFiltered" => $q['recordFiltered'],
+			"data" => $data,
+		);
+
+		echo json_encode($output);
 	}
 	
 	
@@ -182,6 +210,8 @@ class Pendaftaran_awal extends CI_Controller
 		echo json_encode($ret);
 	}
 
+	
+
 	public function delete_pendaftaran_awal(){
 		$id = $this->input->post('id');
 		$data['deleted_at'] = time();
@@ -208,65 +238,34 @@ class Pendaftaran_awal extends CI_Controller
 		echo $ret;
 	}
 
-	// public function option_jurusan($id){
+	public function option_jurusan($id){
 
-	// 	$q = $this->md->getJurusanByTahunPelajaranID($id);
-	// 	$ret = '<option value="">Pilih Jurusan</option>';
-	// 	if ($q->num_rows() > 0) {
-	// 		foreach ($q->result() as $row) {
-	// 			$ret .= '<option value="' . $row->id . '">' . $row->nama_jurusan . '</option>';
-	// 		}
-	// 	}
-	// 	echo $ret;
-	// }
-	// public function option_kelas($id){
-
-	// 	$q = $this->md->getKelasByJurusanID($id);
-	// 	$ret = '<option value="">Pilih Kelas</option>';
-	// 	if ($q->num_rows() > 0) {
-	// 		foreach ($q->result() as $row) {
-	// 			$ret .= '<option value="' . $row->id . '">' . $row->nama_kelas . '</option>';
-	// 		}
-	// 	}
-	// 	echo $ret;
-	// }
-
-	public function option_jurusan($id) {
-		log_message('debug', 'ID Tahun Pelajaran: ' . $id);  // Tambahkan log untuk memastikan ID yang diterima benar
 		$q = $this->md->getJurusanByTahunPelajaranID($id);
-		if ($q === false) {
-			echo 'Tidak ada data untuk ID tahun pelajaran: ' . $id;
-			return;
-		}
-	
 		$ret = '<option value="">Pilih Jurusan</option>';
 		if ($q->num_rows() > 0) {
 			foreach ($q->result() as $row) {
 				$ret .= '<option value="' . $row->id . '">' . $row->nama_jurusan . '</option>';
 			}
-		} else {
-			echo 'Data jurusan kosong untuk ID tahun pelajaran: ' . $id;
 		}
 		echo $ret;
 	}
+	public function option_kelas($id){
+
+		$q = $this->md->getKelasByJurusanID($id);
+		$ret = '<option value="">Pilih Kelas</option>';
+		if ($q->num_rows() > 0) {
+			foreach ($q->result() as $row) {
+				$ret .= '<option value="' . $row->id . '">' . $row->nama_kelas . '</option>';
+			}
+		}
+		echo $ret;
+	}	
+
+
+
 	
 
-public function option_kelas($id)
-{
-    if (!$id) {
-        echo '<option value="">Pilih Kelas</option>';
-        return;
-    }
 
-    $q = $this->md->getKelasByJurusanID($id);
-    $ret = '<option value="">Pilih Kelas</option>';
-    if ($q->num_rows() > 0) {
-        foreach ($q->result() as $row) {
-            $ret .= '<option value="' . $row->id . '">' . $row->nama_kelas . '</option>';
-        }
-    }
-    echo $ret;
-}
 
 
 	public function get_detail_pendaftaran_awal($id)

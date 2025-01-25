@@ -1,63 +1,98 @@
 $(document).ready(function() {
 
-	$('.table').each(function () {
-		let target = $(this).data('target');
-		loadTabel(target);
-	});
 
-	$('.loadSelect').each(function () {
-		let targetController = $(this).data('target');
-		// $('#id_' + targetController)
-		let url = baseClass + '/option_' + targetController;
-		$(this).load(url);
-		// let source = $(this).data('source');
-		// let id = $(this).val();
-		// $('#id_' + source).load(url + '/' + id, function(){
-		// 	$('#id_' + source).val(id)
-		// });
-	});
+		$('.loadSelect').each(function () {
+			let targetController = $(this).data('target');
+			// $('#id_' + targetController)
+			let url = baseClass + '/option_' + targetController;
+			$(this).load(url);
+			// let source = $(this).data('source');
+			// let id = $(this).val();
+			// $('#id_' + source).load(url + '/' + id, function(){
+			// 	$('#id_' + source).val(id)
+			// });
+		});
 
-	$(document).on('hidden.bs.modal', '.modal', function () {
-		const modal = $(this);
-		const form = modal.find('form')[0];
-	
-		if (form) {
-			form.reset(); // Reset form
-		}
+		$('.table').each(function () {
+			let target = $(this).data('target');
+			var table = $("#table_" + target);
+			loadDataTable(table);
+		});
+
 		
-		modal.find('.text-danger').text(''); // Hapus pesan error
-		modal.find('.is-invalid, .is-valid').removeClass('is-invalid is-valid'); // Hapus kelas validasi
+		$("#check-all").click(function() {
+			$(".data-check").prop('checked', $(this).prop('checked'));
+		});
+
+
+
+		$(document).on('hidden.bs.modal', '.modal', function () {
+			const modal = $(this);
+			const form = modal.find('form')[0];
+		
+			if (form) {
+				form.reset(); // Reset form
+			}
+			
+			modal.find('.text-danger').text(''); // Hapus pesan error
+			modal.find('.is-invalid, .is-valid').removeClass('is-invalid is-valid'); // Hapus kelas validasi
+		});
 	});
-	
-	
-	
-	
 
-	// $(document).on('change', '.loadSelect', function() {
-	// 	let targetController = $(this).data('target');
-	// 	let source = $(this).data('source');
-	// 	let id = $(this).val();
-	// 	let url = baseClass + '/option_' + source;
-	// 	$('#id_' + source).load(url + '/' + id, function(){
-	// 		$('#id_' + source).val(id)
-	// 	});
-	// });
+	$(document).on("click", ".btnRefresh", function() {
+		let target = $(this).data('target');
+		var table = $("#table_" + target);
+		// var table = $("#table_" + currentClass);
+		reloadTable(table);
+	});
 
-	// $('#id_jurusan').load(url + '/' + id_tahun_pelajaran, function() {
-	// 	$('#id_jurusan').val(id);
-	// });
+	function reloadTable(el) {
+		return el.DataTable().ajax.reload(null, false);
+	}
 
-	// $('#id_tahun_pelajaran').load('kelas/option_tahun_pelajaran');
-	// $('#id_tahun_pelajaran').change(function() {
-	// 	let id = $(this).val();
-	// 	let url = 'kelas/option_jurusan';
-	// 	$('#id_jurusan').load(url + '/' + id);
-	// })
-	// $('#id_biaya').load('biaya/option_biaya');
-	// $('#id_seragam').load('seragam/option_seragam');
+	function initTable(el) {
+		el.DataTable({
+			"retrieve": true,
+			"processing": true,
+			"order": [],
+			"columnDefs": [],
+			
+
+		});
+	}
+
+	function loadDataTable(el, filter = '') {
+		var ds = el.data("target");
+		el.DataTable().destroy();
+		el.DataTable({
+
+			"retrieve": true,
+			"processing": true,
+			"serverSide": true,
+			"ordering": true,
+			"scrollX": true,
+			"ajax": {
+				"url": baseClass + '/' + 'table_' + ds,
+				"type": "POST",
+				"data": function(data) {
+					data.filter = filter;
+				}
+			},
+
+			"columnDefs": [
 
 
-})
+				{
+					"targets": [-1],
+					"orderable": false,
+				}
+
+			],
+			"fnDrawCallback": function() {
+
+			}
+		});
+	}
 
 $(document).on('click', '.tambahBtn', function(){
 	var targetController = $(this).data('target');
@@ -70,72 +105,72 @@ $(document).on('click', '.tambahBtn', function(){
 
 
 
-function loadTabel(target) {
-	let table = $('#table_' + target);
-	let url = baseClass + '/table_' + target;
-	let tr = '';
-	let th = '';
-	$.ajax({
-		url: url,
-		type: 'GET',
-		dataType: 'json',
-		success: function (response) {
-			if (response.status) {
-				generateTable(response.data, target);
-			} else {
-				tr = $('<tr>');
-				table.find('tbody').html('');
-				th = table.find('thead th').length;
-				tr.append('<td colspan="' + th + '"> <h4>' + response.message + '</h4></td>');
-			}
-		}
-	});
-}
+// // function loadTabel(target) {
+// // 	let table = $('#table_' + target);
+// // 	let url = baseClass + '/table_' + target;
+// // 	let tr = '';
+// // 	let th = '';
+// // 	$.ajax({
+// // 		url: url,
+// // 		type: 'GET',
+// // 		dataType: 'json',
+// // 		success: function (response) {
+// // 			if (response.status) {
+// // 				generateTable(response.data, target);
+// // 			} else {
+// // 				tr = $('<tr>');
+// // 				table.find('tbody').html('');
+// // 				th = table.find('thead th').length;
+// // 				tr.append('<td colspan="' + th + '"> <h4>' + response.message + '</h4></td>');
+// // 			}
+// // 		}
+// // 	});
+// // }
 
 
-function generateTable(data, target) {
-	const $table = $(`#table_${target}`);
-	const $thead = $table.find('thead th');
-	const $tbody = $table.find('tbody');
+// // function generateTable(data, target) {
+// // 	const $table = $(`#table_${target}`);
+// // 	const $thead = $table.find('thead th');
+// // 	const $tbody = $table.find('tbody');
 
-	let rows = "";
+// // 	let rows = "";
 
-	data.forEach((item, index) => {
-		let row = "<tr>";
+// // 	data.forEach((item, index) => {
+// // 		let row = "<tr>";
 
-		$thead.each(function () {
-			const key = $(this).data('key');
+// // 		$thead.each(function () {
+// // 			const key = $(this).data('key');
 
-			if (key === "no") {
-				// Kolom nomor urut
-				row += `<td style="${$(this).attr('style')}">${index + 1}</td>`;
-			} else if (key === "btn_aksi") {
-				// Kolom aksi
-				row += `
-					<td style="${$(this).attr('style')}">
-						<button class="btn btn-primary btn-sm editBtn" data-id="${item.id}" data-target="${target}" >Edit</button>
-						<button class="btn btn-danger btn-sm deleteBtn" data-id="${item.id}" data-target="${target}" >Delete</button>
-					</td>`;
-			} else if (key === "btn_pendaftaran") {
-				// Kolom aksi
-				row += `
-					<td style="${$(this).attr('style')}">
-						<button class="btn btn-primary btn-sm editBtn" data-id="${item.id}" data-target="${target}" >Edit</button>
-						<button class="btn btn-danger btn-sm deleteBtn" data-id="${item.id}" data-target="${target}" >Delete</button>
-						<button class="btn btn-success btn-sm detailBtn" data-id="${item.id}" data-target="${target}" >Lihat Detail</button>
-					</td>`;
-			} else {
-				// Kolom lainnya berdasarkan key
-				row += `<td style="${$(this).attr('style')}">${item[key] || '-'}</td>`;
-			}
-		});
+// // 			if (key === "no") {
+// // 				// Kolom nomor urut
+// // 				row += `<td style="${$(this).attr('style')}">${index + 1}</td>`;
+// // 			} else if (key === "btn_aksi") {
+// // 				// Kolom aksi
+// // 				row += `
+// // 					<td style="${$(this).attr('style')}">
+// // 						<button class="btn btn-primary btn-sm editBtn" data-id="${item.id}" data-target="${target}" >Edit</button>
+// // 						<button class="btn btn-danger btn-sm deleteBtn" data-id="${item.id}" data-target="${target}" >Delete</button>
+// // 					</td>`;
+// // 			} else if (key === "btn_pendaftaran") {
+// // 				// Kolom aksi
+// // 				row += `
+// // 					<td style="${$(this).attr('style')}">
+// // 						<button class="btn btn-primary btn-sm editBtn" data-id="${item.id}" data-target="${target}" >Edit</button>
+// // 						<button class="btn btn-danger btn-sm deleteBtn" data-id="${item.id}" data-target="${target}" >Delete</button>
+// // 						<button class="btn btn-success btn-sm detailBtn" data-id="${item.id}" data-target="${target}" >Lihat Detail</button>
+// // 					</td>`;
+// // 			} else {
+// // 				// Kolom lainnya berdasarkan key
+// // 				row += `<td style="${$(this).attr('style')}">${item[key] || '-'}</td>`;
+// // 			}
+// // 		});
 
-		row += "</tr>";
-		rows += row;
-	});
+// // 		row += "</tr>";
+// // 		rows += row;
+// // 	});
 
-	$tbody.html(rows);
-}
+// // 	$tbody.html(rows);
+// // }
 
 
 $(document).on('click', '.saveBtn', function()  {
@@ -143,6 +178,7 @@ $(document).on('click', '.saveBtn', function()  {
 	$('input').removeClass('is-invalid');
 	var targetController = $(this).data('target');
 	var formElement = $('#form_' + targetController)[0];
+	var table = $("#table_" + targetController);
 	var formData = new FormData(formElement);
 	$.ajax({
 		url: baseClass +'/save_' + targetController,
@@ -155,9 +191,8 @@ $(document).on('click', '.saveBtn', function()  {
 			if (response.status) {
 				alert(response.message);
 				$('#modal_' + targetController).modal('hide');
-				loadTabel(targetController);
+				reloadTable(table);
 			} else {
-				// Bersihkan pesan error dan kelas invalid sebelum menampilkan yang baru
 				$('.text-danger').html('');
 				$('input').removeClass('is-invalid').removeClass('is-valid');
 				
@@ -178,7 +213,7 @@ $(document).on('click', '.saveBtn', function()  {
 
 $(document).on('click', '.editBtn', function() {
 	let targetController = $(this).data('target');
-	let id = $(this).data('id');
+	let id = $(this).data('value');
 	let url = baseClass +'/edit_' + targetController + '/' + id;
 	let form = '#form_' + targetController;
 	$.ajax({
@@ -193,8 +228,6 @@ $(document).on('click', '.editBtn', function() {
 				$.each(response.data, function (i, item) {
 					$(form + ' [name="' + i + '"]').val(item);
 				});
-
-
 				$('#modal_' + targetController).modal('show');
 			} else {
 				alert(response.message);
@@ -204,10 +237,9 @@ $(document).on('click', '.editBtn', function() {
 	})
 });
 
-
 $(document).on('click', '.detailBtn', function() {
     let targetController = $(this).data('target');
-    let id = $(this).data('id');
+    let id = $(this).data('value');
     let url = baseClass + '/get_detail_' + targetController + '/' + id;
 
     $.ajax({
@@ -233,7 +265,8 @@ $(document).on('click', '.detailBtn', function() {
 
 $(document).on('click', '.deleteBtn', function() {
 	var targetController = $(this).data('target');
-	var id = $(this).data('id');
+	var table = $("#table_" + targetController);
+	var id = $(this).data('value');
 	$.ajax({
 		url: baseClass +'/delete_' + targetController,
 		type: 'POST',
@@ -244,7 +277,7 @@ $(document).on('click', '.deleteBtn', function() {
 		success: function(response) {
 			if (response.status) {
 				alert(response.message);
-				loadTabel(targetController);
+				reloadTable(table);
 			} else {
 				alert(response.message);
 			}
@@ -255,13 +288,13 @@ $(document).on('click', '.deleteBtn', function() {
 
 
 
-// function setJurusan(id_tahun_pelajaran, id) {
-// 	let url = 'kelas/option_jurusan';
-// 	$('#id_jurusan').load(url + '/' + id_tahun_pelajaran, function() {
-// 		$('#id_jurusan').val(id);
-// 	});
+// // function setJurusan(id_tahun_pelajaran, id) {
+// // 	let url = 'kelas/option_jurusan';
+// // 	$('#id_jurusan').load(url + '/' + id_tahun_pelajaran, function() {
+// // 		$('#id_jurusan').val(id);
+// // 	});
 
-// }
+// // }
 
 
 $(document).on('click', '#logoutBtn', function() {
